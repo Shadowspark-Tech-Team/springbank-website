@@ -310,11 +310,35 @@
         });
 
         if (!valid) return;
-        // Mock: show error (static site, no real auth)
-        if (alert) {
-          alert.textContent = 'This is a demo. Authentication is not enabled.';
-          alert.classList.add('is-visible');
-        }
+
+        const submitBtn = form.querySelector('[type=submit]');
+        const origText = submitBtn ? submitBtn.textContent : '';
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Signing in…'; }
+        if (alert) { alert.classList.remove('is-visible'); }
+
+        fetch('/api/auth/signin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: uid.value.trim(), password: pw.value })
+        })
+        .then(r => r.json())
+        .then(d => {
+          if (d.success && d.token) {
+            sessionStorage.setItem('sb_token', d.token);
+            sessionStorage.setItem('sb_user', JSON.stringify(d.user));
+            track('signin_success');
+            window.location.href = '/dashboard.html';
+          } else {
+            if (alert) { alert.textContent = d.error || 'Invalid credentials.'; alert.classList.add('is-visible'); }
+            track('signin_failure');
+          }
+        })
+        .catch(() => {
+          if (alert) { alert.textContent = 'Connection error. Please try again.'; alert.classList.add('is-visible'); }
+        })
+        .finally(() => {
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = origText; }
+        });
         track('signin_attempt');
       });
 

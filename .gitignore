@@ -17,10 +17,12 @@ npm-debug.log*
 *.tmp
 *.bak
 
-# Node (if tooling added later)
+# Node
 node_modules/
 package-lock.json
-package.json
+.env.local
+.env
 
 # Source files (DeepSeek drafts – not for production)
 deepseek_*
+.vercel

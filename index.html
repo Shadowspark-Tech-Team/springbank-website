@@ -364,7 +364,7 @@
     <!-- ─── STATS BAR ───────────────────────────────────── -->
     <div class="stats-bar" aria-label="Spring Bank by the numbers">
       <div class="container">
-        <div class="stats-grid">
+        <div class="stats-grid" id="statsGrid">
           <div class="stat">
             <div class="stat__number">5M+</div>
             <div class="stat__label">Customers nationwide</div>
@@ -384,6 +384,21 @@
         </div>
       </div>
     </div>
+    <script>
+    (function() {
+      fetch('/api/stats')
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(d) {
+          if (!d || !d.stats || d.stats.length === 0) return;
+          var grid = document.getElementById('statsGrid');
+          if (!grid) return;
+          grid.innerHTML = d.stats.map(function(s) {
+            return '<div class="stat"><div class="stat__number">' + s.value + '</div><div class="stat__label">' + s.label + '</div></div>';
+          }).join('');
+        })
+        .catch(function() { /* keep static fallback */ });
+    })();
+    </script>
 
     <!-- ─── POPULAR PRODUCTS ───────────────────────────── -->
     <section aria-labelledby="products-title">
@@ -664,6 +679,46 @@
             <span class="footer-brand__name">SpringBank</span>
           </div>
           <p class="footer-brand__desc">Helping people make the most of their money since 2010. Member FDIC. Equal Housing Lender.</p>
+
+          <!-- Newsletter signup -->
+          <form id="newsletterForm" style="margin:20px 0 0" aria-label="Newsletter signup">
+            <label for="nlEmail" style="display:block;font-size:.8rem;color:var(--footer-muted,#8b9db5);margin-bottom:8px">Get banking tips &amp; offers</label>
+            <div style="display:flex;gap:8px">
+              <input type="email" id="nlEmail" placeholder="Your email" required autocomplete="email"
+                style="flex:1;padding:9px 12px;border-radius:var(--radius);border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;font-size:.875rem;outline:none" />
+              <button type="submit" class="btn btn-primary" style="padding:9px 16px;font-size:.875rem;white-space:nowrap">Subscribe</button>
+            </div>
+            <div id="nlMsg" aria-live="polite" style="font-size:.78rem;margin-top:6px;min-height:1em;color:var(--footer-muted,#8b9db5)"></div>
+          </form>
+          <script>
+          (function() {
+            var form = document.getElementById('newsletterForm');
+            if (!form) return;
+            form.addEventListener('submit', function(e) {
+              e.preventDefault();
+              var email = document.getElementById('nlEmail').value.trim();
+              var msg   = document.getElementById('nlMsg');
+              var btn   = form.querySelector('button[type=submit]');
+              if (!email) return;
+              btn.disabled = true;
+              btn.textContent = '…';
+              fetch('/api/newsletter', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email, source: 'footer' })
+              })
+              .then(function(r) { return r.json(); })
+              .then(function(d) {
+                msg.textContent = d.success ? d.message : (d.error || 'Error. Try again.');
+                msg.style.color = d.success ? '#7fc97f' : '#e88';
+                if (d.success) form.reset();
+              })
+              .catch(function() { msg.textContent = 'Network error. Try again.'; msg.style.color = '#e88'; })
+              .finally(function() { btn.disabled = false; btn.textContent = 'Subscribe'; });
+            });
+          })();
+          </script>
+
           <div class="footer-social" aria-label="Follow us on social media">
             <a class="footer-social__link" href="#" aria-label="Facebook" data-pt-name="social_facebook">
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>

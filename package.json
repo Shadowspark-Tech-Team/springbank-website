@@ -1,0 +1,15 @@
+{
+  "name": "springbank-website",
+  "version": "1.0.0",
+  "description": "Spring Bank – production banking website with Vercel Serverless API",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
+    "@upstash/redis": "^1.34.3",
+    "jsonwebtoken": "^9.0.2",
+    "resend": "^4.1.2"
+  }
+}
