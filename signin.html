@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In to Spring Bank – Secure Banking</title>
+  <meta name="description" content="Sign in to your Spring Bank account. Secure online banking with 256-bit encryption." />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com;" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="signin.min.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BankOrCreditUnion",
+    "name": "Spring Bank",
+    "url": "https://www.springbank.com",
+    "logo": "https://www.springbank.com/assets/logo.svg",
+    "description": "Spring Bank offers personal and business banking solutions including checking, savings, credit cards, mortgages, and more.",
+    "telephone": "+1-800-774-6461",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1 Spring Plaza",
+      "addressLocality": "New York",
+      "addressRegion": "NY",
+      "postalCode": "10001",
+      "addressCountry": "US"
+    },
+    "openingHoursSpecification": [
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "09:00", "closes": "17:00" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:00", "closes": "13:00" }
+    ],
+    "sameAs": ["https://twitter.com/springbank","https://www.facebook.com/springbank","https://www.linkedin.com/company/springbank"],
+    "memberOf": { "@type": "Organization", "name": "FDIC" }
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Loading Spinner -->
+  <div id="loadingSpinner" aria-hidden="true" role="presentation">
+    <div class="spinner-ring"></div>
+  </div>
+
+  <!-- Skip Link -->
+  <a href="#signinForm" style="position:absolute;top:-999px;left:8px;background:#041E42;color:#fff;padding:8px 16px;border-radius:0 0 6px 6px;font-size:.875rem;font-weight:600;z-index:9999" onfocus="this.style.top='0'">Skip to sign-in form</a>
+
+  <!-- Sign-In Page -->
+  <main class="signin-page" id="signinForm">
+    <div class="signin-dialog" role="main">
+
+      <!-- Left Panel -->
+      <div class="signin-left" aria-hidden="true">
+        <div>
+          <div class="signin-left__brand">
+            <div class="signin-left__mark">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+            </div>
+            <span class="signin-left__name">SpringBank</span>
+          </div>
+          <h1 class="signin-left__title">Secure sign-in to your Spring account</h1>
+          <p class="signin-left__sub">Your money is protected by industry-leading security, 24 hours a day.</p>
+          <div class="signin-benefits">
+            <div class="signin-benefit">
+              <div class="signin-benefit__icon">
+                <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+              </div>
+              256-bit SSL encryption on every session
+            </div>
+            <div class="signin-benefit">
+              <div class="signin-benefit__icon">
+                <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+              </div>
+              Zero Liability Protection on all accounts
+            </div>
+            <div class="signin-benefit">
+              <div class="signin-benefit__icon">
+                <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/></svg>
+              </div>
+              FDIC insured up to $250,000
+            </div>
+            <div class="signin-benefit">
+              <div class="signin-benefit__icon">
+                <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+              </div>
+              24/7 customer support available
+            </div>
+          </div>
+        </div>
+        <p class="signin-left__footer">© 2026 Spring Bank, N.A. Member FDIC.</p>
+      </div>
+
+      <!-- Right Panel (form) -->
+      <div class="signin-right">
+        <div class="signin-right__header">
+          <span class="signin-right__logo">SpringBank</span>
+          <div class="signin-badge">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg>
+            Secure Login
+          </div>
+        </div>
+
+        <form class="signin-form" id="signinFormEl" novalidate aria-label="Sign in to Spring Bank">
+          <div class="signin-error" id="signinError" role="alert" aria-live="assertive"></div>
+
+          <div class="form-group">
+            <label for="userId">User ID</label>
+            <input type="text" id="userId" name="userid" autocomplete="username" spellcheck="false" autofocus aria-describedby="userIdErr" />
+            <span class="field-err" id="userIdErr" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" autocomplete="current-password" aria-describedby="passwordErr" />
+            <span class="field-err" id="passwordErr" role="alert"></span>
+          </div>
+
+          <div class="form-row">
+            <label class="remember-label">
+              <input type="checkbox" id="rememberMe" name="remember" />
+              Save User ID
+            </label>
+            <a class="forgot-link" href="#">Forgot username/password?</a>
+          </div>
+
+          <button class="btn-submit" type="submit">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg>
+            Sign In
+          </button>
+
+          <hr class="signin-divider" />
+
+          <p class="enroll-row">Not enrolled? <a href="#">Enroll in Online Banking</a></p>
+        </form>
+
+        <div class="signin-security" aria-label="Security information">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+          </svg>
+          Your connection to this site is private and encrypted.
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer Bar -->
+  <footer class="signin-footer-bar" role="contentinfo">
+    <div class="signin-footer-inner">
+      <div class="signin-fdic">
+        <span>Member FDIC</span>
+        <span>Equal Housing Lender</span>
+      </div>
+      <nav class="signin-legal" aria-label="Legal links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="security.html">Security Policy</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="#">Accessibility</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script defer>
+  (function() {
+    // Spinner
+    var sp = document.getElementById('loadingSpinner');
+    setTimeout(function() {
+      sp.classList.add('fade-out');
+      sp.addEventListener('transitionend', function() { sp.remove(); }, { once: true });
+    }, 900);
+
+    // Form validation
+    var form = document.getElementById('signinFormEl');
+    var errorBox = document.getElementById('signinError');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var uid = document.getElementById('userId');
+      var pw = document.getElementById('password');
+      var uidErr = document.getElementById('userIdErr');
+      var pwErr = document.getElementById('passwordErr');
+      var valid = true;
+
+      uidErr.textContent = '';
+      pwErr.textContent = '';
+      uid.classList.remove('is-error');
+      pw.classList.remove('is-error');
+
+      if (!uid.value.trim()) {
+        uidErr.textContent = 'User ID is required.';
+        uid.classList.add('is-error');
+        uid.focus();
+        valid = false;
+      }
+      if (!pw.value) {
+        pwErr.textContent = 'Password is required.';
+        pw.classList.add('is-error');
+        if (valid) pw.focus();
+        valid = false;
+      }
+      if (!valid) return;
+
+      errorBox.textContent = 'This is a demo — authentication is not enabled.';
+      errorBox.classList.add('is-visible');
+    });
+
+    ['userId','password'].forEach(function(id) {
+      document.getElementById(id).addEventListener('input', function() {
+        this.classList.remove('is-error');
+        errorBox.classList.remove('is-visible');
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

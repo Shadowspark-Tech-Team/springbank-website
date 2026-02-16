@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Spring Bank – Our Mission, Story &amp; Team</title>
+  <meta name="description" content="Learn about Spring Bank's mission to make banking simpler, fairer, and more human. Founded in 2010, we serve 5 million customers across the United States." />
+  <link rel="canonical" href="https://www.springbank.com/about.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.springbank.com/about.html" />
+  <meta property="og:title" content="About Spring Bank – Our Mission &amp; Story" />
+  <meta property="og:description" content="Spring Bank was founded to make banking simpler, fairer, and more human. Discover our mission, values, and the team behind it." />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80" />
+
+  <!-- Security -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.min.css" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BankOrCreditUnion",
+    "name": "Spring Bank",
+    "url": "https://www.springbank.com",
+    "logo": "https://www.springbank.com/assets/logo.svg",
+    "description": "Spring Bank offers personal and business banking solutions including checking, savings, credit cards, mortgages, and more.",
+    "foundingDate": "2010",
+    "telephone": "+1-800-774-6461",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1 Spring Plaza",
+      "addressLocality": "New York",
+      "addressRegion": "NY",
+      "postalCode": "10001",
+      "addressCountry": "US"
+    },
+    "numberOfEmployees": { "@type": "QuantitativeValue", "value": 12000 },
+    "sameAs": [
+      "https://twitter.com/springbank",
+      "https://www.facebook.com/springbank",
+      "https://www.linkedin.com/company/springbank"
+    ],
+    "memberOf": { "@type": "Organization", "name": "FDIC" }
+  }
+  </script>
+
+  <!-- Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXX');
+  </script>
+
+  <style>
+    /* Page-specific styles */
+    .about-hero {
+      background: linear-gradient(135deg, var(--brand-dark) 0%, #0d3d78 60%, var(--brand) 100%);
+      padding: 80px 0 60px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1400&q=60') center/cover no-repeat;
+      opacity: .08;
+    }
+    .about-hero__inner { position: relative; z-index: 1; }
+    .about-hero__eyebrow { font-size: .8125rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.65); margin-bottom: 12px; }
+    .about-hero__title { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; line-height: 1.1; margin-bottom: 20px; }
+    .about-hero__title em { color: rgba(255,255,255,.7); font-style: normal; }
+    .about-hero__desc { font-size: 1.125rem; color: rgba(255,255,255,.85); max-width: 560px; line-height: 1.7; }
+
+    .mission-block { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .mission-block--rev .mission-block__img { order: 2; }
+    .mission-block--rev .mission-block__text { order: 1; }
+    .mission-block__img { border-radius: 16px; overflow: hidden; box-shadow: 0 16px 48px rgba(4,30,66,.14); }
+    .mission-block__img img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+
+    .value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .value-card { background: var(--white); border: 1px solid var(--border-light); border-radius: 12px; padding: 28px; transition: box-shadow .2s, transform .2s; }
+    .value-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+    .value-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--brand-light); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .value-icon svg { width: 24px; height: 24px; color: var(--brand); }
+
+    .leadership-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+    .leader-card { text-align: center; }
+    .leader-card__img { border-radius: 50%; overflow: hidden; width: 120px; height: 120px; margin: 0 auto 14px; box-shadow: var(--shadow); }
+    .leader-card__img img { width: 100%; height: 100%; object-fit: cover; }
+    .leader-card__name { font-size: 1rem; font-weight: 700; color: var(--brand-dark); margin-bottom: 3px; }
+    .leader-card__title { font-size: .8125rem; color: var(--muted); }
+
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before { content: ''; position: absolute; left: 0; top: 4px; bottom: 4px; width: 2px; background: var(--brand-light); border-radius: 2px; }
+    .timeline-item { position: relative; margin-bottom: 36px; }
+    .timeline-item::before { content: ''; position: absolute; left: -38px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--brand); border: 3px solid #fff; box-shadow: 0 0 0 2px var(--brand); }
+    .timeline-year { font-size: .75rem; font-weight: 700; color: var(--brand); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+    .timeline-title { font-size: 1rem; font-weight: 700; color: var(--brand-dark); margin-bottom: 5px; }
+    .timeline-desc { font-size: .875rem; color: var(--muted); line-height: 1.6; }
+
+    .award-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .award-card { background: var(--white); border: 1px solid var(--border-light); border-radius: 10px; padding: 20px 16px; text-align: center; }
+    .award-card__year { font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--brand); margin-bottom: 6px; }
+    .award-card__name { font-size: .875rem; font-weight: 700; color: var(--brand-dark); margin-bottom: 4px; }
+    .award-card__org { font-size: .75rem; color: var(--muted); }
+
+    @media (max-width: 900px) {
+      .mission-block { grid-template-columns: 1fr; gap: 32px; }
+      .mission-block--rev .mission-block__img,
+      .mission-block--rev .mission-block__text { order: unset; }
+      .value-grid { grid-template-columns: 1fr 1fr; }
+      .leadership-grid { grid-template-columns: 1fr 1fr; }
+      .award-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .value-grid { grid-template-columns: 1fr; }
+      .leadership-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <!-- BRAND BAR -->
+  <div class="brand-bar" role="navigation" aria-label="Site sections">
+    <div class="brand-bar__inner">
+      <div class="brand-bar__segments">
+        <a class="brand-bar__link" href="index.html">Personal</a>
+        <a class="brand-bar__link" href="business.html">Business</a>
+        <a class="brand-bar__link" href="#">Commercial</a>
+      </div>
+      <div class="brand-bar__util">
+        <a class="brand-bar__util-link" href="atm-branch.html">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C4.686 0 2 2.686 2 6c0 4.418 6 10 6 10s6-5.582 6-10c0-3.314-2.686-6-6-6zm0 8.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+          ATM &amp; Branch
+        </a>
+        <a class="brand-bar__util-link" href="contact.html">Contact Us</a>
+        <a class="brand-bar__util-link" href="help.html">Help</a>
+        <a class="brand-bar__util-link" href="es/index.html" hreflang="es">Español</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="site-header" role="banner">
+    <div class="site-header__inner container">
+      <a class="site-logo" href="index.html" aria-label="Spring Bank – Home">
+        <div class="site-logo__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+        </div>
+        <span class="site-logo__wordmark">Spring<span>Bank</span></span>
+      </a>
+
+      <nav class="primary-nav" id="primaryNav" aria-label="Primary navigation">
+        <ul class="primary-nav__list" role="list">
+          <li class="primary-nav__item"><a class="primary-nav__link" href="index.html">Personal</a></li>
+          <li class="primary-nav__item"><a class="primary-nav__link" href="business.html">Business</a></li>
+          <li class="primary-nav__item"><a class="primary-nav__link" href="about.html" aria-current="page" style="color:var(--brand);border-bottom-color:var(--brand)">About</a></li>
+          <li class="primary-nav__item"><a class="primary-nav__link" href="help.html">Help</a></li>
+          <li class="primary-nav__item"><a class="primary-nav__link" href="contact.html">Contact</a></li>
+          <li class="primary-nav__item"><a class="primary-nav__link" href="atm-branch.html">ATM &amp; Branch</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-utils">
+        <form class="search-form" role="search" aria-label="Site search">
+          <button type="submit" aria-label="Search">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"/></svg>
+          </button>
+          <input type="search" placeholder="Search Spring Bank…" aria-label="Search" autocomplete="off" />
+        </form>
+        <button class="btn-signin" data-modal-open="signinModal" aria-haspopup="dialog">Sign In</button>
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="primaryNav">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <div class="container">
+      <ol class="breadcrumb__list">
+        <li class="breadcrumb__item"><a href="index.html">Home</a><span class="breadcrumb__sep" aria-hidden="true">›</span></li>
+        <li class="breadcrumb__item" aria-current="page">About Spring Bank</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ═══ MAIN ═══════════════════════════════════════════════ -->
+  <main id="main-content">
+
+    <!-- HERO -->
+    <div class="about-hero">
+      <div class="container about-hero__inner">
+        <p class="about-hero__eyebrow">Our Story</p>
+        <h1 class="about-hero__title">Banking built for<br /><em>real people.</em></h1>
+        <p class="about-hero__desc">Spring Bank was founded in 2010 with a single conviction: banking should work for people, not the other way around. Today we serve more than 5 million customers across the United States — and we're just getting started.</p>
+      </div>
+    </div>
+
+    <!-- MISSION & VALUES -->
+    <section aria-labelledby="mission-title">
+      <div class="container">
+        <div class="mission-block">
+          <div class="mission-block__img">
+            <picture>
+              <source srcset="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=700&q=80&fm=webp" type="image/webp" />
+              <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=700&q=80" alt="Spring Bank team members collaborating in an open office" width="700" height="525" loading="lazy" />
+            </picture>
+          </div>
+          <div class="mission-block__text">
+            <p style="font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--brand);margin-bottom:10px">Our Mission</p>
+            <h2 class="section-title" id="mission-title">Make banking simpler, fairer, and more human</h2>
+            <p style="color:var(--muted);line-height:1.8;margin-bottom:16px">We believe everyone deserves a bank they can trust — one that gives them the tools to grow, protect, and make the most of their money without the jargon, hidden fees, or friction that has defined banking for too long.</p>
+            <p style="color:var(--muted);line-height:1.8;margin-bottom:24px">Spring was built from the ground up around the customer. Our technology is best-in-class, our fees are transparent, and our people are trained to listen first and sell second.</p>
+            <a class="btn btn-primary" href="index.html" data-pt-name="about_open_account">Open an Account</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <div class="stats-bar" aria-label="Spring Bank by the numbers">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat"><div class="stat__number">5M+</div><div class="stat__label">Customers served</div></div>
+          <div class="stat"><div class="stat__number">2010</div><div class="stat__label">Year founded</div></div>
+          <div class="stat"><div class="stat__number">4,800+</div><div class="stat__label">ATMs &amp; branches</div></div>
+          <div class="stat"><div class="stat__number">$42B</div><div class="stat__label">Assets under management</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OUR VALUES -->
+    <section class="alt-bg" aria-labelledby="values-title">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title" id="values-title">What we stand for</h2>
+          <p class="section-subtitle">Six principles that guide every decision we make — from product design to customer service.</p>
+        </div>
+        <div class="value-grid">
+          <div class="value-card">
+            <div class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            </div>
+            <h3 style="font-size:1rem;font-weight:700;color:var(--brand-dark);margin-bottom:8px">Trust &amp; Integrity</h3>
+            <p style="font-size:.875rem;color:var(--muted);line-height:1.6">We keep our word. No hidden fees, no surprise rate hikes, no fine print designed to trick you.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            </div>
+            <h3 style="font-size:1rem;font-weight:700;color:var(--brand-dark);margin-bottom:8px">People First</h3>
+            <p style="font-size:.875rem;color:var(--muted);line-height:1.6">Our customers and employees are our greatest asset. We invest in both, always.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+            </div>
+            <h3 style="font-size:1rem;font-weight:700;color:var(--brand-dark);margin-bottom:8px">Innovation</h3>
+            <p style="font-size:.875rem;color:var(--muted);line-height:1.6">We move fast, ship often, and build technology that solves real problems — not technology for its own sake.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
+            </div>
+            <h3 style="font-size:1rem;font-weight:700;color:var(--brand-dark);margin-bottom:8px">Inclusion</h3>
+            <p style="font-size:.875rem;color:var(--muted);line-height:1.6">Banking is for everyone. We build products that are accessible, equitable, and useful across every income level.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 8C8 10 5.9 16.17 3.82 19.82c-.37.65.42 1.32.97.8C6 19.4 8.53 17 12 17c4 0 4.53 2.4 6.71 3.62.55.52 1.34-.15.97-.8C17.62 16.17 15.5 10 17 8zM12 15c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>
+            </div>
+            <h3 style="font-size:1rem;font-weight:700;color:var(--brand-dark);margin-bottom:8px">Sustainability</h3>
+            <p style="font-size:.875rem;color:var(--muted);line-height:1.6">We invest in green bonds, carbon-neutral operations, and community development funds in underserved areas.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            </div>
+            <h3 style="font-size:1rem;font-weight:700;color:var(--brand-dark);margin-bottom:8px">Transparency</h3>
+            <p style="font-size:.875rem;color:var(--muted);line-height:1.6">Clear pricing, plain language, and honest communication — always. You'll never wonder what you're paying for.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OUR STORY TIMELINE -->
+    <section aria-labelledby="history-title">
+      <div class="container" style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start">
+        <div>
+          <h2 class="section-title" id="history-title" style="margin-bottom:8px">Our history</h2>
+          <p class="section-subtitle">From a two-person startup to a national bank — here's how we got here.</p>
+          <div class="timeline" style="margin-top:32px">
+            <div class="timeline-item">
+              <div class="timeline-year">2010</div>
+              <div class="timeline-title">Founded in New York City</div>
+              <div class="timeline-desc">Spring Bank opens its first branch in Manhattan with 12 employees and a bold mission: make banking work for people, not the other way around.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-year">2012</div>
+              <div class="timeline-title">First 100,000 customers</div>
+              <div class="timeline-desc">Word spreads about our no-fee checking accounts and human customer service. We reach 100K customers 18 months ahead of projections.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-year">2015</div>
+              <div class="timeline-title">Spring Business Banking launches</div>
+              <div class="timeline-desc">We extend our philosophy to small businesses, offering checking accounts with no minimum balance and SBA-preferred lending.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-year">2018</div>
+              <div class="timeline-title">Spring Mobile App — 4.9★ on App Store</div>
+              <div class="timeline-desc">Our redesigned app wins "Best Banking App" from NerdWallet and reaches 2 million active users within 6 months.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-year">2021</div>
+              <div class="timeline-title">Spring Sapphire Preferred® card launches</div>
+              <div class="timeline-desc">Our flagship rewards card earns industry acclaim for its earning rates and travel protections.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-year">2024</div>
+              <div class="timeline-title">5 million customers &amp; $42B AUM</div>
+              <div class="timeline-desc">Spring Bank becomes a nationally chartered bank with branches in 34 states and 4,800+ ATMs. We remain founder-led and customer-obsessed.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LEADERSHIP -->
+        <div>
+          <h2 class="section-title" style="margin-bottom:8px">Leadership</h2>
+          <p class="section-subtitle" style="margin-bottom:28px">The team setting the direction.</p>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg-light);border-radius:12px">
+              <picture>
+                <source srcset="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80&fm=webp" type="image/webp" />
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80" alt="Portrait of James Okafor, CEO of Spring Bank" width="60" height="60" style="border-radius:50%;width:60px;height:60px;object-fit:cover;flex-shrink:0" loading="lazy" />
+              </picture>
+              <div>
+                <div style="font-weight:700;color:var(--brand-dark)">James Okafor</div>
+                <div style="font-size:.8125rem;color:var(--brand);font-weight:600">Chief Executive Officer &amp; Co-Founder</div>
+                <p style="font-size:.8125rem;color:var(--muted);margin-top:3px">Former Goldman Sachs VP. Built Spring from his kitchen table in 2010.</p>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg-light);border-radius:12px">
+              <picture>
+                <source srcset="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=80&q=80&fm=webp" type="image/webp" />
+                <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=80&q=80" alt="Portrait of Amara Chen, CTO of Spring Bank" width="60" height="60" style="border-radius:50%;width:60px;height:60px;object-fit:cover;flex-shrink:0" loading="lazy" />
+              </picture>
+              <div>
+                <div style="font-weight:700;color:var(--brand-dark)">Amara Chen</div>
+                <div style="font-size:.8125rem;color:var(--brand);font-weight:600">Chief Technology Officer &amp; Co-Founder</div>
+                <p style="font-size:.8125rem;color:var(--muted);margin-top:3px">Led engineering at Stripe and Plaid before co-founding Spring.</p>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg-light);border-radius:12px">
+              <picture>
+                <source srcset="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&q=80&fm=webp" type="image/webp" />
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&q=80" alt="Portrait of David Reeves, CFO of Spring Bank" width="60" height="60" style="border-radius:50%;width:60px;height:60px;object-fit:cover;flex-shrink:0" loading="lazy" />
+              </picture>
+              <div>
+                <div style="font-weight:700;color:var(--brand-dark)">David Reeves</div>
+                <div style="font-size:.8125rem;color:var(--brand);font-weight:600">Chief Financial Officer</div>
+                <p style="font-size:.8125rem;color:var(--muted);margin-top:3px">20 years in banking and capital markets. Joined Spring in 2014.</p>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg-light);border-radius:12px">
+              <picture>
+                <source srcset="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&q=80&fm=webp" type="image/webp" />
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&q=80" alt="Portrait of Sofia Ramirez, Chief Customer Officer of Spring Bank" width="60" height="60" style="border-radius:50%;width:60px;height:60px;object-fit:cover;flex-shrink:0" loading="lazy" />
+              </picture>
+              <div>
+                <div style="font-weight:700;color:var(--brand-dark)">Sofia Ramirez</div>
+                <div style="font-size:.8125rem;color:var(--brand);font-weight:600">Chief Customer Officer</div>
+                <p style="font-size:.8125rem;color:var(--muted);margin-top:3px">Passionate about building banking products that include, not exclude.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AWARDS -->
+    <section class="alt-bg" aria-labelledby="awards-title">
+      <div class="container">
+        <h2 class="section-title" id="awards-title" style="text-align:center;margin-bottom:8px">Recognition &amp; Awards</h2>
+        <p style="text-align:center;color:var(--muted);margin-bottom:36px">We don't chase awards — but we're proud when good work gets noticed.</p>
+        <div class="award-grid">
+          <div class="award-card">
+            <div class="award-card__year">2025</div>
+            <div class="award-card__name">Best Mobile Banking App</div>
+            <div class="award-card__org">NerdWallet Awards</div>
+          </div>
+          <div class="award-card">
+            <div class="award-card__year">2024</div>
+            <div class="award-card__name">Best Online Bank</div>
+            <div class="award-card__org">Bankrate Best Banks</div>
+          </div>
+          <div class="award-card">
+            <div class="award-card__year">2024</div>
+            <div class="award-card__name">J.D. Power #1 in Customer Satisfaction</div>
+            <div class="award-card__org">Retail Banking — East Region</div>
+          </div>
+          <div class="award-card">
+            <div class="award-card__year">2023</div>
+            <div class="award-card__name">Best Credit Card Rewards Program</div>
+            <div class="award-card__org">The Points Guy</div>
+          </div>
+          <div class="award-card">
+            <div class="award-card__year">2023</div>
+            <div class="award-card__name">Top 10 Best Places to Work in Banking</div>
+            <div class="award-card__org">American Banker</div>
+          </div>
+          <div class="award-card">
+            <div class="award-card__year">2022</div>
+            <div class="award-card__name">Most Trusted Bank</div>
+            <div class="award-card__org">Forbes Advisor Survey</div>
+          </div>
+          <div class="award-card">
+            <div class="award-card__year">2022</div>
+            <div class="award-card__name">Best SBA Lender — Small Business</div>
+            <div class="award-card__org">U.S. Small Business Administration</div>
+          </div>
+          <div class="award-card">
+            <div class="award-card__year">2021</div>
+            <div class="award-card__name">Accessibility Leader in Banking</div>
+            <div class="award-card__org">ABA Foundation</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section style="padding:72px 0;background:var(--brand-dark);color:#fff;text-align:center">
+      <div class="container">
+        <h2 style="font-size:clamp(1.75rem,4vw,2.5rem);font-weight:700;margin-bottom:12px">Ready to bank differently?</h2>
+        <p style="font-size:1.0625rem;color:rgba(255,255,255,.8);margin-bottom:32px;max-width:500px;margin-inline:auto">Open a Spring account in under 5 minutes. No paperwork. No minimum balance. No nonsense.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <a class="btn btn-primary btn-lg" href="signin.html" data-pt-name="about_cta_open">Open an Account</a>
+          <a class="btn btn-ghost btn-lg" href="contact.html" data-pt-name="about_cta_contact">Talk to a Banker</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-main">
+        <div class="footer-brand">
+          <div class="footer-brand__logo">
+            <div class="footer-brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="#fff"/></svg></div>
+            <span class="footer-brand__name">SpringBank</span>
+          </div>
+          <p class="footer-brand__desc">Banking built for people. Member FDIC. Equal Housing Lender.</p>
+          <div class="footer-social" aria-label="Follow us on social media">
+            <a class="footer-social__link" href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+            <a class="footer-social__link" href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+            <a class="footer-social__link" href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h3 class="footer-col__title">Products</h3>
+          <ul class="footer-col__links">
+            <li><a class="footer-col__link" href="index.html">Personal Banking</a></li>
+            <li><a class="footer-col__link" href="business.html">Business Banking</a></li>
+            <li><a class="footer-col__link" href="#">Credit Cards</a></li>
+            <li><a class="footer-col__link" href="#">Mortgages</a></li>
+            <li><a class="footer-col__link" href="#">Investing</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3 class="footer-col__title">Company</h3>
+          <ul class="footer-col__links">
+            <li><a class="footer-col__link" href="about.html" aria-current="page">About Us</a></li>
+            <li><a class="footer-col__link" href="#">Careers</a></li>
+            <li><a class="footer-col__link" href="#">Newsroom</a></li>
+            <li><a class="footer-col__link" href="#">Investor Relations</a></li>
+            <li><a class="footer-col__link" href="#">Community</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3 class="footer-col__title">Support</h3>
+          <ul class="footer-col__links">
+            <li><a class="footer-col__link" href="help.html">Help Center</a></li>
+            <li><a class="footer-col__link" href="contact.html">Contact Us</a></li>
+            <li><a class="footer-col__link" href="atm-branch.html">ATM &amp; Branch</a></li>
+            <li><a class="footer-col__link" href="security.html">Security</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3 class="footer-col__title">Legal</h3>
+          <ul class="footer-col__links">
+            <li><a class="footer-col__link" href="privacy.html">Privacy Policy</a></li>
+            <li><a class="footer-col__link" href="security.html">Security Policy</a></li>
+            <li><a class="footer-col__link" href="terms.html">Terms of Use</a></li>
+            <li><a class="footer-col__link" href="#">Fee Schedule</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <hr class="footer-divider" />
+    <div class="container">
+      <div class="footer-bottom">
+        <div class="footer-fdic">
+          <span class="fdic-badge">Member FDIC</span>
+          <span class="fdic-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            Equal Housing Lender
+          </span>
+        </div>
+        <div class="footer-legal-links">
+          <a href="privacy.html">Privacy</a><a href="security.html">Security</a>
+          <a href="terms.html">Terms</a><a href="#">Site Map</a>
+          <a href="#">Accessibility</a>
+        </div>
+        <p class="footer-copyright">© 2026 Spring Bank, N.A. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SIGN-IN MODAL -->
+  <div class="modal-overlay" id="signinModal" role="dialog" aria-modal="true" aria-label="Sign in to Spring Bank" aria-hidden="true">
+    <div class="modal">
+      <div class="modal__header">
+        <div class="modal__brand">
+          <div class="modal__brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="#fff"/></svg></div>
+          <span class="modal__brand-name">SpringBank</span>
+        </div>
+        <button class="modal__close" data-modal-close aria-label="Close sign-in">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
+        </button>
+      </div>
+      <div class="modal__body">
+        <h2 class="modal__title">Sign in to your account</h2>
+        <div class="modal__alert" id="modalAlert" role="alert" aria-live="assertive"></div>
+        <form class="modal__form" id="signinForm" novalidate>
+          <div class="form-field">
+            <label class="field-label" for="modalUserId">User ID</label>
+            <input class="field-input" type="text" id="modalUserId" name="userid" autocomplete="username" spellcheck="false" />
+            <div class="field-error" id="modalUserIdError" role="alert"></div>
+          </div>
+          <div class="form-field">
+            <label class="field-label" for="modalPassword">Password</label>
+            <input class="field-input" type="password" id="modalPassword" name="password" autocomplete="current-password" />
+            <div class="field-error" id="modalPasswordError" role="alert"></div>
+          </div>
+          <div class="form-row">
+            <label class="checkbox-label"><input type="checkbox" id="modalRemember" /> Save User ID</label>
+            <a class="form-link" href="signin.html">Forgot ID/Password?</a>
+          </div>
+          <button class="modal__submit" type="submit">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg>
+            Sign In Securely
+          </button>
+        </form>
+      </div>
+      <div class="modal__footer">
+        <p class="modal__enroll">Not enrolled? <a href="signin.html">Enroll now</a></p>
+        <p class="modal__security">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg>
+          Secure 256-bit encryption
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.min.js" defer></script>
+</body>
+</html>

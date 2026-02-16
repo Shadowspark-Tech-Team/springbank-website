@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Disallow: /signin.html
+Disallow: /es/signin.html
+
+# Allow major crawlers to index the full site
+User-agent: Googlebot
+Allow: /
+Disallow: /signin.html
+
+User-agent: Bingbot
+Allow: /
+Disallow: /signin.html
+
+# Sitemap location
+Sitemap: https://www.springbank.com/sitemap.xml

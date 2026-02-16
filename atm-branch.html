@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATM &amp; Branch Locator – Spring Bank</title>
+  <meta name="description" content="Find Spring Bank ATMs and branches near you. 4,800+ locations nationwide." />
+  <link rel="canonical" href="https://www.springbank.com/atm-branch.html" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.min.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BankOrCreditUnion",
+    "name": "Spring Bank",
+    "url": "https://www.springbank.com",
+    "logo": "https://www.springbank.com/assets/logo.svg",
+    "description": "Spring Bank offers personal and business banking solutions including checking, savings, credit cards, mortgages, and more.",
+    "telephone": "+1-800-774-6461",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1 Spring Plaza",
+      "addressLocality": "New York",
+      "addressRegion": "NY",
+      "postalCode": "10001",
+      "addressCountry": "US"
+    },
+    "openingHoursSpecification": [
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "09:00", "closes": "17:00" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:00", "closes": "13:00" }
+    ],
+    "sameAs": ["https://twitter.com/springbank","https://www.facebook.com/springbank","https://www.linkedin.com/company/springbank"],
+    "memberOf": { "@type": "Organization", "name": "FDIC" }
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="brand-bar" role="navigation" aria-label="Site sections">
+    <div class="brand-bar__inner">
+      <div class="brand-bar__segments">
+        <a class="brand-bar__link" href="index.html">Personal</a>
+        <a class="brand-bar__link" href="business.html">Business</a>
+        <a class="brand-bar__link" href="#">Commercial</a>
+      </div>
+      <div class="brand-bar__util">
+        <a class="brand-bar__util-link" href="atm-branch.html" aria-current="page">ATM &amp; Branch</a>
+        <a class="brand-bar__util-link" href="contact.html">Contact Us</a>
+        <a class="brand-bar__util-link" href="help.html">Help</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header" role="banner">
+    <div class="site-header__inner container">
+      <a class="site-logo" href="index.html" aria-label="Spring Bank – Home">
+        <div class="site-logo__mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>
+        <span class="site-logo__wordmark">Spring<span>Bank</span></span>
+      </a>
+      <div class="header-utils">
+        <a class="btn-signin" href="signin.html">Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <div class="page-hero">
+      <div class="container">
+        <p class="page-hero__eyebrow">Locations</p>
+        <h1 class="page-hero__title">ATM &amp; Branch Locator</h1>
+        <p class="page-hero__subtitle">4,800+ ATMs and branches across the United States. Find one near you.</p>
+      </div>
+    </div>
+
+    <section>
+      <div class="container">
+        <!-- Search -->
+        <div style="background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:24px;margin-bottom:32px;box-shadow:var(--shadow-sm)">
+          <form role="search" aria-label="Find ATM or branch" style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
+            <div style="flex:1;min-width:200px">
+              <label style="display:block;font-size:.8125rem;font-weight:600;color:var(--brand-dark);margin-bottom:6px" for="locationSearch">Enter ZIP code, city, or address</label>
+              <input id="locationSearch" type="search" placeholder="e.g. New York, NY or 10001" aria-label="Search location"
+                style="width:100%;border:1.5px solid var(--border);border-radius:var(--radius);padding:10px 14px;font-size:.9375rem;font-family:inherit;color:var(--brand-dark)" />
+            </div>
+            <div>
+              <label style="display:block;font-size:.8125rem;font-weight:600;color:var(--brand-dark);margin-bottom:6px" for="locationType">Type</label>
+              <select id="locationType" style="border:1.5px solid var(--border);border-radius:var(--radius);padding:10px 14px;font-size:.9375rem;font-family:inherit;color:var(--brand-dark);background:#fff">
+                <option value="all">ATMs &amp; Branches</option>
+                <option value="branch">Branches only</option>
+                <option value="atm">ATMs only</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" type="submit" onclick="return false">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"/></svg>
+              Search
+            </button>
+          </form>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1.5fr;gap:24px;align-items:start">
+          <!-- Branch List -->
+          <div>
+            <h2 style="font-size:1rem;font-weight:700;color:var(--brand-dark);margin-bottom:16px">Locations near you</h2>
+            <div class="branch-list">
+              <div class="branch-card">
+                <div>
+                  <div class="branch-name">Spring Bank – Midtown Manhattan</div>
+                  <div class="branch-address">450 Park Avenue, New York, NY 10022</div>
+                  <div class="branch-hours">Mon–Fri 9am–5pm · Sat 9am–1pm</div>
+                </div>
+                <div class="branch-distance">0.3 mi</div>
+              </div>
+              <div class="branch-card">
+                <div>
+                  <div class="branch-name">Spring Bank ATM – Grand Central</div>
+                  <div class="branch-address">89 E 42nd St, New York, NY 10017</div>
+                  <div class="branch-hours">ATM Available 24/7</div>
+                </div>
+                <div class="branch-distance">0.5 mi</div>
+              </div>
+              <div class="branch-card">
+                <div>
+                  <div class="branch-name">Spring Bank – Times Square</div>
+                  <div class="branch-address">1560 Broadway, New York, NY 10036</div>
+                  <div class="branch-hours">Mon–Fri 9am–6pm · Sat 10am–2pm</div>
+                </div>
+                <div class="branch-distance">0.8 mi</div>
+              </div>
+              <div class="branch-card">
+                <div>
+                  <div class="branch-name">Spring Bank – Upper East Side</div>
+                  <div class="branch-address">1201 Lexington Ave, New York, NY 10028</div>
+                  <div class="branch-hours">Mon–Fri 9am–5pm · Sat 9am–12pm</div>
+                </div>
+                <div class="branch-distance">1.2 mi</div>
+              </div>
+              <div class="branch-card">
+                <div>
+                  <div class="branch-name">Spring Bank ATM – Penn Station</div>
+                  <div class="branch-address">1 Penn Plaza, New York, NY 10119</div>
+                  <div class="branch-hours">ATM Available 24/7</div>
+                </div>
+                <div class="branch-distance">1.4 mi</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Map Placeholder -->
+          <div>
+            <div class="map-placeholder" role="img" aria-label="Interactive map placeholder — integrate Google Maps or Mapbox here">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+              <p style="font-weight:600;font-size:.9rem">Interactive Map</p>
+              <p style="font-size:.8125rem">Integrate Google Maps or Mapbox to show real branch locations</p>
+            </div>
+            <p style="font-size:.75rem;color:var(--muted);margin-top:12px;text-align:center">Map shows approximate locations. Hours may vary on holidays.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-bottom" style="padding:24px 0">
+        <div class="footer-fdic">
+          <span class="fdic-badge">Member FDIC</span>
+          <span class="fdic-badge">Equal Housing Lender</span>
+        </div>
+        <div class="footer-legal-links">
+          <a href="privacy.html">Privacy</a>
+          <a href="security.html">Security</a>
+          <a href="terms.html">Terms</a>
+          <a href="index.html">Home</a>
+        </div>
+        <p class="footer-copyright">© 2026 Spring Bank, N.A.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.min.js" defer></script>
+</body>
+</html>
