@@ -24,13 +24,13 @@ module.exports = async function handler(req, res) {
     return res.status(503).json({ error: 'Authentication service not configured.' });
   }
 
-  const demoUser = process.env.DEMO_USER_ID || 'demo@springbank.com';
-  const demoPass = process.env.DEMO_PASSWORD || 'SpringDemo2026!';
+  const demoUser = (process.env.DEMO_USER_ID || 'demo@springbank.com').trim();
+  const demoPass = (process.env.DEMO_PASSWORD || 'SpringDemo2026!').trim();
 
   // Log attempt
   try {
     const sql = neon(process.env.DATABASE_URL);
-    const success = (username === demoUser && password === demoPass);
+    const success = (username.trim() === demoUser && password === demoPass);
 
     await sql`
       INSERT INTO auth_attempts (username, ip, success)
