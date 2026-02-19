@@ -220,7 +220,9 @@ function nextStep() {
         const note = document.getElementById('transferNote').value;
         
         if (!amount || parseFloat(amount) <= 0) {
-            alert('Please enter a valid amount');
+            if (typeof showNotification === 'function') {
+                showNotification('Please enter a valid amount', 'error');
+            }
             return;
         }
         

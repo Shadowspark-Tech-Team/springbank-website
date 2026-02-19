@@ -200,7 +200,7 @@ function initGrowthChart() {
 // ============================================================================
 
 // Update charts based on time filter
-function updateChartsTimeframe(timeframe) {
+function updateChartsTimeframe(event, timeframe) {
     // This would typically fetch new data from an API
     // For demo purposes, we'll just update the active filter button
     
@@ -208,7 +208,9 @@ function updateChartsTimeframe(timeframe) {
         btn.classList.remove('active');
     });
     
-    event.target.classList.add('active');
+    if (event && event.target) {
+        event.target.classList.add('active');
+    }
     
     // In a real application, you would:
     // 1. Fetch new data based on timeframe
