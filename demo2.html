@@ -3352,6 +3352,518 @@
         }
     </style>
 
+    <!-- SECURITY CENTER SECTION -->
+    <section class="security-center" id="security" style="padding: 6rem 5%; background: var(--surface-dark); position: relative; z-index: 1;">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <!-- Section Header -->
+            <div class="section-header" style="text-align: center; margin-bottom: 4rem;">
+                <div class="section-badge" style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--surface-glass); border: 1px solid var(--border-subtle); padding: 0.5rem 1.5rem; border-radius: 50px; color: var(--accent-gold); font-weight: 600; margin-bottom: 1rem;">
+                    <i class="fas fa-shield-alt"></i>
+                    Security Center
+                </div>
+                <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">Your Security Dashboard</h2>
+                <p style="color: var(--text-secondary); font-size: 1.125rem; max-width: 600px; margin: 0 auto;">Monitor your account security, manage devices, and control your privacy settings.</p>
+            </div>
+
+            <!-- Security Score Meter -->
+            <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; margin-bottom: 3rem;">
+                <div class="security-score-card" style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 3rem; text-align: center;">
+                    <h3 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 2rem;">Security Score</h3>
+                    <div style="position: relative; width: 200px; height: 200px; margin: 0 auto 2rem;">
+                        <svg class="security-score-ring" width="200" height="200" style="transform: rotate(-90deg);">
+                            <circle cx="100" cy="100" r="85" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="12"/>
+                            <circle id="securityScoreCircle" cx="100" cy="100" r="85" fill="none" stroke="url(#scoreGradient)" stroke-width="12" stroke-dasharray="534" stroke-dashoffset="534" stroke-linecap="round" style="transition: stroke-dashoffset 2s ease-in-out;"/>
+                            <defs>
+                                <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#00D4AA;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#00FFD0;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                            <div id="securityScoreValue" style="font-size: 3rem; font-weight: 800; color: var(--accent-teal);">85</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.5rem;">/ 100</div>
+                        </div>
+                    </div>
+                    <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0, 212, 170, 0.15); border: 1px solid var(--accent-teal); padding: 0.5rem 1.5rem; border-radius: 50px; color: var(--accent-teal); font-weight: 600;">
+                        <i class="fas fa-check-circle"></i>
+                        Strong Security
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid for other widgets -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 2rem;">
+                
+                <!-- Login History -->
+                <div class="security-widget" style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 2rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+                        <h3 style="font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-history" style="color: var(--accent-teal);"></i>
+                            Login History
+                        </h3>
+                        <span style="font-size: 0.875rem; color: var(--text-muted);">Last 10 attempts</span>
+                    </div>
+                    <div class="login-timeline" style="position: relative;">
+                        <div style="position: absolute; left: 18px; top: 0; bottom: 0; width: 2px; background: var(--border-subtle);"></div>
+                        
+                        <!-- Login Entry - Success -->
+                        <div class="login-entry" style="position: relative; padding-left: 3rem; margin-bottom: 1.5rem;">
+                            <div style="position: absolute; left: 10px; top: 0; width: 18px; height: 18px; background: var(--success); border-radius: 50%; border: 3px solid var(--surface-dark);"></div>
+                            <div style="background: rgba(0, 200, 83, 0.1); border: 1px solid rgba(0, 200, 83, 0.3); border-radius: 12px; padding: 1rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                                    <div>
+                                        <div style="font-weight: 600; color: var(--success); font-size: 0.875rem;">Successful Login</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Today, 9:32 AM</div>
+                                    </div>
+                                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                    <div><i class="fas fa-laptop" style="width: 16px;"></i> MacBook Pro</div>
+                                    <div style="margin-top: 0.25rem;"><i class="fas fa-map-marker-alt" style="width: 16px;"></i> Lagos, Nigeria</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Login Entry - Success -->
+                        <div class="login-entry" style="position: relative; padding-left: 3rem; margin-bottom: 1.5rem;">
+                            <div style="position: absolute; left: 10px; top: 0; width: 18px; height: 18px; background: var(--success); border-radius: 50%; border: 3px solid var(--surface-dark);"></div>
+                            <div style="background: rgba(0, 200, 83, 0.1); border: 1px solid rgba(0, 200, 83, 0.3); border-radius: 12px; padding: 1rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                                    <div>
+                                        <div style="font-weight: 600; color: var(--success); font-size: 0.875rem;">Successful Login</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Yesterday, 2:15 PM</div>
+                                    </div>
+                                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                    <div><i class="fas fa-mobile-alt" style="width: 16px;"></i> iPhone 14 Pro</div>
+                                    <div style="margin-top: 0.25rem;"><i class="fas fa-map-marker-alt" style="width: 16px;"></i> Lagos, Nigeria</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Login Entry - Failed -->
+                        <div class="login-entry" style="position: relative; padding-left: 3rem; margin-bottom: 1.5rem;">
+                            <div style="position: absolute; left: 10px; top: 0; width: 18px; height: 18px; background: var(--danger); border-radius: 50%; border: 3px solid var(--surface-dark);"></div>
+                            <div style="background: rgba(255, 82, 82, 0.1); border: 1px solid rgba(255, 82, 82, 0.3); border-radius: 12px; padding: 1rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                                    <div>
+                                        <div style="font-weight: 600; color: var(--danger); font-size: 0.875rem;">Failed Login Attempt</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Jan 17, 11:45 PM</div>
+                                    </div>
+                                    <i class="fas fa-times-circle" style="color: var(--danger);"></i>
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                    <div><i class="fas fa-desktop" style="width: 16px;"></i> Unknown Device</div>
+                                    <div style="margin-top: 0.25rem;"><i class="fas fa-map-marker-alt" style="width: 16px;"></i> Unknown Location</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- More Success Entries -->
+                        <div class="login-entry" style="position: relative; padding-left: 3rem;">
+                            <div style="position: absolute; left: 10px; top: 0; width: 18px; height: 18px; background: var(--success); border-radius: 50%; border: 3px solid var(--surface-dark);"></div>
+                            <div style="background: rgba(0, 200, 83, 0.1); border: 1px solid rgba(0, 200, 83, 0.3); border-radius: 12px; padding: 1rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                                    <div>
+                                        <div style="font-weight: 600; color: var(--success); font-size: 0.875rem;">Successful Login</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Jan 16, 8:20 AM</div>
+                                    </div>
+                                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                    <div><i class="fas fa-laptop" style="width: 16px;"></i> MacBook Pro</div>
+                                    <div style="margin-top: 0.25rem;"><i class="fas fa-map-marker-alt" style="width: 16px;"></i> Lagos, Nigeria</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2FA Setup -->
+                <div class="security-widget" style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 2rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+                        <h3 style="font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-shield-alt" style="color: var(--accent-gold);"></i>
+                            Two-Factor Authentication
+                        </h3>
+                        <label class="toggle-switch" style="position: relative; display: inline-block; width: 52px; height: 28px;">
+                            <input type="checkbox" id="twoFAToggle" style="opacity: 0; width: 0; height: 0;">
+                            <span class="toggle-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border-subtle); transition: .4s; border-radius: 28px;"></span>
+                        </label>
+                    </div>
+                    
+                    <div id="twoFAContent" style="display: none;">
+                        <div style="text-align: center; margin-bottom: 2rem;">
+                            <div style="width: 180px; height: 180px; background: white; margin: 0 auto 1rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent-gold);">
+                                <i class="fas fa-qrcode" style="font-size: 3rem; color: var(--primary-deep);"></i>
+                            </div>
+                            <p style="font-size: 0.875rem; color: var(--text-secondary);">Scan this QR code with your authenticator app</p>
+                        </div>
+                        
+                        <div style="background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+                            <div style="font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">Setup Key:</div>
+                            <code style="font-size: 0.75rem; color: var(--accent-teal); word-break: break-all;">JBSWY3DPEHPK3PXP</code>
+                        </div>
+                        
+                        <button id="showBackupCodes" style="width: 100%; background: transparent; border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 0.75rem; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">
+                            <i class="fas fa-key"></i> Show Backup Codes
+                        </button>
+                        
+                        <div id="backupCodes" style="display: none; margin-top: 1rem; background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem;">
+                            <div style="font-size: 0.875rem; font-weight: 600; margin-bottom: 1rem; color: var(--warning);">
+                                <i class="fas fa-exclamation-triangle"></i> Save these backup codes
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-family: monospace; font-size: 0.8rem;">
+                                <div style="background: rgba(255,255,255,0.05); padding: 0.5rem; border-radius: 6px;">1234-5678</div>
+                                <div style="background: rgba(255,255,255,0.05); padding: 0.5rem; border-radius: 6px;">9876-5432</div>
+                                <div style="background: rgba(255,255,255,0.05); padding: 0.5rem; border-radius: 6px;">ABCD-EFGH</div>
+                                <div style="background: rgba(255,255,255,0.05); padding: 0.5rem; border-radius: 6px;">WXYZ-1234</div>
+                                <div style="background: rgba(255,255,255,0.05); padding: 0.5rem; border-radius: 6px;">5678-QRST</div>
+                                <div style="background: rgba(255,255,255,0.05); padding: 0.5rem; border-radius: 6px;">LMNO-9876</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="twoFADisabled">
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">Enable two-factor authentication to add an extra layer of security to your account. You'll need to enter a code from your authenticator app when you sign in.</p>
+                    </div>
+                </div>
+
+                <!-- Connected Devices -->
+                <div class="security-widget" style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 2rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+                        <h3 style="font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-devices" style="color: var(--accent-teal);"></i>
+                            Connected Devices
+                        </h3>
+                        <span style="font-size: 0.875rem; color: var(--text-muted);">4 devices</span>
+                    </div>
+                    
+                    <!-- Device 1 -->
+                    <div class="device-item" style="background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-laptop" style="font-size: 1.5rem; color: var(--accent-teal);"></i>
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.95rem;">MacBook Pro</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted);">macOS Sonoma</div>
+                                    </div>
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-left: 2.25rem;">
+                                    <div><i class="fas fa-clock" style="width: 14px;"></i> Active now</div>
+                                    <div style="margin-top: 0.25rem;"><i class="fas fa-map-marker-alt" style="width: 14px;"></i> Lagos, Nigeria</div>
+                                </div>
+                            </div>
+                            <button class="device-remove" style="background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.75rem; font-weight: 600; transition: all 0.3s ease;">
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Device 2 -->
+                    <div class="device-item" style="background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-mobile-alt" style="font-size: 1.5rem; color: var(--accent-gold);"></i>
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.95rem;">iPhone 14 Pro</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted);">iOS 17.2</div>
+                                    </div>
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-left: 2.25rem;">
+                                    <div><i class="fas fa-clock" style="width: 14px;"></i> 2 hours ago</div>
+                                    <div style="margin-top: 0.25rem;"><i class="fas fa-map-marker-alt" style="width: 14px;"></i> Lagos, Nigeria</div>
+                                </div>
+                            </div>
+                            <button class="device-remove" style="background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.75rem; font-weight: 600; transition: all 0.3s ease;">
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Device 3 -->
+                    <div class="device-item" style="background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-tablet-alt" style="font-size: 1.5rem; color: var(--text-secondary);"></i>
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.95rem;">iPad Air</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted);">iPadOS 17</div>
+                                    </div>
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-left: 2.25rem;">
+                                    <div><i class="fas fa-clock" style="width: 14px;"></i> Yesterday</div>
+                                    <div style="margin-top: 0.25rem;"><i class="fas fa-map-marker-alt" style="width: 14px;"></i> Abuja, Nigeria</div>
+                                </div>
+                            </div>
+                            <button class="device-remove" style="background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.75rem; font-weight: 600; transition: all 0.3s ease;">
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Device 4 -->
+                    <div class="device-item" style="background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-desktop" style="font-size: 1.5rem; color: var(--text-secondary);"></i>
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.95rem;">Windows PC</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted);">Windows 11</div>
+                                    </div>
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-left: 2.25rem;">
+                                    <div><i class="fas fa-clock" style="width: 14px;"></i> 3 days ago</div>
+                                    <div style="margin-top: 0.25rem;"><i class="fas fa-map-marker-alt" style="width: 14px;"></i> Port Harcourt, Nigeria</div>
+                                </div>
+                            </div>
+                            <button class="device-remove" style="background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.75rem; font-weight: 600; transition: all 0.3s ease;">
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Privacy Settings -->
+                <div class="security-widget" style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 2rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+                        <h3 style="font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-user-shield" style="color: var(--accent-gold);"></i>
+                            Privacy Settings
+                        </h3>
+                    </div>
+                    
+                    <!-- Email Notifications -->
+                    <div class="privacy-setting" style="display: flex; justify-content: space-between; align-items: center; padding: 1.25rem; background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; margin-bottom: 1rem;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.25rem;">
+                                <i class="fas fa-envelope" style="color: var(--accent-teal); margin-right: 0.5rem;"></i>
+                                Email Notifications
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Receive transaction alerts via email</div>
+                        </div>
+                        <label class="toggle-switch" style="position: relative; display: inline-block; width: 52px; height: 28px;">
+                            <input type="checkbox" class="privacy-toggle" checked style="opacity: 0; width: 0; height: 0;">
+                            <span class="toggle-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--accent-teal); transition: .4s; border-radius: 28px;"></span>
+                        </label>
+                    </div>
+
+                    <!-- SMS Alerts -->
+                    <div class="privacy-setting" style="display: flex; justify-content: space-between; align-items: center; padding: 1.25rem; background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; margin-bottom: 1rem;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.25rem;">
+                                <i class="fas fa-sms" style="color: var(--accent-gold); margin-right: 0.5rem;"></i>
+                                SMS Alerts
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Get SMS for important activities</div>
+                        </div>
+                        <label class="toggle-switch" style="position: relative; display: inline-block; width: 52px; height: 28px;">
+                            <input type="checkbox" class="privacy-toggle" checked style="opacity: 0; width: 0; height: 0;">
+                            <span class="toggle-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--accent-teal); transition: .4s; border-radius: 28px;"></span>
+                        </label>
+                    </div>
+
+                    <!-- Marketing Emails -->
+                    <div class="privacy-setting" style="display: flex; justify-content: space-between; align-items: center; padding: 1.25rem; background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; margin-bottom: 1rem;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.25rem;">
+                                <i class="fas fa-bullhorn" style="color: var(--text-secondary); margin-right: 0.5rem;"></i>
+                                Marketing Emails
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Promotional offers and updates</div>
+                        </div>
+                        <label class="toggle-switch" style="position: relative; display: inline-block; width: 52px; height: 28px;">
+                            <input type="checkbox" class="privacy-toggle" style="opacity: 0; width: 0; height: 0;">
+                            <span class="toggle-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border-subtle); transition: .4s; border-radius: 28px;"></span>
+                        </label>
+                    </div>
+
+                    <!-- Location Tracking -->
+                    <div class="privacy-setting" style="display: flex; justify-content: space-between; align-items: center; padding: 1.25rem; background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.25rem;">
+                                <i class="fas fa-location-arrow" style="color: var(--warning); margin-right: 0.5rem;"></i>
+                                Location Tracking
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Share location for fraud prevention</div>
+                        </div>
+                        <label class="toggle-switch" style="position: relative; display: inline-block; width: 52px; height: 28px;">
+                            <input type="checkbox" class="privacy-toggle" checked style="opacity: 0; width: 0; height: 0;">
+                            <span class="toggle-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--accent-teal); transition: .4s; border-radius: 28px;"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* Toggle Switch Styles */
+        .toggle-switch input:checked + .toggle-slider {
+            background-color: var(--accent-teal);
+        }
+
+        .toggle-switch input:focus + .toggle-slider {
+            box-shadow: 0 0 1px var(--accent-teal);
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Device Remove Button Hover */
+        .device-remove:hover {
+            background: var(--danger) !important;
+            color: white !important;
+            transform: scale(1.05);
+        }
+
+        /* Widget Hover Effects */
+        .security-widget:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-teal);
+            transition: all 0.3s ease;
+        }
+
+        .security-score-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-gold);
+            transition: all 0.3s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .security-center > div > div:nth-child(3) {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
+
+    <script>
+        // Security Score Animation
+        function animateSecurityScore() {
+            const circle = document.getElementById('securityScoreCircle');
+            const scoreValue = document.getElementById('securityScoreValue');
+            const targetScore = 85;
+            const circumference = 2 * Math.PI * 85;
+            const offset = circumference - (targetScore / 100) * circumference;
+            
+            // Animate the circle
+            setTimeout(() => {
+                circle.style.strokeDashoffset = offset;
+            }, 500);
+            
+            // Animate the number
+            let currentScore = 0;
+            const increment = targetScore / 60;
+            const scoreInterval = setInterval(() => {
+                currentScore += increment;
+                if (currentScore >= targetScore) {
+                    currentScore = targetScore;
+                    clearInterval(scoreInterval);
+                }
+                scoreValue.textContent = Math.round(currentScore);
+            }, 30);
+        }
+
+        // Observer for scroll animation
+        const securityObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateSecurityScore();
+                    securityObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        const securitySection = document.querySelector('.security-center');
+        if (securitySection) {
+            securityObserver.observe(securitySection);
+        }
+
+        // 2FA Toggle
+        const twoFAToggle = document.getElementById('twoFAToggle');
+        const twoFAContent = document.getElementById('twoFAContent');
+        const twoFADisabled = document.getElementById('twoFADisabled');
+        
+        if (twoFAToggle) {
+            twoFAToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    twoFAContent.style.display = 'block';
+                    twoFADisabled.style.display = 'none';
+                } else {
+                    twoFAContent.style.display = 'none';
+                    twoFADisabled.style.display = 'block';
+                }
+            });
+        }
+
+        // Show Backup Codes
+        const showBackupBtn = document.getElementById('showBackupCodes');
+        const backupCodes = document.getElementById('backupCodes');
+        
+        if (showBackupBtn) {
+            showBackupBtn.addEventListener('click', function() {
+                if (backupCodes.style.display === 'none' || backupCodes.style.display === '') {
+                    backupCodes.style.display = 'block';
+                    this.innerHTML = '<i class="fas fa-eye-slash"></i> Hide Backup Codes';
+                } else {
+                    backupCodes.style.display = 'none';
+                    this.innerHTML = '<i class="fas fa-key"></i> Show Backup Codes';
+                }
+            });
+        }
+
+        // Device Remove Buttons
+        const deviceRemoveBtns = document.querySelectorAll('.device-remove');
+        deviceRemoveBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to remove this device?')) {
+                    this.closest('.device-item').style.transition = 'all 0.3s ease';
+                    this.closest('.device-item').style.opacity = '0';
+                    this.closest('.device-item').style.transform = 'translateX(20px)';
+                    setTimeout(() => {
+                        this.closest('.device-item').remove();
+                        // Update device count
+                        const deviceCount = document.querySelectorAll('.device-item').length;
+                        document.querySelector('.security-widget h3 + span').textContent = `${deviceCount} devices`;
+                    }, 300);
+                }
+            });
+        });
+
+        // Privacy Toggle Switches
+        const privacyToggles = document.querySelectorAll('.privacy-toggle');
+        privacyToggles.forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const slider = this.nextElementSibling;
+                if (this.checked) {
+                    slider.style.backgroundColor = 'var(--accent-teal)';
+                } else {
+                    slider.style.backgroundColor = 'var(--border-subtle)';
+                }
+            });
+        });
+    </script>
+
     <!-- CTA SECTION -->
     <section class="cta" id="contact">
         <div class="cta-box">
