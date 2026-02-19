@@ -55,6 +55,132 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════════
+           LIGHT THEME
+        ═══════════════════════════════════════════════════════════════════ */
+        body.light-theme {
+            --surface-dark: #F8FAFC;
+            --surface-dark-alt: #F1F5F9;
+            --surface-card: rgba(255, 255, 255, 0.9);
+            --surface-glass: rgba(255, 255, 255, 0.7);
+            --text-primary: #1A1A2E;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-subtle: rgba(0, 0, 0, 0.1);
+            --shadow-premium: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        body.light-theme .bg-orb {
+            opacity: 0.15;
+        }
+
+        body.light-theme .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════
+           ENTRANCE ANIMATIONS
+        ═══════════════════════════════════════════════════════════════════ */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .animate-on-scroll.delay-1 { animation-delay: 0.1s; }
+        .animate-on-scroll.delay-2 { animation-delay: 0.2s; }
+        .animate-on-scroll.delay-3 { animation-delay: 0.3s; }
+        .animate-on-scroll.delay-4 { animation-delay: 0.4s; }
+        .animate-on-scroll.delay-5 { animation-delay: 0.5s; }
+        .animate-on-scroll.delay-6 { animation-delay: 0.6s; }
+
+        /* ═══════════════════════════════════════════════════════════════════
+           ENHANCED HOVER EFFECTS
+        ═══════════════════════════════════════════════════════════════════ */
+        .feature-card:hover,
+        .security-widget:hover,
+        .chart-card:hover {
+            transform: translateY(-8px) !important;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4) !important;
+            border-color: var(--accent-gold) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .btn:hover {
+            transform: scale(1.02) !important;
+            box-shadow: 0 15px 30px rgba(0, 212, 170, 0.4) !important;
+        }
+
+        nav a:not(.btn):hover {
+            color: var(--accent-gold) !important;
+        }
+
+        .theme-toggle:hover {
+            background: var(--surface-glass) !important;
+            border-color: var(--accent-teal) !important;
+            transform: scale(1.05) !important;
+        }
+
+        .theme-toggle:hover .theme-icon {
+            transform: rotate(360deg) !important;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════
+           LOADING SKELETONS
+        ═══════════════════════════════════════════════════════════════════ */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .skeleton {
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.05) 0px,
+                rgba(255, 255, 255, 0.15) 40px,
+                rgba(255, 255, 255, 0.05) 80px
+            );
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite linear;
+            border-radius: 8px;
+        }
+
+        body.light-theme .skeleton {
+            background: linear-gradient(
+                90deg,
+                rgba(0, 0, 0, 0.05) 0px,
+                rgba(0, 0, 0, 0.1) 40px,
+                rgba(0, 0, 0, 0.05) 80px
+            );
+            background-size: 1000px 100%;
+        }
+
+        .skeleton-pulse {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .skeleton-card {
+            height: 200px;
+            border-radius: 16px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════
            BACKGROUND EFFECTS
         ═══════════════════════════════════════════════════════════════════ */
         .bg-effects {
@@ -2862,7 +2988,13 @@
             <li><a href="#services">Services</a></li>
             <li><a href="#security">Security</a></li>
             <li><a href="#contact">Contact</a></li>
-        </ul>        <div class="nav-cta">
+        </ul>
+        
+        <div class="nav-cta">
+            <!-- Theme Toggle -->
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme" style="background: transparent; border: 1px solid var(--border-subtle); width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; margin-right: 1rem;">
+                <i class="fas fa-moon theme-icon" style="color: var(--text-primary); font-size: 1.1rem; transition: transform 0.3s ease;"></i>
+            </button>
             <a href="#" class="btn btn-ghost">Sign In</a>
             <a href="#" class="btn btn-primary">Get Started</a>
         </div>
@@ -4479,6 +4611,165 @@
             }
         `;
         document.head.appendChild(style);
+    </script>
+
+    <!-- INTERACTIVE FEATURES SCRIPT -->
+    <script>
+        // ═══════════════════════════════════════════════════════════════════
+        // THEME TOGGLE
+        // ═══════════════════════════════════════════════════════════════════
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.querySelector('.theme-icon');
+        const body = document.body;
+
+        // Load saved theme preference
+        const savedTheme = localStorage.getItem('springbank-theme') || 'dark';
+        if (savedTheme === 'light') {
+            body.classList.add('light-theme');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+
+        // Toggle theme
+        if (themeToggle) {
+            themeToggle.addEventListener('click', function() {
+                body.classList.toggle('light-theme');
+                
+                if (body.classList.contains('light-theme')) {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                    localStorage.setItem('springbank-theme', 'light');
+                } else {
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                    localStorage.setItem('springbank-theme', 'dark');
+                }
+            });
+        }
+
+        // ═══════════════════════════════════════════════════════════════════
+        // ENTRANCE ANIMATIONS ON SCROLL
+        // ═══════════════════════════════════════════════════════════════════
+        const animateOnScrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // Add animation class with staggered delay
+                    setTimeout(() => {
+                        entry.target.classList.add('animate-on-scroll');
+                    }, index * 100);
+                    animateOnScrollObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        // Animate feature cards
+        document.querySelectorAll('.feature-card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.classList.add(`delay-${(index % 6) + 1}`);
+            animateOnScrollObserver.observe(card);
+        });
+
+        // Animate security widgets
+        document.querySelectorAll('.security-widget').forEach((widget, index) => {
+            widget.style.opacity = '0';
+            widget.classList.add(`delay-${(index % 4) + 1}`);
+            animateOnScrollObserver.observe(widget);
+        });
+
+        // Animate app features
+        document.querySelectorAll('.app-feature').forEach((feature, index) => {
+            feature.style.opacity = '0';
+            feature.classList.add(`delay-${(index % 6) + 1}`);
+            animateOnScrollObserver.observe(feature);
+        });
+
+        // Animate chart cards
+        document.querySelectorAll('.chart-card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.classList.add(`delay-${(index % 3) + 1}`);
+            animateOnScrollObserver.observe(card);
+        });
+
+        // ═══════════════════════════════════════════════════════════════════
+        // LOADING SKELETONS (Example Implementation)
+        // ═══════════════════════════════════════════════════════════════════
+        function showSkeleton(element) {
+            const skeleton = document.createElement('div');
+            skeleton.className = 'skeleton skeleton-card';
+            skeleton.style.position = 'absolute';
+            skeleton.style.top = '0';
+            skeleton.style.left = '0';
+            skeleton.style.width = '100%';
+            skeleton.style.height = '100%';
+            skeleton.style.zIndex = '10';
+            
+            element.style.position = 'relative';
+            element.appendChild(skeleton);
+            
+            return skeleton;
+        }
+
+        function hideSkeleton(skeleton) {
+            if (skeleton && skeleton.parentNode) {
+                skeleton.parentNode.removeChild(skeleton);
+            }
+        }
+
+        // Example: Simulate loading for chart cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const chartCards = document.querySelectorAll('.chart-card');
+            
+            chartCards.forEach((card, index) => {
+                const skeleton = showSkeleton(card);
+                
+                // Simulate loading time (remove in production)
+                setTimeout(() => {
+                    hideSkeleton(skeleton);
+                }, 1000 + (index * 200));
+            });
+        });
+
+        // ═══════════════════════════════════════════════════════════════════
+        // SMOOTH SCROLL ENHANCEMENT
+        // ═══════════════════════════════════════════════════════════════════
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && href !== '#!') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+
+        // ═══════════════════════════════════════════════════════════════════
+        // PERFORMANCE OPTIMIZATION
+        // ═══════════════════════════════════════════════════════════════════
+        // Lazy load images
+        if ('loading' in HTMLImageElement.prototype) {
+            const images = document.querySelectorAll('img[loading="lazy"]');
+            images.forEach(img => {
+                img.src = img.dataset.src || img.src;
+            });
+        } else {
+            // Fallback for browsers that don't support lazy loading
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+            document.body.appendChild(script);
+        }
+
+        console.log('%c🏦 SpringBank Digital Banking', 'font-size: 20px; font-weight: bold; color: #00D4AA;');
+        console.log('%c✨ Designed by Shadowspark Technologies', 'font-size: 14px; color: #C9A227;');
+        console.log('%c👨‍💻 Stephen Chijioke Okoronkwo', 'font-size: 12px; color: #94A3B8;');
     </script>
 </body>
 </html>
