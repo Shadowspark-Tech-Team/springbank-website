@@ -4,27 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SpringBank | Premium Digital Banking - Powered by Shadowspark Technologies</title>
-    
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Experience the future of banking with SpringBank - A premium digital banking platform built by Shadowspark Technologies. Secure, fast, and designed for the modern world.">
-    <meta name="keywords" content="digital banking, online banking, premium banking, financial services, Shadowspark Technologies, SpringBank">
-    <meta name="author" content="Stephen Chijioke Okoronkwo">
-    <meta name="company" content="Shadowspark Technologies">
-    <meta name="designer" content="Stephen Chijioke Okoronkwo">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="SpringBank | Premium Digital Banking">
-    <meta property="og:description" content="Experience the future of banking with SpringBank - Secure, fast, and designed for the modern world.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://springbank-demo.vercel.app">
-    <meta property="og:image" content="https://springbank-demo.vercel.app/og-image.png">
-    <meta property="og:site_name" content="SpringBank">
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="SpringBank | Premium Digital Banking">
-    <meta name="twitter:description" content="Experience the future of banking with SpringBank - Secure, fast, and designed for the modern world.">
-    <meta name="twitter:image" content="https://springbank-demo.vercel.app/twitter-image.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -2896,22 +2875,8 @@
             gap: 0.75rem;
             z-index: 999;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: var(--text-primary);
-            overflow: hidden;
-            max-width: 180px;
         }
-        
-        .designed-by:hover {
-            background: var(--surface-glass);
-            border-color: var(--accent-gold);
-            transform: translateY(-3px);
-            max-width: 300px;
-            box-shadow: 0 15px 40px rgba(201, 162, 39, 0.3);
-        }
-        
+
         .designed-by-icon {
             width: 32px;
             height: 32px;
@@ -2923,31 +2888,16 @@
             font-weight: 700;
             font-size: 0.8rem;
             color: var(--accent-gold);
-            flex-shrink: 0;
         }
 
         .designed-by-text {
             font-size: 0.8rem;
-            white-space: nowrap;
         }
 
         .designed-by-text span {
             display: block;
             color: var(--text-muted);
             font-size: 0.7rem;
-        }
-        
-        .designed-by-extra {
-            display: none;
-            margin-left: 0.5rem;
-            padding-left: 0.5rem;
-            border-left: 1px solid var(--border-subtle);
-            font-size: 0.65rem;
-            color: var(--text-muted);
-        }
-        
-        .designed-by:hover .designed-by-extra {
-            display: block;
         }
 
         /* RESPONSIVE */
@@ -4395,20 +4345,10 @@
                     <li><a href="#">Terms of Service</a></li>
                 </ul>
             </div>
-            
-            <div class="footer-column">
-                <h4>Connect</h4>
-                <ul>
-                    <li><a href="https://www.linkedin.com/in/stephen-chijioke-okoronkwo" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
-                    <li><a href="https://github.com/Shadow7user" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
-                    <li><a href="https://shadowspark-tech.org" target="_blank"><i class="fas fa-globe"></i> Company Website</a></li>
-                    <li><a href="mailto:wonderstevie702@gmail.com"><i class="fas fa-envelope"></i> Contact</a></li>
-                </ul>
-            </div>
         </div>
         
         <div class="footer-bottom">
-            <p>&copy; 2024 Shadowspark Technologies. All rights reserved. | Designed by <strong>Stephen Chijioke Okoronkwo</strong></p>
+            <p>&copy; 2024 SpringBank. All rights reserved. | Built by <strong>Shadowspark Technologies</strong></p>
             <div class="footer-bottom-links">
                 <a href="#">Privacy</a>
                 <a href="#">Terms</a>
@@ -4418,17 +4358,13 @@
     </footer>
 
     <!-- DESIGNED BY BADGE -->
-    <!-- DESIGNED BY BADGE -->
-    <a href="https://shadowspark-tech.org" target="_blank" class="designed-by">
+    <div class="designed-by">
         <div class="designed-by-icon">ST</div>
         <div class="designed-by-text">
-            Built by
+            Designed by
             <span>Shadowspark Technologies</span>
         </div>
-        <div class="designed-by-extra">
-            Click to learn more
-        </div>
-    </a>
+    </div>
 
     <script>
         // Navbar scroll effect
