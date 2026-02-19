@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- Primary Meta Tags -->
+    <title>SpringBank Digital Banking - The Future of Banking | Shadowspark Technologies</title>
+    <meta name="title" content="SpringBank Digital Banking - The Future of Banking">
+    <meta name="description" content="Experience premium digital banking with bank-level security, smart analytics, and global transfers. Built by Shadowspark Technologies for the modern world.">
+    <meta name="keywords" content="digital banking, online banking, mobile banking, premium banking, fintech, Shadowspark Technologies, Stephen Chijioke Okoronkwo">
+    <meta name="author" content="Stephen Chijioke Okoronkwo, Shadowspark Technologies">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://springbank-demo.vercel.app/">
+    <meta property="og:title" content="SpringBank Digital Banking - The Future of Banking">
+    <meta property="og:description" content="Experience premium digital banking with bank-level security, smart analytics, and global transfers.">
+    <meta property="og:image" content="https://springbank-demo.vercel.app/assets/images/og-image.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://springbank-demo.vercel.app/">
+    <meta property="twitter:title" content="SpringBank Digital Banking - The Future of Banking">
+    <meta property="twitter:description" content="Experience premium digital banking with bank-level security, smart analytics, and global transfers.">
+    <meta property="twitter:image" content="https://springbank-demo.vercel.app/assets/images/twitter-image.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏦</text></svg>">
+    
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+</head>
+<body class="dark-theme">
+    
+    <!-- Header/Navigation -->
+    <header class="header" id="header">
+        <nav class="container nav">
+            <div class="nav-brand">
+                <i class="fas fa-landmark"></i>
+                <span class="brand-text">Spring<span class="brand-accent">Bank</span></span>
+            </div>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item"><a href="#features" class="nav-link">Features</a></li>
+                <li class="nav-item"><a href="#services" class="nav-link">Services</a></li>
+                <li class="nav-item"><a href="#security" class="nav-link">Security</a></li>
+                <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            
+            <div class="nav-actions">
+                <button class="btn btn-ghost" onclick="window.location.href='#signin'">Sign In</button>
+                <button class="btn btn-primary">Get Started</button>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <span class="badge badge-premium">
+                    <i class="fas fa-shield-halved"></i>
+                    Bank-Level Security
+                </span>
+                
+                <h1 class="hero-title fade-in-up">
+                    The Future of <br>
+                    <span class="gradient-text">Digital Banking</span>
+                </h1>
+                
+                <p class="hero-subtitle fade-in-up delay-1">
+                    Experience seamless financial management with cutting-edge security, 
+                    intelligent analytics, and global accessibility. Your money, elevated.
+                </p>
+                
+                <div class="hero-actions fade-in-up delay-2">
+                    <button class="btn btn-primary btn-lg">
+                        <span>Try Demo</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn btn-outline btn-lg">
+                        <span>Contact Sales</span>
+                        <i class="fas fa-phone"></i>
+                    </button>
+                </div>
+                
+                <div class="hero-stats fade-in-up delay-3">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="2000000">0</div>
+                        <div class="stat-label">Active Users</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="150">0</div>
+                        <div class="stat-label">Countries</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number">99.9%</div>
+                        <div class="stat-label">Uptime</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-visual fade-in-up delay-2">
+                <div class="dashboard-card floating">
+                    <div class="card-header">
+                        <div class="card-title">Account Overview</div>
+                        <button class="icon-btn">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                    <div class="balance-display">
+                        <div class="balance-label">Total Balance</div>
+                        <div class="balance-amount">$124,589.00</div>
+                        <div class="balance-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+12.5% this month</span>
+                        </div>
+                    </div>
+                    <div class="quick-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Send</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-download"></i>
+                            <span>Receive</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Exchange</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Invest</span>
+                        </button>
+                    </div>
+                    <div class="recent-transactions">
+                        <div class="transaction-header">Recent Transactions</div>
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-name">Amazon Purchase</div>
+                                <div class="transaction-date">Today, 2:45 PM</div>
+                            </div>
+                            <div class="transaction-amount negative">-$89.99</div>
+                        </div>
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-name">Salary Deposit</div>
+                                <div class="transaction-date">Dec 1, 9:00 AM</div>
+                            </div>
+                            <div class="transaction-amount positive">+$5,240.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Why Choose Us</span>
+                <h2 class="section-title">Built for the Modern World</h2>
+                <p class="section-subtitle">
+                    Powerful features designed to give you complete control over your finances
+                </p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Mobile Banking</h3>
+                    <p class="feature-description">
+                        Bank anywhere, anytime with our intuitive mobile app. 
+                        Complete control at your fingertips.
+                    </p>
+                </div>
+                
+                <div class="feature-card fade-in-up delay-1">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Bank-Level Security</h3>
+                    <p class="feature-description">
+                        Military-grade encryption and multi-factor authentication 
+                        protect your assets 24/7.
+                    </p>
+                </div>
+                
+                <div class="feature-card fade-in-up delay-2">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3 class="feature-title">Smart Analytics</h3>
+                    <p class="feature-description">
+                        AI-powered insights help you understand spending patterns 
+                        and optimize your finances.
+                    </p>
+                </div>
+                
+                <div class="feature-card fade-in-up delay-3">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="feature-title">Global Transfers</h3>
+                    <p class="feature-description">
+                        Send money worldwide instantly with competitive rates 
+                        and zero hidden fees.
+                    </p>
+                </div>
+                
+                <div class="feature-card fade-in-up delay-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-piggy-bank"></i>
+                    </div>
+                    <h3 class="feature-title">Savings Goals</h3>
+                    <p class="feature-description">
+                        Set and track financial goals with automated savings 
+                        and smart recommendations.
+                    </p>
+                </div>
+                
+                <div class="feature-card fade-in-up delay-5">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3 class="feature-title">24/7 Support</h3>
+                    <p class="feature-description">
+                        Our dedicated support team is always ready to help 
+                        you with any questions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container services-container">
+            <div class="services-content">
+                <span class="section-badge">Our Services</span>
+                <h2 class="section-title">Everything You Need in One Place</h2>
+                <p class="services-description">
+                    SpringBank offers comprehensive financial services designed to meet 
+                    all your banking needs with exceptional convenience and security.
+                </p>
+                
+                <ul class="services-list">
+                    <li class="service-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Personal & Business Accounts</span>
+                    </li>
+                    <li class="service-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Investment & Wealth Management</span>
+                    </li>
+                    <li class="service-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Loans & Credit Solutions</span>
+                    </li>
+                    <li class="service-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Insurance & Protection Plans</span>
+                    </li>
+                    <li class="service-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Cryptocurrency Trading</span>
+                    </li>
+                    <li class="service-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Multi-Currency Accounts</span>
+                    </li>
+                </ul>
+                
+                <button class="btn btn-primary btn-lg">
+                    <span>Explore All Services</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            
+            <div class="services-visual">
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="app-preview">
+                            <div class="app-header">
+                                <div class="app-time">9:41</div>
+                                <div class="app-icons">
+                                    <i class="fas fa-signal"></i>
+                                    <i class="fas fa-wifi"></i>
+                                    <i class="fas fa-battery-full"></i>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="app-title">Quick Transfer</div>
+                                <div class="contact-avatars">
+                                    <div class="avatar">JD</div>
+                                    <div class="avatar">SM</div>
+                                    <div class="avatar">RL</div>
+                                    <div class="avatar">+12</div>
+                                </div>
+                                <div class="transfer-amount">$2,450.00</div>
+                                <div class="transfer-note">Rent payment for Dec</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Investment Dashboard Section -->
+    <section class="investment" id="investment">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Portfolio</span>
+                <h2 class="section-title">Investment Dashboard</h2>
+                <p class="section-subtitle">
+                    Track and manage your investment portfolio with real-time analytics
+                </p>
+            </div>
+            
+            <div class="investment-grid">
+                <div class="investment-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Asset Allocation</h3>
+                        <button class="icon-btn">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="assetChart"></canvas>
+                    </div>
+                    <div class="asset-legend">
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: #00D4AA;"></span>
+                            <span class="legend-label">Stocks (40%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: #C9A227;"></span>
+                            <span class="legend-label">Bonds (30%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: #2E5A8B;"></span>
+                            <span class="legend-label">Cash (20%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: #FF5252;"></span>
+                            <span class="legend-label">Crypto (10%)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="investment-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Portfolio Growth</h3>
+                        <div class="time-filter">
+                            <button class="filter-btn active">1Y</button>
+                            <button class="filter-btn">6M</button>
+                            <button class="filter-btn">1M</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="investment-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Live Markets</h3>
+                        <span class="live-indicator">
+                            <span class="pulse"></span>
+                            Live
+                        </span>
+                    </div>
+                    <div class="stocks-list">
+                        <div class="stock-item">
+                            <div class="stock-info">
+                                <div class="stock-symbol">AAPL</div>
+                                <div class="stock-name">Apple Inc.</div>
+                            </div>
+                            <div class="stock-data">
+                                <div class="stock-price">$178.45</div>
+                                <div class="stock-change positive">+2.34%</div>
+                            </div>
+                        </div>
+                        <div class="stock-item">
+                            <div class="stock-info">
+                                <div class="stock-symbol">MSFT</div>
+                                <div class="stock-name">Microsoft Corp.</div>
+                            </div>
+                            <div class="stock-data">
+                                <div class="stock-price">$374.23</div>
+                                <div class="stock-change positive">+1.87%</div>
+                            </div>
+                        </div>
+                        <div class="stock-item">
+                            <div class="stock-info">
+                                <div class="stock-symbol">GOOGL</div>
+                                <div class="stock-name">Alphabet Inc.</div>
+                            </div>
+                            <div class="stock-data">
+                                <div class="stock-price">$140.92</div>
+                                <div class="stock-change negative">-0.56%</div>
+                            </div>
+                        </div>
+                        <div class="stock-item">
+                            <div class="stock-info">
+                                <div class="stock-symbol">TSLA</div>
+                                <div class="stock-name">Tesla Inc.</div>
+                            </div>
+                            <div class="stock-data">
+                                <div class="stock-price">$242.84</div>
+                                <div class="stock-change positive">+3.12%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="investment-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Investment Calculator</h3>
+                    </div>
+                    <div class="calculator">
+                        <div class="input-group">
+                            <label>Initial Investment</label>
+                            <input type="number" id="initialInvestment" value="10000" class="calculator-input">
+                        </div>
+                        <div class="input-group">
+                            <label>Monthly Contribution</label>
+                            <input type="number" id="monthlyContribution" value="500" class="calculator-input">
+                        </div>
+                        <div class="input-group">
+                            <label>Expected Return (%)</label>
+                            <input type="number" id="returnRate" value="8" class="calculator-input">
+                        </div>
+                        <div class="input-group">
+                            <label>Time Period (Years)</label>
+                            <input type="number" id="timePeriod" value="10" class="calculator-input">
+                        </div>
+                        <button class="btn btn-primary full-width" onclick="calculateInvestment()">
+                            Calculate
+                        </button>
+                        <div class="calculator-result" id="calculatorResult">
+                            <div class="result-label">Projected Value</div>
+                            <div class="result-value">$0.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Money Transfer Section -->
+    <section class="transfer" id="transfer">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Send Money</span>
+                <h2 class="section-title">Quick & Secure Transfers</h2>
+                <p class="section-subtitle">
+                    Send money to anyone, anywhere in the world, instantly
+                </p>
+            </div>
+            
+            <div class="transfer-widget">
+                <div class="transfer-steps">
+                    <div class="step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Recipient</div>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Amount</div>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Confirm</div>
+                    </div>
+                </div>
+                
+                <div class="transfer-form">
+                    <div class="form-step active" id="step1">
+                        <h3 class="form-title">Select Recipient</h3>
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search by name or account" class="search-input">
+                        </div>
+                        <div class="contacts-grid">
+                            <div class="contact-card" onclick="selectRecipient('John Doe')">
+                                <div class="contact-avatar">JD</div>
+                                <div class="contact-name">John Doe</div>
+                                <div class="contact-account">****4532</div>
+                            </div>
+                            <div class="contact-card" onclick="selectRecipient('Sarah Miller')">
+                                <div class="contact-avatar">SM</div>
+                                <div class="contact-name">Sarah Miller</div>
+                                <div class="contact-account">****7891</div>
+                            </div>
+                            <div class="contact-card" onclick="selectRecipient('Robert Lee')">
+                                <div class="contact-avatar">RL</div>
+                                <div class="contact-name">Robert Lee</div>
+                                <div class="contact-account">****2345</div>
+                            </div>
+                            <div class="contact-card" onclick="selectRecipient('Emma Wilson')">
+                                <div class="contact-avatar">EW</div>
+                                <div class="contact-name">Emma Wilson</div>
+                                <div class="contact-account">****6789</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-step" id="step2">
+                        <h3 class="form-title">Enter Amount</h3>
+                        <div class="selected-recipient" id="selectedRecipient"></div>
+                        <div class="amount-input-wrapper">
+                            <span class="currency-symbol">$</span>
+                            <input type="text" id="transferAmount" placeholder="0.00" class="amount-input">
+                        </div>
+                        <div class="quick-amounts">
+                            <button class="quick-amount" onclick="setAmount(50)">$50</button>
+                            <button class="quick-amount" onclick="setAmount(100)">$100</button>
+                            <button class="quick-amount" onclick="setAmount(500)">$500</button>
+                            <button class="quick-amount" onclick="setAmount(1000)">$1000</button>
+                        </div>
+                        <div class="input-group">
+                            <label>Note (Optional)</label>
+                            <input type="text" id="transferNote" placeholder="What's this for?" class="form-input">
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-ghost" onclick="prevStep()">Back</button>
+                            <button class="btn btn-primary" onclick="nextStep()">Continue</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-step" id="step3">
+                        <h3 class="form-title">Confirm Transfer</h3>
+                        <div class="confirmation-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Recipient</span>
+                                <span class="detail-value" id="confirmRecipient">-</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Amount</span>
+                                <span class="detail-value" id="confirmAmount">$0.00</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Fee</span>
+                                <span class="detail-value">$0.00</span>
+                            </div>
+                            <div class="detail-row total">
+                                <span class="detail-label">Total</span>
+                                <span class="detail-value" id="confirmTotal">$0.00</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Note</span>
+                                <span class="detail-value" id="confirmNote">-</span>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-ghost" onclick="prevStep()">Back</button>
+                            <button class="btn btn-primary" onclick="submitTransfer()">
+                                <i class="fas fa-lock"></i>
+                                <span>Confirm Transfer</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Security Center Section -->
+    <section class="security" id="security">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Security</span>
+                <h2 class="section-title">Your Security, Our Priority</h2>
+                <p class="section-subtitle">
+                    Advanced protection measures to keep your account safe
+                </p>
+            </div>
+            
+            <div class="security-grid">
+                <div class="security-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Security Score</h3>
+                    </div>
+                    <div class="security-score">
+                        <svg class="score-ring" viewBox="0 0 200 200">
+                            <circle class="score-ring-background" cx="100" cy="100" r="85" />
+                            <circle class="score-ring-progress" cx="100" cy="100" r="85" id="scoreRing" />
+                        </svg>
+                        <div class="score-value">
+                            <span id="securityScore" data-target="92">0</span>%
+                        </div>
+                    </div>
+                    <div class="score-status">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Excellent Security</span>
+                    </div>
+                    <button class="btn btn-outline full-width">
+                        Improve Score
+                    </button>
+                </div>
+                
+                <div class="security-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Activity</h3>
+                        <button class="text-btn">View All</button>
+                    </div>
+                    <div class="activity-timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-icon success">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Successful Login</div>
+                                <div class="timeline-meta">
+                                    <span>New York, USA</span>
+                                    <span>2 hours ago</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon success">
+                                <i class="fas fa-key"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Password Changed</div>
+                                <div class="timeline-meta">
+                                    <span>New York, USA</span>
+                                    <span>1 day ago</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon warning">
+                                <i class="fas fa-exclamation"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Failed Login Attempt</div>
+                                <div class="timeline-meta">
+                                    <span>London, UK</span>
+                                    <span>3 days ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="security-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Two-Factor Authentication</h3>
+                    </div>
+                    <div class="twofa-setup">
+                        <div class="twofa-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <p class="twofa-description">
+                            Add an extra layer of security to your account with 2FA
+                        </p>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="twofaToggle" checked>
+                            <label for="twofaToggle" class="toggle-label">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span class="toggle-text">Enabled</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="security-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Connected Devices</h3>
+                        <button class="text-btn">Manage All</button>
+                    </div>
+                    <div class="devices-list">
+                        <div class="device-item">
+                            <div class="device-icon">
+                                <i class="fas fa-laptop"></i>
+                            </div>
+                            <div class="device-info">
+                                <div class="device-name">MacBook Pro</div>
+                                <div class="device-location">New York, USA</div>
+                            </div>
+                            <span class="device-status active">Active Now</span>
+                        </div>
+                        <div class="device-item">
+                            <div class="device-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div class="device-info">
+                                <div class="device-name">iPhone 14 Pro</div>
+                                <div class="device-location">New York, USA</div>
+                            </div>
+                            <span class="device-status">2 hours ago</span>
+                        </div>
+                        <div class="device-item">
+                            <div class="device-icon">
+                                <i class="fas fa-tablet-alt"></i>
+                            </div>
+                            <div class="device-info">
+                                <div class="device-name">iPad Air</div>
+                                <div class="device-location">New York, USA</div>
+                            </div>
+                            <span class="device-status">1 day ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Testimonials</span>
+                <h2 class="section-title">Trusted by Millions Worldwide</h2>
+                <p class="section-subtitle">
+                    See what our customers have to say about their experience
+                </p>
+            </div>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card fade-in-up">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "SpringBank has completely transformed how I manage my finances. 
+                        The interface is intuitive, and the security features give me peace of mind."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MJ</div>
+                        <div class="author-info">
+                            <div class="author-name">Michael Johnson</div>
+                            <div class="author-role">Entrepreneur</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card fade-in-up delay-1">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "The investment tools are incredible. I've grown my portfolio significantly 
+                        thanks to the smart analytics and real-time market data."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SP</div>
+                        <div class="author-info">
+                            <div class="author-name">Sarah Peterson</div>
+                            <div class="author-role">Financial Advisor</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card fade-in-up delay-2">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "As a business owner, SpringBank's multi-currency accounts and 
+                        global transfer capabilities have been game-changing for my international operations."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">DK</div>
+                        <div class="author-info">
+                            <div class="author-name">David Kim</div>
+                            <div class="author-role">CEO, TechCorp</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Transform Your Banking?</h2>
+                <p class="cta-subtitle">
+                    Join millions of users who trust SpringBank for their financial needs
+                </p>
+                <div class="cta-actions">
+                    <button class="btn btn-primary btn-lg">
+                        <span>Open Account</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn btn-outline btn-lg">
+                        <span>Talk to Us</span>
+                        <i class="fas fa-comments"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <div class="brand-logo">
+                        <i class="fas fa-landmark"></i>
+                        <span class="brand-text">Spring<span class="brand-accent">Bank</span></span>
+                    </div>
+                    <p class="brand-description">
+                        Experience the future of digital banking with SpringBank. 
+                        Secure, intelligent, and accessible financial services for the modern world.
+                    </p>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/stephen-chijioke-okoronkwo" target="_blank" class="social-link" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://twitter.com/shadowspark" target="_blank" class="social-link" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://facebook.com/shadowspark" target="_blank" class="social-link" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://instagram.com/shadowspark" target="_blank" class="social-link" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://github.com/Shadow7user" target="_blank" class="social-link" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4 class="column-title">Products</h4>
+                        <ul class="links-list">
+                            <li><a href="#" class="footer-link">Personal Banking</a></li>
+                            <li><a href="#" class="footer-link">Business Banking</a></li>
+                            <li><a href="#" class="footer-link">Investment</a></li>
+                            <li><a href="#" class="footer-link">Insurance</a></li>
+                            <li><a href="#" class="footer-link">Loans</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4 class="column-title">Company</h4>
+                        <ul class="links-list">
+                            <li><a href="#" class="footer-link">About Us</a></li>
+                            <li><a href="#" class="footer-link">Careers</a></li>
+                            <li><a href="#" class="footer-link">Press</a></li>
+                            <li><a href="#" class="footer-link">Blog</a></li>
+                            <li><a href="#" class="footer-link">Partnerships</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4 class="column-title">Support</h4>
+                        <ul class="links-list">
+                            <li><a href="#" class="footer-link">Help Center</a></li>
+                            <li><a href="#" class="footer-link">Contact Us</a></li>
+                            <li><a href="#" class="footer-link">Security</a></li>
+                            <li><a href="#" class="footer-link">FAQs</a></li>
+                            <li><a href="#" class="footer-link">Community</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4 class="column-title">Legal</h4>
+                        <ul class="links-list">
+                            <li><a href="#" class="footer-link">Privacy Policy</a></li>
+                            <li><a href="#" class="footer-link">Terms of Service</a></li>
+                            <li><a href="#" class="footer-link">Cookie Policy</a></li>
+                            <li><a href="#" class="footer-link">Compliance</a></li>
+                            <li><a href="#" class="footer-link">Licenses</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="copyright">
+                    <p>&copy; 2024 <a href="https://shadowspark-tech.org" target="_blank" class="company-link">Shadowspark Technologies</a>. All rights reserved.</p>
+                    <p class="designer-credit">Designed by <a href="https://www.linkedin.com/in/stephen-chijioke-okoronkwo" target="_blank" class="designer-link">Stephen Chijioke Okoronkwo</a></p>
+                </div>
+                <div class="footer-badges">
+                    <span class="badge-item">
+                        <i class="fas fa-shield-alt"></i>
+                        Bank-Grade Security
+                    </span>
+                    <span class="badge-item">
+                        <i class="fas fa-lock"></i>
+                        256-bit Encryption
+                    </span>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Designer Badge (Fixed Position) -->
+    <a href="https://shadowspark-tech.org" target="_blank" class="designer-badge" aria-label="Designed by Shadowspark Technologies">
+        <div class="badge-icon">
+            <span class="icon-text">ST</span>
+        </div>
+        <div class="badge-content">
+            <div class="badge-label">Designed by</div>
+            <div class="badge-company">Shadowspark Technologies</div>
+        </div>
+    </a>
+    
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-overlay" onclick="closeModal()"></div>
+        <div class="modal-content">
+            <div class="success-animation">
+                <div class="success-checkmark">
+                    <i class="fas fa-check"></i>
+                </div>
+            </div>
+            <h3 class="modal-title">Transfer Successful!</h3>
+            <p class="modal-text">Your money has been sent successfully</p>
+            <button class="btn btn-primary full-width" onclick="closeModal()">Done</button>
+        </div>
+    </div>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/charts.js"></script>
+    <script src="assets/js/ui.js"></script>
+</body>
+</html>
