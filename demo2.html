@@ -3885,6 +3885,237 @@
         </div>
     </section>
 
+    <!-- Multi-Currency Banking Section -->
+    <section style="padding: 6rem 2rem; background: var(--surface-dark); position: relative; overflow: hidden;">
+        <div style="max-width: 1400px; margin: 0 auto; position: relative; z-index: 2;">
+            <div style="text-align: center; margin-bottom: 4rem;">
+                <span style="display: inline-block; padding: 0.5rem 1.25rem; background: var(--surface-card); backdrop-filter: blur(10px); border: 1px solid var(--border-subtle); border-radius: 24px; font-size: 0.85rem; font-weight: 600; color: var(--accent-teal); margin-bottom: 1rem;">
+                    <i class="fas fa-globe"></i> Global Banking
+                </span>
+                <h2 style="font-size: 3rem; font-weight: 700; margin-bottom: 1rem; background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    Multi-Currency Accounts
+                </h2>
+                <p style="font-size: 1.2rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto;">
+                    Hold, exchange, and transfer money in 6+ currencies with competitive rates
+                </p>
+            </div>
+
+            <!-- Currency Wallets -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+                <!-- USD Wallet -->
+                <div class="currency-card" data-currency="USD" style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1.5rem; cursor: pointer; transition: all 0.3s ease;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <span style="font-size: 2rem;">🇺🇸</span>
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.9rem;">USD</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);">US Dollar</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 1.8rem; font-weight: 700; margin-bottom: 0.25rem;">$45,280</div>
+                    <div class="exchange-rate" style="font-size: 0.75rem; color: var(--text-muted); display: none;">1 USD = 1.00 USD</div>
+                </div>
+
+                <!-- EUR Wallet -->
+                <div class="currency-card" data-currency="EUR" style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1.5rem; cursor: pointer; transition: all 0.3s ease;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <span style="font-size: 2rem;">🇪🇺</span>
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.9rem;">EUR</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);">Euro</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 1.8rem; font-weight: 700; margin-bottom: 0.25rem;">€32,450</div>
+                    <div class="exchange-rate" style="font-size: 0.75rem; color: var(--text-muted); display: none;">1 EUR = 1.09 USD</div>
+                </div>
+
+                <!-- GBP Wallet -->
+                <div class="currency-card" data-currency="GBP" style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1.5rem; cursor: pointer; transition: all 0.3s ease;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <span style="font-size: 2rem;">🇬🇧</span>
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.9rem;">GBP</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);">British Pound</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 1.8rem; font-weight: 700; margin-bottom: 0.25rem;">£28,900</div>
+                    <div class="exchange-rate" style="font-size: 0.75rem; color: var(--text-muted); display: none;">1 GBP = 1.27 USD</div>
+                </div>
+
+                <!-- NGN Wallet -->
+                <div class="currency-card" data-currency="NGN" style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1.5rem; cursor: pointer; transition: all 0.3s ease;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <span style="font-size: 2rem;">🇳🇬</span>
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.9rem;">NGN</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);">Nigerian Naira</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 1.8rem; font-weight: 700; margin-bottom: 0.25rem;">₦18,500,000</div>
+                    <div class="exchange-rate" style="font-size: 0.75rem; color: var(--text-muted); display: none;">1 USD = 775 NGN</div>
+                </div>
+
+                <!-- JPY Wallet -->
+                <div class="currency-card" data-currency="JPY" style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1.5rem; cursor: pointer; transition: all 0.3s ease;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <span style="font-size: 2rem;">🇯🇵</span>
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.9rem;">JPY</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);">Japanese Yen</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 1.8rem; font-weight: 700; margin-bottom: 0.25rem;">¥5,420,000</div>
+                    <div class="exchange-rate" style="font-size: 0.75rem; color: var(--text-muted); display: none;">1 USD = 149.50 JPY</div>
+                </div>
+
+                <!-- AED Wallet -->
+                <div class="currency-card" data-currency="AED" style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1.5rem; cursor: pointer; transition: all 0.3s ease;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <span style="font-size: 2rem;">🇦🇪</span>
+                        <div>
+                            <div style="font-weight: 600; font-size: 0.9rem;">AED</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);">UAE Dirham</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 1.8rem; font-weight: 700; margin-bottom: 0.25rem;">د.إ166,300</div>
+                    <div class="exchange-rate" style="font-size: 0.75rem; color: var(--text-muted); display: none;">1 USD = 3.67 AED</div>
+                </div>
+            </div>
+
+            <!-- Currency Converter & International Transfer -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 2rem;">
+                <!-- Currency Converter -->
+                <div style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 2rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-exchange-alt" style="color: var(--accent-teal);"></i>
+                        Currency Converter
+                    </h3>
+
+                    <!-- From Currency -->
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">From</label>
+                        <div style="display: flex; gap: 1rem;">
+                            <input type="number" id="fromAmount" value="1000" style="flex: 1; background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem; color: var(--text-primary); font-size: 1.2rem; font-weight: 600;">
+                            <select id="fromCurrency" style="background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem; color: var(--text-primary); cursor: pointer; min-width: 120px;">
+                                <option value="USD">🇺🇸 USD</option>
+                                <option value="EUR">🇪🇺 EUR</option>
+                                <option value="GBP">🇬🇧 GBP</option>
+                                <option value="NGN">🇳🇬 NGN</option>
+                                <option value="JPY">🇯🇵 JPY</option>
+                                <option value="AED">🇦🇪 AED</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Swap Button -->
+                    <div style="text-align: center; margin: 1rem 0;">
+                        <button id="swapCurrencies" style="background: var(--accent-teal); border: none; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-exchange-alt" style="color: white; font-size: 1.2rem;"></i>
+                        </button>
+                    </div>
+
+                    <!-- To Currency -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">To</label>
+                        <div style="display: flex; gap: 1rem;">
+                            <input type="number" id="toAmount" value="920" readonly style="flex: 1; background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem; color: var(--text-primary); font-size: 1.2rem; font-weight: 600;">
+                            <select id="toCurrency" style="background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem; color: var(--text-primary); cursor: pointer; min-width: 120px;">
+                                <option value="USD">🇺🇸 USD</option>
+                                <option value="EUR" selected>🇪🇺 EUR</option>
+                                <option value="GBP">🇬🇧 GBP</option>
+                                <option value="NGN">🇳🇬 NGN</option>
+                                <option value="JPY">🇯🇵 JPY</option>
+                                <option value="AED">🇦🇪 AED</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Exchange Rate Display -->
+                    <div style="background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span style="font-size: 0.85rem; color: var(--text-muted);">Exchange Rate</span>
+                            <span id="exchangeRateDisplay" style="font-size: 0.95rem; font-weight: 600; color: var(--accent-teal);">1 USD = 0.92 EUR</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted);">
+                            <span>Last updated</span>
+                            <span>2 mins ago</span>
+                        </div>
+                    </div>
+
+                    <!-- Lock Rate Button -->
+                    <button style="width: 100%; background: var(--gradient-teal); border: none; border-radius: 12px; padding: 1rem; color: white; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-lock"></i> Lock in This Rate
+                    </button>
+                </div>
+
+                <!-- Send Internationally -->
+                <div style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 2rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-paper-plane" style="color: var(--accent-gold);"></i>
+                        Send Internationally
+                    </h3>
+
+                    <!-- Country Selector -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Recipient Country</label>
+                        <select id="recipientCountry" style="width: 100%; background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem; color: var(--text-primary); cursor: pointer; font-size: 1rem;">
+                            <option value="NG">🇳🇬 Nigeria</option>
+                            <option value="GB">🇬🇧 United Kingdom</option>
+                            <option value="US">🇺🇸 United States</option>
+                            <option value="CA">🇨🇦 Canada</option>
+                            <option value="AU">🇦🇺 Australia</option>
+                            <option value="DE">🇩🇪 Germany</option>
+                            <option value="FR">🇫🇷 France</option>
+                            <option value="JP">🇯🇵 Japan</option>
+                            <option value="AE">🇦🇪 UAE</option>
+                            <option value="IN">🇮🇳 India</option>
+                        </select>
+                    </div>
+
+                    <!-- SWIFT Code Display -->
+                    <div style="background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                            <span style="font-size: 0.85rem; color: var(--text-muted);">SWIFT/BIC Code</span>
+                            <span id="swiftCode" style="font-family: monospace; font-size: 0.95rem; font-weight: 600; color: var(--accent-gold);">SBNGNGLA</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                            <span style="font-size: 0.85rem; color: var(--text-muted);">Estimated Arrival</span>
+                            <span id="arrivalTime" style="font-size: 0.95rem; font-weight: 600; color: var(--success);">1-2 business days</span>
+                        </div>
+                    </div>
+
+                    <!-- Amount Input -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Amount to Send</label>
+                        <input type="number" id="sendAmount" value="5000" style="width: 100%; background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1rem; color: var(--text-primary); font-size: 1.2rem; font-weight: 600;">
+                    </div>
+
+                    <!-- Fee Breakdown -->
+                    <div style="background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem;">
+                        <h4 style="font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem;">Fee Breakdown</h4>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.85rem;">
+                            <span style="color: var(--text-muted);">Transfer Fee</span>
+                            <span>$15.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.85rem;">
+                            <span style="color: var(--text-muted);">Exchange Fee (0.5%)</span>
+                            <span>$25.00</span>
+                        </div>
+                        <div style="height: 1px; background: var(--border-subtle); margin: 0.75rem 0;"></div>
+                        <div style="display: flex; justify-content: space-between; font-weight: 600;">
+                            <span>Total Cost</span>
+                            <span style="color: var(--accent-teal);">$5,040.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Send Button -->
+                    <button style="width: 100%; background: var(--gradient-gold); border: none; border-radius: 12px; padding: 1rem; color: var(--primary-deep); font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-paper-plane"></i> Send Money
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <style>
         /* Toggle Switch Styles */
         .toggle-switch input:checked + .toggle-slider {
@@ -4675,6 +4906,140 @@
             }
         `;
         document.head.appendChild(style);
+
+        // ========================================
+        // MULTI-CURRENCY FEATURES
+        // ========================================
+
+        // Currency exchange rates (simplified - real app would fetch from API)
+        const exchangeRates = {
+            USD: { EUR: 0.92, GBP: 0.79, NGN: 775, JPY: 149.50, AED: 3.67 },
+            EUR: { USD: 1.09, GBP: 0.86, NGN: 843, JPY: 162.50, AED: 4.00 },
+            GBP: { USD: 1.27, EUR: 1.16, NGN: 983, JPY: 189.80, AED: 4.66 },
+            NGN: { USD: 0.00129, EUR: 0.00119, GBP: 0.00102, JPY: 0.193, AED: 0.00474 },
+            JPY: { USD: 0.0067, EUR: 0.0062, GBP: 0.0053, NGN: 5.18, AED: 0.0246 },
+            AED: { USD: 0.272, EUR: 0.250, GBP: 0.215, NGN: 211, JPY: 40.65 }
+        };
+
+        // Country SWIFT codes and arrival times
+        const countryData = {
+            NG: { swift: 'SBNGNGLA', arrival: '1-2 business days' },
+            GB: { swift: 'SBGBGB2L', arrival: 'Same day' },
+            US: { swift: 'SBUSUS33', arrival: 'Same day' },
+            CA: { swift: 'SBCACATT', arrival: '1 business day' },
+            AU: { swift: 'SBAUAU2S', arrival: '2-3 business days' },
+            DE: { swift: 'SBDEDE7X', arrival: 'Same day' },
+            FR: { swift: 'SBFRFR2L', arrival: 'Same day' },
+            JP: { swift: 'SBJPJT3X', arrival: '1-2 business days' },
+            AE: { swift: 'SBAEAEAA', arrival: '1 business day' },
+            IN: { swift: 'SBININBB', arrival: '2-3 business days' }
+        };
+
+        // Currency wallet card click to expand
+        document.querySelectorAll('.currency-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const rateDisplay = this.querySelector('.exchange-rate');
+                if (rateDisplay.style.display === 'none' || !rateDisplay.style.display) {
+                    rateDisplay.style.display = 'block';
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.borderColor = 'var(--accent-teal)';
+                } else {
+                    rateDisplay.style.display = 'none';
+                    this.style.transform = 'translateY(0)';
+                    this.style.borderColor = 'var(--border-subtle)';
+                }
+            });
+        });
+
+        // Currency conversion
+        function convertCurrency() {
+            const fromAmount = parseFloat(document.getElementById('fromAmount').value) || 0;
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+            
+            let convertedAmount = fromAmount;
+            
+            if (fromCurrency !== toCurrency) {
+                if (exchangeRates[fromCurrency] && exchangeRates[fromCurrency][toCurrency]) {
+                    convertedAmount = fromAmount * exchangeRates[fromCurrency][toCurrency];
+                }
+            }
+            
+            document.getElementById('toAmount').value = convertedAmount.toFixed(2);
+            
+            // Update exchange rate display
+            const rate = fromCurrency === toCurrency ? 1 : (exchangeRates[fromCurrency]?.[toCurrency] || 1);
+            document.getElementById('exchangeRateDisplay').textContent = `1 ${fromCurrency} = ${rate.toFixed(4)} ${toCurrency}`;
+        }
+
+        // Add event listeners for conversion
+        if (document.getElementById('fromAmount')) {
+            document.getElementById('fromAmount').addEventListener('input', convertCurrency);
+            document.getElementById('fromCurrency').addEventListener('change', convertCurrency);
+            document.getElementById('toCurrency').addEventListener('change', convertCurrency);
+            
+            // Initial conversion
+            convertCurrency();
+        }
+
+        // Swap currencies
+        if (document.getElementById('swapCurrencies')) {
+            document.getElementById('swapCurrencies').addEventListener('click', function() {
+                const fromCurrency = document.getElementById('fromCurrency');
+                const toCurrency = document.getElementById('toCurrency');
+                const fromAmount = document.getElementById('fromAmount');
+                const toAmount = document.getElementById('toAmount');
+                
+                // Swap values
+                const tempCurrency = fromCurrency.value;
+                fromCurrency.value = toCurrency.value;
+                toCurrency.value = tempCurrency;
+                
+                const tempAmount = fromAmount.value;
+                fromAmount.value = toAmount.value;
+                
+                // Animate the button
+                this.style.transform = 'rotate(180deg)';
+                setTimeout(() => {
+                    this.style.transform = 'rotate(0deg)';
+                }, 300);
+                
+                // Recalculate
+                convertCurrency();
+            });
+        }
+
+        // Update SWIFT code and arrival time based on country selection
+        if (document.getElementById('recipientCountry')) {
+            document.getElementById('recipientCountry').addEventListener('change', function() {
+                const country = this.value;
+                const data = countryData[country] || { swift: 'SBXXXXXX', arrival: '2-3 business days' };
+                
+                document.getElementById('swiftCode').textContent = data.swift;
+                document.getElementById('arrivalTime').textContent = data.arrival;
+            });
+        }
+
+        // Update fee calculation when send amount changes
+        if (document.getElementById('sendAmount')) {
+            document.getElementById('sendAmount').addEventListener('input', function() {
+                const amount = parseFloat(this.value) || 0;
+                const transferFee = 15;
+                const exchangeFeePercent = 0.005;
+                const exchangeFee = amount * exchangeFeePercent;
+                const total = amount + transferFee + exchangeFee;
+                
+                // Update the fee display (would need to add IDs to the elements)
+                const feeBreakdownContainer = this.closest('div').nextElementSibling;
+                if (feeBreakdownContainer) {
+                    const feeElements = feeBreakdownContainer.querySelectorAll('span');
+                    if (feeElements.length >= 5) {
+                        feeElements[2].textContent = `$${exchangeFee.toFixed(2)}`;
+                        feeElements[4].textContent = `$${total.toFixed(2)}`;
+                    }
+                }
+            });
+        }
     </script>
 
     <!-- INTERACTIVE FEATURES SCRIPT -->
