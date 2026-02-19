@@ -5122,6 +5122,508 @@
         }
     </script>
 
+    <!-- SOCIAL BANKING SECTION -->
+    <section class="social-banking" id="social-banking" style="padding: 120px 5%; background: var(--surface-dark);">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <!-- Section Header -->
+            <div style="text-align: center; margin-bottom: 80px;">
+                <div style="display: inline-block; padding: 8px 20px; background: rgba(0, 212, 170, 0.1); border: 1px solid rgba(0, 212, 170, 0.3); border-radius: 50px; margin-bottom: 20px;">
+                    <span style="color: var(--accent-teal); font-size: 0.9rem; font-weight: 600;">Social Banking</span>
+                </div>
+                <h2 style="font-size: 3rem; margin-bottom: 20px; background: var(--gradient-premium); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Split, Share & Settle</h2>
+                <p style="font-size: 1.2rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Split bills with friends, create group accounts, and manage shared expenses effortlessly</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-bottom: 50px;">
+                <!-- Split Bill Card -->
+                <div class="social-card animate-on-scroll" style="background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 35px; backdrop-filter: blur(20px);">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                        <div style="width: 50px; height: 50px; border-radius: 16px; background: linear-gradient(135deg, #FF6B9D 0%, #C239B3 100%); display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-receipt" style="font-size: 24px; color: white;"></i>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.3rem; margin-bottom: 5px;">Split Bill</h3>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">Dinner at Restaurant</p>
+                        </div>
+                    </div>
+
+                    <!-- Bill Total -->
+                    <div style="background: rgba(255, 107, 157, 0.1); padding: 20px; border-radius: 16px; margin-bottom: 20px; border: 1px solid rgba(255, 107, 157, 0.2);">
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px;">Total Bill</div>
+                        <div style="font-size: 2.2rem; font-weight: 700; color: #FF6B9D;">$156.80</div>
+                    </div>
+
+                    <!-- Participants -->
+                    <div style="margin-bottom: 20px;">
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+                            <span>4 Participants</span>
+                            <button onclick="addParticipant()" style="background: none; border: none; color: var(--accent-teal); font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <i class="fas fa-plus-circle"></i> Add
+                            </button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                            <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 12px;">
+                                <div style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: 600;">AL</div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 0.85rem; font-weight: 500;">Alice</div>
+                                    <div style="font-size: 0.75rem; color: var(--accent-teal);">$39.20</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 12px;">
+                                <div style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: 600;">BO</div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 0.85rem; font-weight: 500;">Bob</div>
+                                    <div style="font-size: 0.75rem; color: var(--accent-teal);">$39.20</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 12px;">
+                                <div style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: 600;">CH</div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 0.85rem; font-weight: 500;">Charlie</div>
+                                    <div style="font-size: 0.75rem; color: var(--accent-teal);">$39.20</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 12px;">
+                                <div style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: 600;">DA</div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 0.85rem; font-weight: 500;">Diana</div>
+                                    <div style="font-size: 0.75rem; color: var(--accent-teal);">$39.20</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Split Type Toggle -->
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <button onclick="setSplitType('equal')" id="split-equal" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #FF6B9D 0%, #C239B3 100%); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; transition: 0.3s;">Equal Split</button>
+                        <button onclick="setSplitType('custom')" id="split-custom" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); border-radius: 12px; color: var(--text-secondary); font-weight: 600; cursor: pointer; transition: 0.3s;">Custom</button>
+                    </div>
+
+                    <button onclick="requestSplitPayment()" style="width: 100%; padding: 16px; background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%); border: none; border-radius: 16px; color: white; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <i class="fas fa-paper-plane"></i>
+                        Request Payment
+                    </button>
+                </div>
+
+                <!-- Group Account Card -->
+                <div class="social-card animate-on-scroll delay-1" style="background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 35px; backdrop-filter: blur(20px);">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="width: 50px; height: 50px; border-radius: 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-users" style="font-size: 24px; color: white;"></i>
+                            </div>
+                            <div>
+                                <h3 style="font-size: 1.3rem; margin-bottom: 5px;">Summer Trip</h3>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">5 members</p>
+                            </div>
+                        </div>
+                        <button onclick="addMoney()" style="background: rgba(102, 126, 234, 0.2); border: 1px solid rgba(102, 126, 234, 0.3); padding: 8px 16px; border-radius: 10px; color: #667eea; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+
+                    <!-- Group Balance -->
+                    <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 16px; margin-bottom: 20px; border: 1px solid rgba(102, 126, 234, 0.2);">
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px;">Group Balance</div>
+                        <div style="font-size: 2.2rem; font-weight: 700; color: #667eea;">$3,842.50</div>
+                        <div style="font-size: 0.85rem; color: var(--success); margin-top: 8px;">
+                            <i class="fas fa-arrow-up"></i> $420 added this week
+                        </div>
+                    </div>
+
+                    <!-- Members -->
+                    <div style="margin-bottom: 20px;">
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px;">Members</div>
+                        <div style="display: flex; gap: -10px; margin-bottom: 15px;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: 3px solid var(--surface-dark); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.9rem; font-weight: 600;">AL</div>
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border: 3px solid var(--surface-dark); margin-left: -10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.9rem; font-weight: 600;">BO</div>
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border: 3px solid var(--surface-dark); margin-left: -10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.9rem; font-weight: 600;">CH</div>
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border: 3px solid var(--surface-dark); margin-left: -10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.9rem; font-weight: 600;">DA</div>
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); border: 3px solid var(--surface-dark); margin-left: -10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.9rem; font-weight: 600;">EV</div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Transactions -->
+                    <div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px;">Recent Activity</div>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 12px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem; font-weight: 600;">AL</div>
+                                    <div>
+                                        <div style="font-size: 0.85rem; font-weight: 500;">Hotel Booking</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary);">2 hours ago</div>
+                                    </div>
+                                </div>
+                                <div style="font-size: 0.9rem; font-weight: 600; color: var(--accent-teal);">$850</div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 12px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem; font-weight: 600;">BO</div>
+                                    <div>
+                                        <div style="font-size: 0.85rem; font-weight: 500;">Flight Tickets</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary);">Yesterday</div>
+                                    </div>
+                                </div>
+                                <div style="font-size: 0.9rem; font-weight: 600; color: var(--accent-teal);">$1,240</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Request Money Card -->
+                <div class="social-card animate-on-scroll delay-2" style="background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 35px; backdrop-filter: blur(20px);">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                        <div style="width: 50px; height: 50px; border-radius: 16px; background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 90%, #2BFF88 100%); display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-hand-holding-usd" style="font-size: 24px; color: white;"></i>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.3rem; margin-bottom: 5px;">Request Money</h3>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">From anyone, anywhere</p>
+                        </div>
+                    </div>
+
+                    <!-- Amount Input -->
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 10px;">Amount</label>
+                        <div style="display: flex; align-items: center; background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 16px;">
+                            <span style="font-size: 1.5rem; color: var(--text-secondary); margin-right: 10px;">$</span>
+                            <input type="number" placeholder="0.00" style="flex: 1; background: none; border: none; color: var(--text-primary); font-size: 1.5rem; outline: none; font-weight: 600;" value="75.00" />
+                        </div>
+                    </div>
+
+                    <!-- Note Input -->
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 10px;">What's it for?</label>
+                        <input type="text" placeholder="Lunch money" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 16px; color: var(--text-primary); outline: none; font-size: 1rem;" />
+                    </div>
+
+                    <!-- QR Code -->
+                    <div style="background: white; padding: 20px; border-radius: 16px; margin-bottom: 20px; text-align: center;">
+                        <div style="width: 120px; height: 120px; margin: 0 auto; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; display: grid; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr); gap: 2px; padding: 10px;">
+                            <div style="background: white; border-radius: 2px;"></div>
+                            <div style="background: white; border-radius: 2px;"></div>
+                            <div style="background: transparent;"></div>
+                            <div style="background: transparent;"></div>
+                            <div style="background: white; border-radius: 2px;"></div>
+                            <div style="background: white; border-radius: 2px;"></div>
+                            <div style="background: transparent;"></div>
+                            <div style="background: white; border-radius: 2px;"></div>
+                            <div style="background: white; border-radius: 2px;"></div>
+                            <div style="background: transparent;"></div>
+                            <div style="background: white; border-radius: 2px;"></div>
+                            <div style="background: transparent;"></div>
+                            <div style="background: white; border-radius: 2px;"></div>
+                            <div style="background: transparent;"></div>
+                            <div style="background: white; border-radius: 2px;"></div>
+                            <div style="background: white; border-radius: 2px;"></div>
+                        </div>
+                        <div style="font-size: 0.75rem; color: #666; margin-top: 10px;">Scan to pay</div>
+                    </div>
+
+                    <!-- Share Buttons -->
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="shareRequestLink()" style="flex: 1; padding: 16px; background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 100%); border: none; border-radius: 16px; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                            <i class="fas fa-share-alt"></i>
+                            Share Link
+                        </button>
+                        <button onclick="copyRequestLink()" style="padding: 16px 20px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); border-radius: 16px; color: var(--text-secondary); cursor: pointer;">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Send to Friends & Activity Feed Row -->
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; margin-bottom: 50px;">
+                <!-- Send to Friends -->
+                <div class="social-card animate-on-scroll delay-3" style="background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 35px; backdrop-filter: blur(20px);">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+                        <div style="width: 50px; height: 50px; border-radius: 16px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-paper-plane" style="font-size: 24px; color: white;"></i>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.3rem; margin-bottom: 5px;">Send to Friends</h3>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">Quick send money</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Contacts -->
+                    <div style="margin-bottom: 25px;">
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 15px;">Quick Select</div>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                            <div onclick="selectContact('Alice')" style="text-align: center; cursor: pointer; padding: 10px; border-radius: 12px; transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                                <div style="width: 50px; height: 50px; margin: 0 auto 8px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">AL</div>
+                                <div style="font-size: 0.8rem;">Alice</div>
+                            </div>
+                            <div onclick="selectContact('Bob')" style="text-align: center; cursor: pointer; padding: 10px; border-radius: 12px; transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                                <div style="width: 50px; height: 50px; margin: 0 auto 8px; border-radius: 50%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">BO</div>
+                                <div style="font-size: 0.8rem;">Bob</div>
+                            </div>
+                            <div onclick="selectContact('Charlie')" style="text-align: center; cursor: pointer; padding: 10px; border-radius: 12px; transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                                <div style="width: 50px; height: 50px; margin: 0 auto 8px; border-radius: 50%; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">CH</div>
+                                <div style="font-size: 0.8rem;">Charlie</div>
+                            </div>
+                            <div onclick="selectContact('Diana')" style="text-align: center; cursor: pointer; padding: 10px; border-radius: 12px; transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                                <div style="width: 50px; height: 50px; margin: 0 auto 8px; border-radius: 50%; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">DA</div>
+                                <div style="font-size: 0.8rem;">Diana</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Amount and Note -->
+                    <div style="margin-bottom: 20px;">
+                        <input type="number" id="send-amount" placeholder="Amount ($)" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 16px; color: var(--text-primary); outline: none; font-size: 1rem; margin-bottom: 15px;" />
+                        <input type="text" id="send-note" placeholder="Add a note (optional)" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 16px; color: var(--text-primary); outline: none; font-size: 1rem;" />
+                    </div>
+
+                    <button onclick="sendMoneyToFriend()" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border: none; border-radius: 16px; color: white; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Money
+                    </button>
+
+                    <!-- Recent Transfers -->
+                    <div style="margin-top: 25px; padding-top: 25px; border-top: 1px solid var(--border-subtle);">
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">Recent Transfers</div>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem; font-weight: 600;">AL</div>
+                                    <div style="font-size: 0.85rem;">Alice</div>
+                                </div>
+                                <div style="font-size: 0.85rem; color: var(--accent-teal); font-weight: 600;">$50</div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem; font-weight: 600;">CH</div>
+                                    <div style="font-size: 0.85rem;">Charlie</div>
+                                </div>
+                                <div style="font-size: 0.85rem; color: var(--accent-teal); font-weight: 600;">$30</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Feed -->
+                <div class="social-card animate-on-scroll delay-4" style="background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 35px; backdrop-filter: blur(20px);">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="width: 50px; height: 50px; border-radius: 16px; background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 100%); display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-stream" style="font-size: 24px; color: white;"></i>
+                            </div>
+                            <div>
+                                <h3 style="font-size: 1.3rem; margin-bottom: 5px;">Activity Feed</h3>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">Recent group activities</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity Items -->
+                    <div style="display: flex; flex-direction: column; gap: 15px; max-height: 500px; overflow-y: auto;">
+                        <!-- Activity Item 1 -->
+                        <div style="display: flex; gap: 15px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 16px; border-left: 3px solid #00C853;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: 600; flex-shrink: 0;">AL</div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 0.9rem; margin-bottom: 5px;"><strong>Alice</strong> paid for <strong>Hotel Booking</strong></div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary);">Summer Trip • 2 hours ago</div>
+                                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                    <button onclick="settleUp('Alice', 170)" style="padding: 6px 12px; background: rgba(0, 200, 83, 0.2); border: 1px solid rgba(0, 200, 83, 0.3); border-radius: 8px; color: #00C853; font-size: 0.8rem; font-weight: 600; cursor: pointer;">Settle $170</button>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.1rem; font-weight: 700; color: var(--accent-teal);">$850</div>
+                        </div>
+
+                        <!-- Activity Item 2 -->
+                        <div style="display: flex; gap: 15px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 16px; border-left: 3px solid #FFB300;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: 600; flex-shrink: 0;">BO</div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 0.9rem; margin-bottom: 5px;"><strong>Bob</strong> requested money for <strong>Dinner</strong></div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary);">Roommates • 5 hours ago</div>
+                                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                    <button onclick="payRequest('Bob', 45)" style="padding: 6px 12px; background: rgba(255, 179, 0, 0.2); border: 1px solid rgba(255, 179, 0, 0.3); border-radius: 8px; color: #FFB300; font-size: 0.8rem; font-weight: 600; cursor: pointer;">Pay $45</button>
+                                    <button onclick="declineRequest()" style="padding: 6px 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); border-radius: 8px; color: var(--text-secondary); font-size: 0.8rem; cursor: pointer;">Decline</button>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.1rem; font-weight: 700; color: #FFB300;">$45</div>
+                        </div>
+
+                        <!-- Activity Item 3 -->
+                        <div style="display: flex; gap: 15px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 16px; border-left: 3px solid #00D4AA;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: 600; flex-shrink: 0;">CH</div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 0.9rem; margin-bottom: 5px;"><strong>Charlie</strong> settled up with <strong>Diana</strong></div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary);">Summer Trip • Yesterday</div>
+                            </div>
+                            <div style="font-size: 1.1rem; font-weight: 700; color: var(--accent-teal);">$120</div>
+                        </div>
+
+                        <!-- Activity Item 4 -->
+                        <div style="display: flex; gap: 15px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 16px; border-left: 3px solid #667eea;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: 600; flex-shrink: 0;">DA</div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 0.9rem; margin-bottom: 5px;"><strong>Diana</strong> added <strong>$200</strong> to group</div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary);">Summer Trip • Yesterday</div>
+                            </div>
+                            <div style="font-size: 1.1rem; font-weight: 700; color: #667eea;">$200</div>
+                        </div>
+
+                        <!-- Activity Item 5 -->
+                        <div style="display: flex; gap: 15px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 16px; border-left: 3px solid #FF5252;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: 600; flex-shrink: 0;">EV</div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 0.9rem; margin-bottom: 5px;"><strong>Reminder:</strong> You owe <strong>Eva</strong> for groceries</div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary);">Roommates • 2 days ago</div>
+                                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                    <button onclick="settleUp('Eva', 32.50)" style="padding: 6px 12px; background: rgba(255, 82, 82, 0.2); border: 1px solid rgba(255, 82, 82, 0.3); border-radius: 8px; color: #FF5252; font-size: 0.8rem; font-weight: 600; cursor: pointer;">Settle $32.50</button>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.1rem; font-weight: 700; color: #FF5252;">$32.50</div>
+                        </div>
+
+                        <!-- Activity Item 6 -->
+                        <div style="display: flex; gap: 15px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 16px; border-left: 3px solid #00D4AA;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: 600; flex-shrink: 0;">AL</div>
+                            <div style="flex: 1;">
+                                <div style="font-size: 0.9rem; margin-bottom: 5px;"><strong>Alice</strong> created group <strong>Summer Trip</strong></div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary);">3 days ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* Social Banking Specific Styles */
+        .social-card {
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .social-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-teal);
+            box-shadow: 0 20px 40px rgba(0, 212, 170, 0.15);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .social-banking > div > div:first-of-type {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+            }
+            
+            .social-banking > div > div:last-of-type {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .social-banking {
+                padding: 80px 5% !important;
+            }
+            
+            .social-banking h2 {
+                font-size: 2rem !important;
+            }
+        }
+    </style>
+
+    <script>
+        // Social Banking Functions
+        let selectedContact = null;
+        let splitType = 'equal';
+
+        function addParticipant() {
+            alert('Add Participant feature would open a contact selector modal');
+        }
+
+        function setSplitType(type) {
+            splitType = type;
+            const equalBtn = document.getElementById('split-equal');
+            const customBtn = document.getElementById('split-custom');
+            
+            if (type === 'equal') {
+                equalBtn.style.background = 'linear-gradient(135deg, #FF6B9D 0%, #C239B3 100%)';
+                equalBtn.style.color = 'white';
+                customBtn.style.background = 'rgba(255,255,255,0.05)';
+                customBtn.style.color = 'var(--text-secondary)';
+            } else {
+                customBtn.style.background = 'linear-gradient(135deg, #FF6B9D 0%, #C239B3 100%)';
+                customBtn.style.color = 'white';
+                equalBtn.style.background = 'rgba(255,255,255,0.05)';
+                equalBtn.style.color = 'var(--text-secondary)';
+            }
+        }
+
+        function requestSplitPayment() {
+            if (splitType === 'equal') {
+                alert('Payment requests sent to all 4 participants!\n\nEach person will receive a request for $39.20');
+            } else {
+                alert('Payment requests sent with custom amounts to all participants!');
+            }
+        }
+
+        function addMoney() {
+            const amount = prompt('How much would you like to add to the group?', '100');
+            if (amount) {
+                alert(`$${amount} added to Summer Trip group!`);
+            }
+        }
+
+        function shareRequestLink() {
+            alert('Share link: springbank.com/request/abc123\n\nLink copied to clipboard!');
+        }
+
+        function copyRequestLink() {
+            alert('Payment request link copied to clipboard!');
+        }
+
+        function selectContact(name) {
+            selectedContact = name;
+            alert(`${name} selected. Enter amount and note to send money.`);
+        }
+
+        function sendMoneyToFriend() {
+            const amount = document.getElementById('send-amount').value;
+            const note = document.getElementById('send-note').value;
+            
+            if (!selectedContact) {
+                alert('Please select a contact first!');
+                return;
+            }
+            
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid amount!');
+                return;
+            }
+            
+            if (confirm(`Send $${amount} to ${selectedContact}?${note ? '\n\nNote: ' + note : ''}`)) {
+                alert(`$${amount} sent to ${selectedContact} successfully!`);
+                document.getElementById('send-amount').value = '';
+                document.getElementById('send-note').value = '';
+                selectedContact = null;
+            }
+        }
+
+        function settleUp(person, amount) {
+            if (confirm(`Settle up with ${person} for $${amount}?`)) {
+                alert(`Payment of $${amount} sent to ${person}!\n\nYou're all settled up.`);
+            }
+        }
+
+        function payRequest(person, amount) {
+            if (confirm(`Pay $${amount} to ${person}?`)) {
+                alert(`Payment of $${amount} sent to ${person}!`);
+            }
+        }
+
+        function declineRequest() {
+            if (confirm('Decline this payment request?')) {
+                alert('Payment request declined.');
+            }
+        }
+    </script>
+
     <!-- CTA SECTION -->
     <section class="cta" id="contact">
         <div class="cta-box">
