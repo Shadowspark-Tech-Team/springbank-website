@@ -3128,6 +3128,230 @@
         </div>
     </section>
 
+    <!-- INVESTMENT PORTFOLIO SECTION -->
+    <section class="portfolio" id="portfolio" style="padding: 6rem 0; background: var(--surface-dark);">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 2rem;">
+            <!-- Section Header -->
+            <div class="section-header" style="text-align: center; margin-bottom: 4rem;">
+                <div class="section-badge" style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--surface-glass); border: 1px solid var(--border-subtle); padding: 0.5rem 1.5rem; border-radius: 50px; color: var(--accent-teal); font-weight: 600; margin-bottom: 1rem;">
+                    <i class="fas fa-chart-line"></i>
+                    Investment Portfolio
+                </div>
+                <h2 style="font-size: 3rem; font-weight: 700; margin-bottom: 1rem; background: var(--gradient-teal); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Track Your Investments</h2>
+                <p style="font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Monitor your portfolio performance, asset allocation, and market trends in real-time.</p>
+            </div>
+
+            <!-- Stock Ticker -->
+            <div style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 1rem; margin-bottom: 3rem; overflow: hidden;">
+                <div class="stock-ticker" style="display: flex; gap: 3rem; animation: scroll-ticker 20s linear infinite; white-space: nowrap;">
+                    <div class="ticker-item" style="display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                        <span style="color: var(--text-primary);">AAPL</span>
+                        <span style="color: var(--success);">+2.3%</span>
+                    </div>
+                    <div class="ticker-item" style="display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                        <span style="color: var(--text-primary);">GOOGL</span>
+                        <span style="color: var(--success);">+1.8%</span>
+                    </div>
+                    <div class="ticker-item" style="display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                        <span style="color: var(--text-primary);">MSFT</span>
+                        <span style="color: var(--success);">+0.9%</span>
+                    </div>
+                    <div class="ticker-item" style="display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                        <span style="color: var(--text-primary);">AMZN</span>
+                        <span style="color: var(--success);">+1.2%</span>
+                    </div>
+                    <div class="ticker-item" style="display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                        <span style="color: var(--text-primary);">BTC</span>
+                        <span style="color: var(--success);">+5.4%</span>
+                    </div>
+                    <!-- Duplicate for seamless loop -->
+                    <div class="ticker-item" style="display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                        <span style="color: var(--text-primary);">AAPL</span>
+                        <span style="color: var(--success);">+2.3%</span>
+                    </div>
+                    <div class="ticker-item" style="display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                        <span style="color: var(--text-primary);">GOOGL</span>
+                        <span style="color: var(--success);">+1.8%</span>
+                    </div>
+                    <div class="ticker-item" style="display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                        <span style="color: var(--text-primary);">MSFT</span>
+                        <span style="color: var(--success);">+0.9%</span>
+                    </div>
+                    <div class="ticker-item" style="display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                        <span style="color: var(--text-primary);">AMZN</span>
+                        <span style="color: var(--success);">+1.2%</span>
+                    </div>
+                    <div class="ticker-item" style="display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                        <span style="color: var(--text-primary);">BTC</span>
+                        <span style="color: var(--success);">+5.4%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                <!-- Asset Allocation Pie Chart -->
+                <div class="chart-card" style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3 style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary);">Asset Allocation</h3>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent-teal);"></div>
+                            <span style="font-size: 0.875rem; color: var(--text-secondary);">Live</span>
+                        </div>
+                    </div>
+                    <div style="position: relative; height: 300px;">
+                        <canvas id="assetAllocationChart"></canvas>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 2rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 12px; height: 12px; border-radius: 3px; background: #00D4AA;"></div>
+                            <div>
+                                <div style="font-size: 0.875rem; color: var(--text-muted);">Stocks</div>
+                                <div style="font-size: 1.125rem; font-weight: 700; color: var(--text-primary);">45%</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 12px; height: 12px; border-radius: 3px; background: #C9A227;"></div>
+                            <div>
+                                <div style="font-size: 0.875rem; color: var(--text-muted);">Bonds</div>
+                                <div style="font-size: 1.125rem; font-weight: 700; color: var(--text-primary);">25%</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 12px; height: 12px; border-radius: 3px; background: #2E5A8B;"></div>
+                            <div>
+                                <div style="font-size: 0.875rem; color: var(--text-muted);">Savings</div>
+                                <div style="font-size: 1.125rem; font-weight: 700; color: var(--text-primary);">20%</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 12px; height: 12px; border-radius: 3px; background: #FF5252;"></div>
+                            <div>
+                                <div style="font-size: 0.875rem; color: var(--text-muted);">Crypto</div>
+                                <div style="font-size: 1.125rem; font-weight: 700; color: var(--text-primary);">10%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portfolio Growth Line Chart -->
+                <div class="chart-card" style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3 style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary);">Portfolio Growth</h3>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="time-filter active" data-period="1Y" style="padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--border-subtle); background: var(--accent-teal); color: var(--primary-deep); font-weight: 600; cursor: pointer;">1Y</button>
+                            <button class="time-filter" data-period="6M" style="padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--border-subtle); background: transparent; color: var(--text-secondary); font-weight: 600; cursor: pointer;">6M</button>
+                            <button class="time-filter" data-period="1M" style="padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--border-subtle); background: transparent; color: var(--text-secondary); font-weight: 600; cursor: pointer;">1M</button>
+                        </div>
+                    </div>
+                    <div style="position: relative; height: 300px;">
+                        <canvas id="portfolioGrowthChart"></canvas>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle);">
+                        <div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.25rem;">Initial Value</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">$50,000</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.25rem;">Current Value</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--success);">$124,580</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Investment Calculator -->
+            <div class="chart-card" style="background: var(--surface-card); backdrop-filter: blur(20px); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 2.5rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 600; color: var(--text-primary); margin-bottom: 2rem;">Investment Calculator</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.75rem;">Initial Amount</label>
+                        <input type="number" id="initialAmount" value="10000" min="0" step="1000" style="width: 100%; padding: 1rem; background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; color: var(--text-primary); font-size: 1rem; font-family: inherit;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.75rem;">Monthly Contribution</label>
+                        <input type="number" id="monthlyContribution" value="500" min="0" step="100" style="width: 100%; padding: 1rem; background: var(--surface-glass); border: 1px solid var(--border-subtle); border-radius: 12px; color: var(--text-primary); font-size: 1rem; font-family: inherit;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.75rem;">Interest Rate: <span id="interestRateValue">7</span>%</label>
+                        <input type="range" id="interestRate" min="1" max="10" value="7" step="0.1" style="width: 100%; height: 8px; background: var(--surface-glass); border-radius: 5px; outline: none; -webkit-appearance: none;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.875rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.75rem;">Years: <span id="yearsValue">10</span></label>
+                        <input type="range" id="years" min="1" max="30" value="10" step="1" style="width: 100%; height: 8px; background: var(--surface-glass); border-radius: 5px; outline: none; -webkit-appearance: none;">
+                    </div>
+                </div>
+                <div style="margin-top: 2rem; text-align: center;">
+                    <button onclick="calculateInvestment()" class="btn btn-primary" style="padding: 1rem 3rem; background: var(--gradient-gold); border: none; border-radius: 12px; color: var(--primary-deep); font-size: 1rem; font-weight: 700; cursor: pointer; transition: transform 0.3s;">
+                        <i class="fas fa-calculator"></i>
+                        Calculate
+                    </button>
+                </div>
+                <div id="calculatorResult" style="margin-top: 2rem; padding: 2rem; background: var(--gradient-teal); border-radius: 16px; text-align: center; display: none;">
+                    <div style="font-size: 0.875rem; color: var(--primary-deep); font-weight: 600; margin-bottom: 0.5rem;">Final Amount</div>
+                    <div style="font-size: 3rem; font-weight: 800; color: var(--primary-deep);" id="finalAmount">$0</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        @keyframes scroll-ticker {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .chart-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .time-filter:hover {
+            background: var(--surface-glass);
+            color: var(--text-primary);
+        }
+
+        .time-filter.active {
+            background: var(--accent-teal) !important;
+            color: var(--primary-deep) !important;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-teal);
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--accent-teal);
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .portfolio h2 {
+                font-size: 2rem !important;
+            }
+            
+            .stock-ticker {
+                animation: scroll-ticker 15s linear infinite !important;
+            }
+        }
+    </style>
+
     <!-- CTA SECTION -->
     <section class="cta" id="contact">
         <div class="cta-box">
@@ -3266,6 +3490,205 @@
             el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             observer.observe(el);
         });
+
+        // ========================================
+        // INVESTMENT PORTFOLIO CHARTS & CALCULATOR
+        // ========================================
+
+        // Asset Allocation Pie Chart
+        const assetCtx = document.getElementById('assetAllocationChart');
+        if (assetCtx) {
+            new Chart(assetCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Stocks', 'Bonds', 'Savings', 'Crypto'],
+                    datasets: [{
+                        data: [45, 25, 20, 10],
+                        backgroundColor: ['#00D4AA', '#C9A227', '#2E5A8B', '#FF5252'],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(13, 27, 42, 0.95)',
+                            padding: 12,
+                            titleColor: '#FFFFFF',
+                            bodyColor: '#94A3B8',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            displayColors: true,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+        }
+
+        // Portfolio Growth Line Chart
+        const growthCtx = document.getElementById('portfolioGrowthChart');
+        if (growthCtx) {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const growthData = [50000, 56000, 62000, 68000, 75000, 82000, 90000, 98000, 106000, 114000, 120000, 124580];
+
+            new Chart(growthCtx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Portfolio Value',
+                        data: growthData,
+                        borderColor: '#00D4AA',
+                        backgroundColor: 'rgba(0, 212, 170, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        pointHoverRadius: 6,
+                        pointHoverBackgroundColor: '#00D4AA',
+                        pointHoverBorderColor: '#FFFFFF',
+                        pointHoverBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(13, 27, 42, 0.95)',
+                            padding: 12,
+                            titleColor: '#FFFFFF',
+                            bodyColor: '#94A3B8',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return '$' + context.parsed.y.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#64748B',
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#64748B',
+                                font: {
+                                    size: 11
+                                },
+                                callback: function(value) {
+                                    return '$' + (value / 1000) + 'k';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update slider values
+        const interestRateInput = document.getElementById('interestRate');
+        const interestRateValue = document.getElementById('interestRateValue');
+        const yearsInput = document.getElementById('years');
+        const yearsValue = document.getElementById('yearsValue');
+
+        if (interestRateInput && interestRateValue) {
+            interestRateInput.addEventListener('input', function() {
+                interestRateValue.textContent = this.value;
+            });
+        }
+
+        if (yearsInput && yearsValue) {
+            yearsInput.addEventListener('input', function() {
+                yearsValue.textContent = this.value;
+            });
+        }
+
+        // Investment Calculator Function
+        function calculateInvestment() {
+            const initial = parseFloat(document.getElementById('initialAmount').value) || 0;
+            const monthly = parseFloat(document.getElementById('monthlyContribution').value) || 0;
+            const rate = parseFloat(document.getElementById('interestRate').value) / 100;
+            const years = parseInt(document.getElementById('years').value);
+
+            // Compound interest formula: FV = P(1 + r)^t + PMT × [((1 + r)^t - 1) / r]
+            const months = years * 12;
+            const monthlyRate = rate / 12;
+            
+            const futureValueInitial = initial * Math.pow(1 + monthlyRate, months);
+            const futureValueMonthly = monthly * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
+            
+            const totalValue = futureValueInitial + futureValueMonthly;
+
+            const resultDiv = document.getElementById('calculatorResult');
+            const finalAmountDiv = document.getElementById('finalAmount');
+            
+            if (resultDiv && finalAmountDiv) {
+                finalAmountDiv.textContent = '$' + totalValue.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                resultDiv.style.display = 'block';
+                
+                // Animate the result
+                resultDiv.style.animation = 'none';
+                setTimeout(() => {
+                    resultDiv.style.animation = 'fadeInScale 0.5s ease';
+                }, 10);
+            }
+        }
+
+        // Make function globally available
+        window.calculateInvestment = calculateInvestment;
+
+        // Add fade in scale animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInScale {
+                from {
+                    opacity: 0;
+                    transform: scale(0.95);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
