@@ -1,146 +1,246 @@
-# Spring Bank – Production-Ready Banking Website
+# Spring Bank – Enterprise Banking Demo
 
-A Chase.com-parity static banking website built with semantic HTML5, CSS custom properties, and vanilla JavaScript. Zero dependencies. One-click deployable to Netlify or Vercel.
+A production-grade online banking system prototype with full authentication, role-based dashboards, a double-entry transaction ledger simulation, and secure API architecture. Designed to demonstrate enterprise-ready patterns for financial applications.
+
+> **Disclaimer:** This is a demonstration project only. It is not a licensed banking platform, does not integrate with real payment networks, and should not be used to process real financial transactions.
 
 ---
 
-## Project Structure
+## Architecture Overview
 
 ```
-SPRING/
-├── index.html          # Personal banking homepage
-├── business.html       # Business banking homepage
-├── signin.html         # Dedicated sign-in page
-├── atm-branch.html     # ATM & branch locator
-├── contact.html        # Contact Us page
-├── help.html           # FAQ & Help Center
-├── privacy.html        # Privacy Policy
-├── security.html       # Security Policy
-├── terms.html          # Terms of Use
-├── 404.html            # Custom 404 error page
-├── es/
-│   └── index.html      # Spanish personal homepage
-├── styles.css          # Main design system (Chase-parity)
-├── signin.css          # Sign-in page styles
-├── main.js             # All interactivity
-├── sitemap.xml         # XML sitemap
-├── robots.txt          # Search engine directives
-├── netlify.toml        # Netlify deployment config
-├── vercel.json         # Vercel deployment config
-└── README.md           # This file
+springbank-website/
+├── frontend/                   # Static & dashboard UI
+│   ├── dashboard.html          # Customer banking dashboard
+│   ├── admin-dashboard.html    # Admin management dashboard
+│   └── public/assets/          # Self-contained SVG illustrations & icons
+│
+├── backend/                    # Node.js + TypeScript + Express API
+│   ├── src/
+│   │   ├── index.ts            # Express server entry point
+│   │   ├── middleware/         # auth, security, validation
+│   │   ├── routes/             # auth, accounts, transactions, admin
+│   │   ├── services/           # authService, ledgerService
+│   │   └── types/              # TypeScript type definitions
+│   ├── prisma/
+│   │   └── schema.prisma       # PostgreSQL schema (Prisma ORM)
+│   └── Dockerfile              # Multi-stage production container
+│
+├── shared/
+│   └── types.ts                # Shared TypeScript types (frontend + backend)
+│
+├── docs/
+│   ├── architecture.md         # System architecture overview
+│   ├── api.yaml                # OpenAPI 3.0.3 specification
+│   ├── database.md             # Database schema & ER diagram
+│   ├── security.md             # Security model documentation
+│   ├── deployment.md           # Deployment guide (Netlify/Vercel/Docker)
+│   └── migration.md            # Migration plan from static to full-stack
+│
+├── scripts/
+│   ├── setup.sh                # One-command project setup
+│   └── seed.ts                 # Database seed (demo users + transactions)
+│
+├── api/                        # Legacy Vercel Serverless Functions
+│   ├── contact.js              # Contact form handler
+│   ├── newsletter.js           # Newsletter signup
+│   ├── stats.js                # Public stats endpoint
+│   └── migrate.js              # DB migration runner
+│
+├── index.html                  # Public marketing homepage
+├── business.html               # Business banking page
+├── signin.html                 # Sign-in page
+├── about.html                  # About page
+├── contact.html                # Contact page
+├── help.html                   # FAQ & Help Center
+├── privacy.html                # Privacy Policy
+├── security.html               # Security Policy
+├── terms.html                  # Terms of Use
+├── .env.example                # Environment variable template
+├── netlify.toml                # Netlify deployment config
+├── vercel.json                 # Vercel deployment config
+└── README.md                   # This file
 ```
 
 ---
 
 ## Features
 
-### Chase.com Feature Parity
-- **Brand bar** — Personal / Business / Commercial segment switcher with active state
-- **Utility nav** — ATM & Branch, Contact Us, Help, Español links
-- **Mega-menus** — Hover/click dropdowns for Checking & Savings, Credit Cards, Mortgages, Investing
-- **Hero carousel** — Multi-slide with auto-rotate, pause on hover, touch swipe, keyboard nav, ARIA live region
-- **Stats bar** — Key numbers at a glance
-- **Product cards** — 6-column grid with hover lift effects
-- **Why section** — Alternating image/text layout blocks
-- **Quad tile grid** — Featured products with overlay text
-- **Industry solutions** — 5-item grid with SVG icons (business page)
-- **Solution Advisor** — Interactive finder with 9 recommendation profiles
+### Authentication System
+- **JWT-based auth** — Access tokens (15 min) + refresh tokens (7 days)
+- **Role system** — ADMIN, STAFF, CUSTOMER with route-level guards
+- **Password security** — bcrypt (12 rounds), complexity enforcement
+- **Account lockout** — Auto-lock after 5 failed attempts, admin unlock
+- **2FA-ready** — TOTP-compatible structure via `speakeasy`
+- **Session timeout** — Auto-logout after 15 minutes of inactivity
+
+### Core Banking Simulation
+- **Double-entry ledger** — Every transfer debits source and credits destination atomically
+- **Transaction types** — INTERNAL_TRANSFER, EXTERNAL_TRANSFER, BILL_PAYMENT, DEPOSIT, WITHDRAWAL
+- **Audit logging** — Every state-changing action recorded with user, IP, and timestamp
+- **Account management** — Multiple accounts per user (CHECKING, SAVINGS, BUSINESS)
+
+### Dashboards
+- **Customer Dashboard** — Account balances, filterable transaction table, transfer form, session timeout
+- **Admin Dashboard** — User management, freeze/unfreeze accounts, lock users, audit log viewer, balance adjustment
+
+### Security Hardening
+- **Helmet.js** — Secure HTTP headers (CSP, HSTS, X-Frame-Options, etc.)
+- **CORS** — Configurable origin allowlist
+- **Rate limiting** — 100 req/15min general, 10 req/15min on auth routes
+- **Input validation** — Zod schemas on all API endpoints
+- **SQL injection prevention** — Prisma parameterized queries throughout
+- **XSS prevention** — `escHtml()` sanitizer on all dynamic DOM writes
+
+### Frontend (Marketing Site)
+- **Brand bar** — Personal / Business / Commercial segment switcher
+- **Mega-menus** — Hover/click dropdowns for all product categories
+- **Hero carousel** — Multi-slide with auto-rotate, touch swipe, keyboard nav, ARIA live region
 - **FAQ Accordion** — Keyboard-accessible, ARIA-compliant
-- **Sign-in modal** — Focus trap, ESC close, form validation, backdrop click to dismiss
-- **Full-page sign-in** — Two-panel layout with loading spinner
-- **Expanded footer** — 5 columns: brand + 4 link categories + social icons + FDIC/EHL badges
+- **Sign-in modal** — Focus trap, ESC close, form validation
 - **Español page** — Bilingual support with hreflang links
+- **WCAG 2.1 AA** — Full keyboard navigation, semantic HTML, color contrast compliance
 
-### Accessibility (WCAG 2.1 AA)
-- Skip to main content link
-- `lang` and `dir` attributes on all pages
-- Semantic HTML5 (`header`, `nav`, `main`, `section`, `article`, `footer`)
-- All interactive elements have visible focus indicators
-- `aria-label`, `aria-expanded`, `aria-haspopup`, `aria-controls`, `aria-live` throughout
-- Carousel with `aria-roledescription="carousel"` and live announcements
-- Color contrast ratios meet AA minimum (4.5:1 text, 3:1 UI components)
-- Keyboard navigation for all components
-- `alt` text on all meaningful images; decorative images have `alt=""`
+### Asset Strategy
+- **Self-contained SVGs** — All illustrations and icons are custom vectors in `frontend/public/assets/`
+- **No external image CDNs** — No Unsplash API, Shutterstock, or unlicensed packs
+- **Gradient-based design** — Abstract fintech patterns using CSS and SVG gradients
 
-### Performance
-- Google Fonts loaded with `preconnect` hints
-- All below-fold images have `loading="lazy"`
-- Intersection Observer scroll-reveal for cards and sections
-- CSS custom properties for consistent theming without repetition
-- Minification-ready (no transpilation needed — ES5-compatible main.js)
+---
 
-### SEO
-- Unique `<title>` and `<meta name="description">` on every page
-- Open Graph and Twitter Card tags on main pages
-- JSON-LD LocalBusiness structured data on homepage
-- `sitemap.xml` with `lastmod`, `changefreq`, `priority`, and hreflang links
-- `robots.txt` with sitemap reference
-- `<link rel="canonical">` on every page
-- `hreflang="en"` / `hreflang="es"` alternate links
+## Quick Start
 
-### Security
-- `Content-Security-Policy` meta tag on all pages
-- `X-Content-Type-Options: nosniff` meta tag
-- `X-Frame-Options: DENY` meta tag
-- Security headers enforced via `netlify.toml` / `vercel.json`
-- HSTS with 1-year max-age + includeSubDomains + preload
-- Forms do not submit to any backend (static site)
+### Prerequisites
+- Node.js 18+
+- PostgreSQL (or [Neon](https://neon.tech) free tier)
+
+### 1. Setup
+
+```bash
+# Run the setup script (installs deps, copies .env template, generates Prisma client)
+chmod +x scripts/setup.sh
+./scripts/setup.sh
+```
+
+### 2. Configure environment
+
+```bash
+# Edit backend/.env with your DATABASE_URL, JWT_SECRET, REFRESH_SECRET
+cp .env.example backend/.env
+```
+
+### 3. Initialize the database
+
+```bash
+cd backend
+npx prisma migrate dev --name init
+npx ts-node ../scripts/seed.ts   # Creates demo users + sample data
+```
+
+### 4. Start the backend
+
+```bash
+cd backend
+npm run dev
+# API running at http://localhost:3001
+```
+
+### 5. Open the frontend
+
+Open `index.html` directly in your browser, or serve it with any static file server:
+
+```bash
+npx serve .
+```
+
+Navigate to `frontend/dashboard.html` for the customer dashboard (demo mode works without a backend).
+
+---
+
+## Demo Credentials
+
+After running the seed script:
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@springbank.demo | Spring@2024! |
+| Staff | staff@springbank.demo | Spring@2024! |
+| Customer | customer@springbank.demo | Spring@2024! |
+
+---
+
+## API Endpoints
+
+See [`docs/api.yaml`](docs/api.yaml) for the full OpenAPI 3.0.3 specification.
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/api/auth/register` | Register new customer |
+| POST | `/api/auth/login` | Authenticate user |
+| POST | `/api/auth/refresh` | Refresh access token |
+| POST | `/api/auth/logout` | Logout |
+| POST | `/api/auth/reset-password` | Request password reset |
+| GET | `/api/accounts` | List user's accounts |
+| GET | `/api/accounts/:id/transactions` | Paginated transaction history |
+| POST | `/api/transactions/transfer` | Internal transfer |
+| POST | `/api/transactions/external-transfer` | External wire transfer |
+| POST | `/api/transactions/bill-payment` | Pay a bill |
+| GET | `/api/admin/users` | Admin: list all users |
+| GET | `/api/admin/audit-logs` | Admin: audit log viewer |
+
+---
+
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| [`docs/architecture.md`](docs/architecture.md) | System architecture with ASCII diagrams |
+| [`docs/api.yaml`](docs/api.yaml) | OpenAPI 3.0.3 spec for all 18 endpoints |
+| [`docs/database.md`](docs/database.md) | Database schema, ER diagram, indexes |
+| [`docs/security.md`](docs/security.md) | Full security model documentation |
+| [`docs/deployment.md`](docs/deployment.md) | Deploy to Netlify, Vercel, Railway, Docker |
+| [`docs/migration.md`](docs/migration.md) | 6-phase migration plan from static to full-stack |
 
 ---
 
 ## Deploy
 
-### Netlify (Recommended)
+### Frontend (Netlify)
 ```bash
-# Option 1: Netlify CLI
-npm install -g netlify-cli
 netlify deploy --dir=. --prod
-
-# Option 2: Drag & drop
-# Go to app.netlify.com → Add new site → Deploy manually
-# Drag the SPRING folder into the upload zone
 ```
 
-### Vercel
+### Frontend (Vercel)
 ```bash
-npm install -g vercel
 vercel --prod
 ```
 
-### GitHub Pages
-1. Push this folder to a GitHub repository
-2. Go to Settings → Pages → Source: main branch / root
-3. Your site will be live at `https://username.github.io/repo-name/`
+### Backend (Docker)
+```bash
+cd backend
+docker build -t springbank-api .
+docker run -p 3001:3001 --env-file .env springbank-api
+```
+
+### Backend (Railway / Render / Fly.io)
+See [`docs/deployment.md`](docs/deployment.md) for step-by-step guides.
 
 ---
 
 ## Customization
 
-### Replace placeholder content
-- **Analytics:** Replace `GA_MEASUREMENT_ID` in each HTML file with your Google Analytics 4 ID
-- **Phone numbers:** Replace `1-800-SPRING-1` with real contact numbers
-- **Domain:** Replace `springbank.com` in `sitemap.xml`, `robots.txt`, and canonical URLs
-- **Images:** Unsplash images are placeholders — replace with owned/licensed images for production
 - **Colors:** Edit CSS variables in `styles.css` `:root` block
-
-### Add real authentication
-The sign-in form is static (no backend). To add real auth:
-- Integrate with Supabase Auth, Auth0, AWS Cognito, or similar
-- Replace the form's `submit` handler in `main.js` with a real API call
-
-### Add real ATM/branch map
-Replace the map placeholder in `atm-branch.html` with:
-- Google Maps JavaScript API, or
-- Mapbox GL JS
+- **Analytics:** Replace `GA_MEASUREMENT_ID` with your Google Analytics 4 ID
+- **Domain:** Update `springbank.com` in `sitemap.xml`, `robots.txt`, and canonical URLs
+- **Logo:** Replace `frontend/public/assets/logo.svg` with your own SVG
 
 ---
 
 ## Browser Support
 - Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
 - Responsive: 320px – 2560px
-- Tested on iOS Safari and Android Chrome
 
 ---
 
 ## License
-This is a demonstration project. All Spring Bank branding, copy, and design is fictional. Unsplash images are used under the Unsplash License. Do not use for commercial purposes without replacing all placeholder content.
+This is a demonstration project. All Spring Bank branding and copy is fictional. All SVG assets are self-contained and created for this project. Do not use for commercial purposes without replacing all placeholder content.
