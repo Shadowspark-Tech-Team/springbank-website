@@ -13,6 +13,7 @@ const AUDIT_LOG_BLOCKED_OPERATIONS = new Set([
   'deleteMany',
   'update',
   'updateMany',
+  'upsert',
 ]);
 
 const prisma = new PrismaClient().$extends({

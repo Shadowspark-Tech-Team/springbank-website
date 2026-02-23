@@ -68,6 +68,8 @@ model Account {
   user                User          @relation(fields: [userId], references: [id])
   debitTransactions   Transaction[] @relation("FromAccount")
   creditTransactions  Transaction[] @relation("ToAccount")
+
+  @@index([userId])
 }
 
 model Transaction {
@@ -87,6 +89,11 @@ model Transaction {
   createdAt             DateTime          @default(now())
   fromAccount           Account?          @relation("FromAccount", fields: [fromAccountId], references: [id])
   toAccount             Account?          @relation("ToAccount", fields: [toAccountId], references: [id])
+
+  @@index([fromAccountId])
+  @@index([toAccountId])
+  @@index([status])
+  @@index([idempotencyExpiresAt])
 }
 
 model AuditLog {
@@ -100,6 +107,9 @@ model AuditLog {
   details    Json?
   createdAt  DateTime @default(now())
   user       User?    @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([createdAt])
 }
 
 model RefreshToken {
