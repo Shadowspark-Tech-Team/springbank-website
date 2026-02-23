@@ -1,0 +1,42 @@
+{
+  "name": "@springbank/backend",
+  "version": "1.0.0",
+  "description": "SpringBank backend API",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "start": "node dist/index.js",
+    "postinstall": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:generate": "prisma generate",
+    "db:seed": "ts-node prisma/seed.ts",
+    "db:reconcile": "ts-node ../scripts/reconcile.ts",
+    "db:reconcile:repair": "ts-node ../scripts/reconcile.ts --repair",
+    "db:cleanup": "ts-node ../scripts/cleanup-idempotency.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.10.0",
+    "@springbank/shared": "*",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.3",
+    "express-rate-limit": "^7.2.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "speakeasy": "^2.0.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.11.20",
+    "@types/speakeasy": "^2.0.10",
+    "nodemon": "^3.1.0",
+    "prisma": "^5.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}

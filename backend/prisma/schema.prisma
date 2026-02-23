@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  CUSTOMER
+}
+
+enum AccountType {
+  CHECKING
+  SAVINGS
+  BUSINESS
+}
+
+enum TransactionType {
+  INTERNAL_TRANSFER
+  EXTERNAL_TRANSFER
+  BILL_PAYMENT
+  DEPOSIT
+  WITHDRAWAL
+  ADJUSTMENT
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REVERSED
+}
+
+enum LedgerEntryType {
+  DEBIT
+  CREDIT
+}
+
+model User {
+  id               String     @id @default(uuid())
+  email            String     @unique
+  password         String
+  firstName        String
+  lastName         String
+  role             Role       @default(CUSTOMER)
+  isActive         Boolean    @default(true)
+  isLocked         Boolean    @default(false)
+  failedAttempts   Int        @default(0)
+  twoFactorSecret  String?
+  twoFactorEnabled Boolean    @default(false)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  accounts         Account[]
+  auditLogs        AuditLog[]
+  refreshTokens    RefreshToken[]
+}
+
+model Account {
+  id                  String        @id @default(uuid())
+  userId              String
+  accountNumber       String        @unique
+  accountType         AccountType   @default(CHECKING)
+  balance             Decimal       @default(0) @db.Decimal(18, 2)
+  currency            String        @default("USD")
+  isActive            Boolean       @default(true)
+  isFrozen            Boolean       @default(false)
+  version             Int           @default(0)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  user                User          @relation(fields: [userId], references: [id])
+  debitTransactions   Transaction[] @relation("FromAccount")
+  creditTransactions  Transaction[] @relation("ToAccount")
+  ledgerEntries       LedgerEntry[]
+
+  @@index([userId])
+}
+
+model Transaction {
+  id                    String            @id @default(uuid())
+  fromAccountId         String?
+  toAccountId           String?
+  type                  TransactionType
+  amount                Decimal           @db.Decimal(18, 2)
+  currency              String            @default("USD")
+  description           String
+  reference             String            @unique
+  idempotencyKey        String?           @unique
+  idempotencyPayloadHash String?
+  idempotencyExpiresAt  DateTime?
+  status                TransactionStatus @default(PENDING)
+  metadata              Json?
+  createdAt             DateTime          @default(now())
+  fromAccount           Account?          @relation("FromAccount", fields: [fromAccountId], references: [id])
+  toAccount             Account?          @relation("ToAccount", fields: [toAccountId], references: [id])
+  ledgerEntries         LedgerEntry[]
+
+  @@index([fromAccountId])
+  @@index([toAccountId])
+  @@index([status])
+  @@index([idempotencyExpiresAt])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  action     String
+  resource   String
+  resourceId String?
+  ipAddress  String?
+  userAgent  String?
+  details    Json?
+  createdAt  DateTime @default(now())
+  user       User?    @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model RefreshToken {
+  id          String    @id @default(uuid())
+  userId      String
+  tokenHash   String    @unique
+  expiresAt   DateTime
+  revokedAt   DateTime?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+// Single-account posting in the double-entry ledger.
+// Segregated from Transaction so balance history can be reconstructed
+// purely from LedgerEntry rows (CREDIT - DEBIT = balance).
+// Each Transaction produces 1-2 entries depending on type:
+//   INTERNAL_TRANSFER → DEBIT (source) + CREDIT (destination)
+//   EXTERNAL_TRANSFER / BILL_PAYMENT / WITHDRAWAL → DEBIT (source)
+//   DEPOSIT → CREDIT (destination)
+//   ADJUSTMENT → DEBIT or CREDIT depending on direction
+model LedgerEntry {
+  id           String          @id @default(uuid())
+  transactionId String
+  accountId    String
+  entryType    LedgerEntryType
+  amount       Decimal         @db.Decimal(18, 2)
+  balanceAfter Decimal         @db.Decimal(18, 2)
+  createdAt    DateTime        @default(now())
+  transaction  Transaction     @relation(fields: [transactionId], references: [id])
+  account      Account         @relation(fields: [accountId], references: [id])
+
+  @@index([accountId])
+  @@index([transactionId])
+  @@index([createdAt])
+}

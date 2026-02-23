@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Spring Bank – production banking website with Vercel Serverless API",
   "private": true,
+  "workspaces": [
+    "backend",
+    "shared"
+  ],
   "engines": {
     "node": ">=18"
   },
