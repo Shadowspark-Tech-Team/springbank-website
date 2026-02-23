@@ -53,7 +53,7 @@ export async function transfer(
 
     await tx.auditLog.create({
       data: {
-        userId: actorUserId,
+        userId: actorUserId ?? fromAccount.userId,
         action: 'internal_transfer',
         resource: 'transaction',
         resourceId: transaction.id,

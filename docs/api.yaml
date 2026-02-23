@@ -1,0 +1,1253 @@
+openapi: 3.0.3
+
+info:
+  title: Spring Bank API
+  version: 1.0.0
+  description: |
+    Banking simulation REST API for the Spring Bank demo application.
+
+    ## Authentication
+    Most endpoints require a valid **Bearer JWT** in the `Authorization` header.
+    Obtain a token via `POST /api/auth/login` or `POST /api/auth/register`.
+
+    Tokens expire after **15 minutes**. Use `POST /api/auth/refresh` with your
+    `refreshToken` to obtain a new access token without re-authenticating.
+
+    ## Error responses
+    All errors follow the same envelope:
+    ```json
+    { "success": false, "error": "Human-readable message", "code": "MACHINE_CODE" }
+    ```
+
+    ## Monetary amounts
+    All monetary values are expressed as **integer cents** (e.g. `$12.50` → `1250`)
+    to avoid floating-point precision issues.
+  contact:
+    name: Spring Bank Demo
+    email: support@springbank.demo
+  license:
+    name: MIT
+
+servers:
+  - url: http://localhost:3001
+    description: Local development
+  - url: https://api.springbank.demo
+    description: Production demo
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Auth
+    description: Registration, login, token management, and password reset
+  - name: Accounts
+    description: Account listing, detail, and transaction history
+  - name: Transactions
+    description: Fund transfers, bill payments, deposits and withdrawals
+  - name: Admin
+    description: "Admin-only: user management, audit logs, account adjustments"
+
+# ─── Paths ───────────────────────────────────────────────────────────────────
+
+paths:
+
+  # ── Auth ──────────────────────────────────────────────────────────────────
+
+  /api/auth/register:
+    post:
+      tags: [Auth]
+      security: []
+      summary: Register a new customer account
+      description: |
+        Creates a new user with the `CUSTOMER` role and returns access and refresh tokens.
+        The email address must be unique.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, password]
+              properties:
+                name:
+                  type: string
+                  minLength: 2
+                  maxLength: 100
+                  example: Jane Doe
+                email:
+                  type: string
+                  format: email
+                  example: jane.doe@example.com
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                  description: "Must contain uppercase, lowercase, digit, and special character."
+                  example: "Spring@2024!"
+      responses:
+        "201":
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "409":
+          description: Email already registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                success: false
+                error: "Email address is already in use."
+                code: "EMAIL_CONFLICT"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/auth/login:
+    post:
+      tags: [Auth]
+      security: []
+      summary: Authenticate and obtain tokens
+      description: |
+        Validates credentials and returns a short-lived access token (15 min) and
+        a long-lived refresh token (7 days).  After 5 consecutive failures the
+        account is locked and an admin must unlock it.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: customer@springbank.demo
+                password:
+                  type: string
+                  format: password
+                  example: "Spring@2024!"
+      responses:
+        "200":
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                success: false
+                error: "Invalid email or password."
+                code: "AUTH_INVALID"
+        "403":
+          description: Account frozen or locked
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                success: false
+                error: "Account is locked. Please contact support."
+                code: "ACCOUNT_LOCKED"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/auth/refresh:
+    post:
+      tags: [Auth]
+      security: []
+      summary: Refresh the access token
+      description: |
+        Exchanges a valid refresh token for a new access token and a rotated
+        refresh token.  The old refresh token is immediately invalidated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken:
+                  type: string
+                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      responses:
+        "200":
+          description: Tokens refreshed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Refresh token invalid or expired
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/auth/logout:
+    post:
+      tags: [Auth]
+      summary: Invalidate the current refresh token
+      description: |
+        Revokes the provided refresh token server-side.  The client should also
+        discard the access token from storage.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        "200":
+          description: Logged out successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Logged out successfully."
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/auth/reset-password:
+    post:
+      tags: [Auth]
+      security: []
+      summary: Request a password reset email
+      description: |
+        Sends a password-reset link to the given email address if an account exists.
+        Always returns 200 to prevent user enumeration.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: customer@springbank.demo
+      responses:
+        "200":
+          description: Reset email sent (or silently ignored if email not found)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "If that email exists, a reset link has been sent."
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  # ── Accounts ──────────────────────────────────────────────────────────────
+
+  /api/accounts:
+    get:
+      tags: [Accounts]
+      summary: List accounts for the authenticated user
+      description: |
+        Returns all accounts owned by the current user.
+        Admin and Staff users receive all accounts in the system (paginated).
+      parameters:
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/LimitParam"
+      responses:
+        "200":
+          description: List of accounts
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/PaginatedEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Account"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/accounts/{id}:
+    get:
+      tags: [Accounts]
+      summary: Get a single account by ID
+      description: |
+        Returns account details.  A customer may only fetch their own accounts.
+        Staff and Admin may fetch any account.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Account UUID
+      responses:
+        "200":
+          description: Account detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/Account"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/accounts/{id}/transactions:
+    get:
+      tags: [Accounts]
+      summary: List transactions for an account
+      description: |
+        Returns a paginated, reverse-chronological list of transactions involving
+        the specified account.  Access rules are the same as `GET /api/accounts/{id}`.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/LimitParam"
+        - name: type
+          in: query
+          schema:
+            $ref: "#/components/schemas/TransactionType"
+          description: Filter by transaction type
+        - name: status
+          in: query
+          schema:
+            $ref: "#/components/schemas/TransactionStatus"
+          description: Filter by status
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date
+          description: "Start date filter (ISO 8601, inclusive)"
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date
+          description: "End date filter (ISO 8601, inclusive)"
+      responses:
+        "200":
+          description: Paginated transaction list
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/PaginatedEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Transaction"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  # ── Transactions ──────────────────────────────────────────────────────────
+
+  /api/transactions/transfer:
+    post:
+      tags: [Transactions]
+      summary: Internal account-to-account transfer
+      description: |
+        Moves funds between two Spring Bank accounts atomically.
+        The source account must belong to the authenticated user and have
+        sufficient available balance.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [fromAccountId, toAccountId, amountCents]
+              properties:
+                fromAccountId:
+                  type: string
+                  format: uuid
+                toAccountId:
+                  type: string
+                  format: uuid
+                amountCents:
+                  type: integer
+                  minimum: 1
+                  example: 5000
+                  description: "Amount in cents (e.g. 5000 = $50.00)"
+                description:
+                  type: string
+                  maxLength: 255
+                  example: "Rent payment"
+      responses:
+        "200":
+          description: Transfer completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/Transaction"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          description: Insufficient funds
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                success: false
+                error: "Insufficient funds."
+                code: "INSUFFICIENT_FUNDS"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/transactions/external-transfer:
+    post:
+      tags: [Transactions]
+      summary: Wire / ACH transfer to an external bank
+      description: |
+        Initiates an outbound transfer to an account at another financial institution.
+        In the demo the transfer is simulated and immediately marked COMPLETED.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [fromAccountId, amountCents, recipientName, routingNumber, externalAccountNumber]
+              properties:
+                fromAccountId:
+                  type: string
+                  format: uuid
+                amountCents:
+                  type: integer
+                  minimum: 1
+                  example: 100000
+                recipientName:
+                  type: string
+                  example: "John Smith"
+                routingNumber:
+                  type: string
+                  pattern: "^[0-9]{9}$"
+                  example: "021000021"
+                externalAccountNumber:
+                  type: string
+                  minLength: 4
+                  maxLength: 17
+                  example: "123456789"
+                description:
+                  type: string
+                  maxLength: 255
+      responses:
+        "200":
+          description: External transfer initiated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/Transaction"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          description: Insufficient funds
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/transactions/bill-payment:
+    post:
+      tags: [Transactions]
+      summary: Pay a registered biller
+      description: |
+        Debits a customer account and credits a registered biller account.
+        Biller IDs are listed in the billers catalogue endpoint (not yet implemented).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [fromAccountId, billerId, billerAccountNumber, amountCents]
+              properties:
+                fromAccountId:
+                  type: string
+                  format: uuid
+                billerId:
+                  type: string
+                  example: "biller_electricity_001"
+                billerAccountNumber:
+                  type: string
+                  example: "EL-98765432"
+                amountCents:
+                  type: integer
+                  minimum: 1
+                  example: 12000
+                description:
+                  type: string
+                  maxLength: 255
+      responses:
+        "200":
+          description: Bill payment processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/Transaction"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          description: Insufficient funds
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/transactions/deposit:
+    post:
+      tags: [Transactions]
+      summary: Record a cash or cheque deposit
+      description: |
+        Credits an account with the specified amount.  In production this would
+        be triggered by a teller system; in the demo it can be called directly.
+        Requires STAFF or ADMIN role.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [toAccountId, amountCents]
+              properties:
+                toAccountId:
+                  type: string
+                  format: uuid
+                amountCents:
+                  type: integer
+                  minimum: 1
+                  example: 50000
+                description:
+                  type: string
+                  example: "Cash deposit at branch"
+      responses:
+        "200":
+          description: Deposit recorded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/Transaction"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/transactions/withdrawal:
+    post:
+      tags: [Transactions]
+      summary: Record a cash withdrawal
+      description: |
+        Debits an account with the specified amount.
+        Requires STAFF or ADMIN role.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [fromAccountId, amountCents]
+              properties:
+                fromAccountId:
+                  type: string
+                  format: uuid
+                amountCents:
+                  type: integer
+                  minimum: 1
+                  example: 20000
+                description:
+                  type: string
+                  example: "ATM withdrawal"
+      responses:
+        "200":
+          description: Withdrawal recorded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/Transaction"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "422":
+          description: Insufficient funds
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  # ── Admin ─────────────────────────────────────────────────────────────────
+
+  /api/admin/users:
+    get:
+      tags: [Admin]
+      summary: List all users
+      description: |
+        Returns a paginated list of all registered users.
+        Requires ADMIN or STAFF role.
+      parameters:
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/LimitParam"
+        - name: role
+          in: query
+          schema:
+            $ref: "#/components/schemas/UserRole"
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Partial name or email search
+      responses:
+        "200":
+          description: Paginated user list
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/PaginatedEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/User"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/admin/users/{id}/freeze:
+    patch:
+      tags: [Admin]
+      summary: Freeze or unfreeze a user account
+      description: |
+        Toggles the `isFrozen` flag on a user account.  A frozen user cannot
+        log in or initiate transactions.  Requires ADMIN role.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: User UUID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [frozen]
+              properties:
+                frozen:
+                  type: boolean
+                  description: "`true` to freeze, `false` to unfreeze"
+                reason:
+                  type: string
+                  maxLength: 500
+                  description: Optional reason recorded in the audit log
+      responses:
+        "200":
+          description: User freeze status updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/admin/users/{id}/lock:
+    patch:
+      tags: [Admin]
+      summary: Lock or unlock a user account
+      description: |
+        Toggles the `isLocked` flag.  Accounts are locked automatically after
+        5 failed login attempts; an admin can unlock them here.  Requires ADMIN role.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [locked]
+              properties:
+                locked:
+                  type: boolean
+                reason:
+                  type: string
+                  maxLength: 500
+      responses:
+        "200":
+          description: User lock status updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/admin/audit-logs:
+    get:
+      tags: [Admin]
+      summary: List audit log entries
+      description: |
+        Returns a paginated, reverse-chronological list of all audit log entries.
+        Requires ADMIN role.
+      parameters:
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/LimitParam"
+        - name: userId
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by acting user
+        - name: action
+          in: query
+          schema:
+            type: string
+          description: Filter by action code (e.g. USER_FROZEN)
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Paginated audit log list
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/PaginatedEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AuditLog"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/admin/accounts/{id}/adjust:
+    patch:
+      tags: [Admin]
+      summary: Manually adjust an account balance
+      description: |
+        Applies a positive or negative adjustment to an account's balance.
+        Creates a corresponding transaction record for auditability.
+        Requires ADMIN role.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Account UUID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amountCents, reason]
+              properties:
+                amountCents:
+                  type: integer
+                  description: "Positive to credit, negative to debit. Must not be 0."
+                  example: -5000
+                reason:
+                  type: string
+                  minLength: 10
+                  maxLength: 500
+                  example: "Chargeback reversal for transaction txn_abc123"
+      responses:
+        "200":
+          description: Balance adjusted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/Account"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+# ─── Components ──────────────────────────────────────────────────────────────
+
+components:
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "JWT access token obtained from `/api/auth/login`"
+
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      description: Page number (1-based)
+    LimitParam:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+      description: Items per page
+
+  schemas:
+
+    # ── Enums ────────────────────────────────────────────────────────────────
+
+    UserRole:
+      type: string
+      enum: [ADMIN, STAFF, CUSTOMER]
+      description: "Access level granted to the user"
+
+    AccountType:
+      type: string
+      enum: [CHECKING, SAVINGS, BUSINESS]
+
+    TransactionType:
+      type: string
+      enum: [INTERNAL_TRANSFER, EXTERNAL_TRANSFER, BILL_PAYMENT, DEPOSIT, WITHDRAWAL]
+
+    TransactionStatus:
+      type: string
+      enum: [PENDING, COMPLETED, FAILED, REVERSED]
+
+    # ── Entities ─────────────────────────────────────────────────────────────
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        role:
+          $ref: "#/components/schemas/UserRole"
+        isFrozen:
+          type: boolean
+          default: false
+        isLocked:
+          type: boolean
+          default: false
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required: [id, email, name, role, isFrozen, isLocked, createdAt, updatedAt]
+
+    Account:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        accountNumber:
+          type: string
+          example: "0012-3456-7890"
+          readOnly: true
+        type:
+          $ref: "#/components/schemas/AccountType"
+        balanceCents:
+          type: integer
+          description: "Current balance in minor currency units (cents)"
+          example: 150000
+        currency:
+          type: string
+          example: "USD"
+        userId:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required: [id, accountNumber, type, balanceCents, currency, userId, createdAt, updatedAt]
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        type:
+          $ref: "#/components/schemas/TransactionType"
+        status:
+          $ref: "#/components/schemas/TransactionStatus"
+        amountCents:
+          type: integer
+          minimum: 1
+        currency:
+          type: string
+          example: "USD"
+        fromAccountId:
+          type: string
+          format: uuid
+          nullable: true
+        toAccountId:
+          type: string
+          format: uuid
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        reference:
+          type: string
+          nullable: true
+        initiatedBy:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required: [id, type, status, amountCents, currency, initiatedBy, createdAt, updatedAt]
+
+    AuditLog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        userId:
+          type: string
+          format: uuid
+        action:
+          type: string
+          example: "USER_FROZEN"
+        metadata:
+          type: object
+          nullable: true
+          additionalProperties: true
+        ipAddress:
+          type: string
+          nullable: true
+          example: "192.168.1.1"
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required: [id, userId, action, createdAt]
+
+    AuthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            accessToken:
+              type: string
+              description: "Short-lived JWT (15 min)"
+            refreshToken:
+              type: string
+              description: "Long-lived opaque token (7 days)"
+            user:
+              $ref: "#/components/schemas/User"
+      required: [success, data]
+
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Validation failed."
+        code:
+          type: string
+          example: "VALIDATION_ERROR"
+      required: [success, error]
+
+    PaginationMeta:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 20
+        total:
+          type: integer
+          example: 85
+        totalPages:
+          type: integer
+          example: 5
+        hasNextPage:
+          type: boolean
+        hasPrevPage:
+          type: boolean
+      required: [page, limit, total, totalPages, hasNextPage, hasPrevPage]
+
+    PaginatedEnvelope:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items: {}
+        pagination:
+          $ref: "#/components/schemas/PaginationMeta"
+
+  responses:
+    BadRequest:
+      description: Validation error or malformed request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            success: false
+            error: "amountCents must be a positive integer."
+            code: "VALIDATION_ERROR"
+
+    Unauthorized:
+      description: Missing or invalid authentication token
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            success: false
+            error: "Authentication required."
+            code: "AUTH_REQUIRED"
+
+    Forbidden:
+      description: Authenticated but insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            success: false
+            error: "You do not have permission to perform this action."
+            code: "FORBIDDEN"
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            success: false
+            error: "Resource not found."
+            code: "NOT_FOUND"
+
+    InternalError:
+      description: Unexpected server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            success: false
+            error: "An unexpected error occurred."
+            code: "INTERNAL_ERROR"

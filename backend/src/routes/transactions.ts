@@ -59,10 +59,10 @@ router.post('/transfer', validate(transferSchema), async (req: Request, res: Res
   }
 
   const toAccount = await prisma.account.findFirst({
-    where: { id: toAccountId, userId: req.user!.userId },
+    where: { id: toAccountId },
   });
   if (!toAccount) {
-    res.status(403).json({ error: 'Destination account not found or not owned by user' });
+    res.status(404).json({ error: 'Destination account not found' });
     return;
   }
 
