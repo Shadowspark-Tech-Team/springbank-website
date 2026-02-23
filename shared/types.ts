@@ -40,6 +40,8 @@ export enum TransactionType {
   DEPOSIT = "DEPOSIT",
   /** Cash withdrawal from an account. */
   WITHDRAWAL = "WITHDRAWAL",
+  /** Administrative balance adjustment by bank staff. Recorded as a ledger entry. */
+  ADJUSTMENT = "ADJUSTMENT",
 }
 
 /** Lifecycle state of a transaction. */
@@ -52,6 +54,17 @@ export enum TransactionStatus {
   FAILED = "FAILED",
   /** A completed transaction that was subsequently reversed. */
   REVERSED = "REVERSED",
+}
+
+/**
+ * The direction of a double-entry ledger posting for a single account.
+ * Every {@link LedgerEntry} is either a DEBIT (money out) or CREDIT (money in).
+ */
+export enum LedgerEntryType {
+  /** Funds leaving the account (e.g. a transfer or withdrawal). */
+  DEBIT = "DEBIT",
+  /** Funds entering the account (e.g. a deposit or incoming transfer). */
+  CREDIT = "CREDIT",
 }
 
 // ─── Core entity interfaces ───────────────────────────────────────────────────
@@ -131,6 +144,29 @@ export interface Transaction {
   createdAt: string;
   /** ISO-8601 timestamp of the last status update. */
   updatedAt: string;
+}
+
+/**
+ * A single-account posting in the double-entry ledger.
+ * Each {@link Transaction} generates one or two LedgerEntry records:
+ * - INTERNAL_TRANSFER → one DEBIT (source) + one CREDIT (destination)
+ * - All others → one entry (DEBIT for outflows, CREDIT for inflows)
+ */
+export interface LedgerEntry {
+  /** UUID primary key. */
+  id: string;
+  /** The transaction that generated this posting. */
+  transactionId: string;
+  /** The account whose balance was affected. */
+  accountId: string;
+  /** Direction of the posting. */
+  entryType: LedgerEntryType;
+  /** Absolute amount posted, in major currency units. Always positive. */
+  amount: number;
+  /** Account balance immediately after this posting was applied. */
+  balanceAfter: number;
+  /** ISO-8601 timestamp of the posting. */
+  createdAt: string;
 }
 
 /**

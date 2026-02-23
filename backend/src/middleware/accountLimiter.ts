@@ -96,6 +96,16 @@ export function remainingAttempts(accountId: string): number {
   return Math.max(0, MAX_PER_WINDOW - timestamps.length);
 }
 
+/**
+ * Returns the number of transfers from `accountId` within the current
+ * 5-minute velocity alert window.  Distinct from {@link remainingAttempts}
+ * which operates on the shorter 60-second rate-limit window.
+ */
+export function windowTransferCount(accountId: string): number {
+  const now = Date.now();
+  return (transferWindows.get(accountId) ?? []).filter((t) => t > now - VELOCITY_ALERT_WINDOW_MS).length;
+}
+
 /** Returns the total amount transferred from `accountId` in the current alert window. */
 export function windowTransferTotal(accountId: string): number {
   const now = Date.now();
@@ -160,4 +170,21 @@ export function resetAccountLimits(): void {
   transferWindows.clear();
   transferAmounts.clear();
   lastAlertTime.clear();
+}
+
+/**
+ * Compute a fraud risk score (0–100) for an account based on its current
+ * in-window transfer count and cumulative amount.
+ *
+ * Scoring model:
+ *   - Count component (0–50): count / alertThreshold × 50, capped at 50
+ *   - Amount component (0–50): totalAmount / amountThreshold × 50, capped at 50
+ *
+ * A score of 50 means either the count or the amount threshold has been hit.
+ * A score of 100 means both thresholds are simultaneously exceeded.
+ */
+export function computeFraudScore(count: number, totalAmountUsd: number): number {
+  const countFactor = Math.min(1, count / VELOCITY_ALERT_THRESHOLD);
+  const amountFactor = Math.min(1, totalAmountUsd / VELOCITY_AMOUNT_THRESHOLD);
+  return Math.round(countFactor * 50 + amountFactor * 50);
 }

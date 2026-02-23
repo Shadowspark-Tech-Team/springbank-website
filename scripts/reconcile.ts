@@ -58,29 +58,26 @@ async function reconcileAccounts(): Promise<ReconciliationResult[]> {
   const discrepancies: ReconciliationResult[] = [];
 
   for (const account of accounts) {
-    // Sum of credits: COMPLETED transactions that deposited into this account.
-    const creditAgg = await prisma.transaction.aggregate({
-      where: { toAccountId: account.id, status: 'COMPLETED' },
+    // Sum of CREDIT ledger entries for this account (funds received).
+    const creditAgg = await prisma.ledgerEntry.aggregate({
+      where: { accountId: account.id, entryType: 'CREDIT' },
       _sum: { amount: true },
     });
 
-    // Sum of debits: COMPLETED transactions that withdrew from this account.
-    const debitAgg = await prisma.transaction.aggregate({
-      where: { fromAccountId: account.id, status: 'COMPLETED' },
+    // Sum of DEBIT ledger entries for this account (funds sent).
+    const debitAgg = await prisma.ledgerEntry.aggregate({
+      where: { accountId: account.id, entryType: 'DEBIT' },
       _sum: { amount: true },
     });
 
     const credits = creditAgg._sum.amount ?? new Decimal(0);
     const debits = debitAgg._sum.amount ?? new Decimal(0);
 
-    // Expected balance assuming accounts start at 0 and every balance
-    // movement is recorded as a COMPLETED transaction in the ledger.
-    // ⚠ Assumption: no out-of-band balance adjustments have occurred and
-    // no accounts have non-zero opening balances set outside the ledger.
-    // Admin balance adjustments (PATCH /admin/accounts/:id/adjust) are
-    // NOT yet recorded as transactions, so they will appear as discrepancies.
-    // If legacy or out-of-band data exists, expected discrepancies must be
-    // allowlisted before using this script as a hard CI gate.
+    // Expected balance = sum of all CREDIT postings minus sum of all DEBIT postings.
+    // Assumes accounts start at zero and every balance movement — including
+    // admin adjustments (PATCH /admin/accounts/:id/adjust) — is recorded as a
+    // LedgerEntry.  Admin adjustments now create a CREDIT or DEBIT LedgerEntry
+    // atomically, so no out-of-band adjustments should appear as discrepancies.
     const computedBalance = credits.minus(debits);
     const storedBalance = account.balance;
     const discrepancy = storedBalance.minus(computedBalance);

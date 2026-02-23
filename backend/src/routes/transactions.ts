@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { authenticate, requireRole } from '../middleware/auth';
 import { validate } from '../middleware/validate';
 import { transfer, createTransaction, IdempotencyPayloadMismatchError } from '../services/ledgerService';
-import { checkAccountTransferLimit, checkVelocityAlert, checkVelocityAmountAlert, recordTransferAmount, remainingAttempts, windowTransferTotal } from '../middleware/accountLimiter';
+import { checkAccountTransferLimit, checkVelocityAlert, checkVelocityAmountAlert, computeFraudScore, recordTransferAmount, remainingAttempts, windowTransferCount, windowTransferTotal } from '../middleware/accountLimiter';
 import { log } from '../middleware/logger';
 import { UserRole } from '../types';
 import prisma from '../db';
@@ -71,6 +71,11 @@ function handleVelocityAlert(accountId: string, userId: string, amount: number, 
   recordTransferAmount(accountId, amount);
 
   const requestId = req.requestId ?? 'unknown';
+  const windowTotal = windowTransferTotal(accountId);
+  // Use the 5-minute velocity alert window count (same window used by checkVelocityAlert)
+  // rather than deriving count from the 60-second rate-limit window.
+  const currentCount = windowTransferCount(accountId);
+  const fraudScore = computeFraudScore(currentCount, windowTotal);
 
   // Count-based velocity alert (6 transfers in 5 minutes).
   if (checkVelocityAlert(accountId)) {
@@ -80,6 +85,7 @@ function handleVelocityAlert(accountId: string, userId: string, amount: number, 
       message: 'High transfer velocity detected',
       accountId,
       userId,
+      fraudScore,
     });
 
     prisma.auditLog.create({
@@ -90,7 +96,7 @@ function handleVelocityAlert(accountId: string, userId: string, amount: number, 
         resourceId: accountId,
         ipAddress: req.ip,
         userAgent: req.headers['user-agent'],
-        details: { requestId },
+        details: { requestId, fraudScore },
       },
     }).catch((err: unknown) => {
       log({ level: 'error', requestId, message: `Failed to write velocity-alert audit log: ${String(err)}` });
@@ -105,7 +111,8 @@ function handleVelocityAlert(accountId: string, userId: string, amount: number, 
       message: 'High transfer amount velocity detected',
       accountId,
       userId,
-      windowTotalUsd: windowTransferTotal(accountId),
+      windowTotalUsd: windowTotal,
+      fraudScore,
     });
 
     prisma.auditLog.create({
@@ -116,7 +123,7 @@ function handleVelocityAlert(accountId: string, userId: string, amount: number, 
         resourceId: accountId,
         ipAddress: req.ip,
         userAgent: req.headers['user-agent'],
-        details: { requestId },
+        details: { requestId, windowTotalUsd: windowTotal, fraudScore },
       },
     }).catch((err: unknown) => {
       log({ level: 'error', requestId, message: `Failed to write amount-alert audit log: ${String(err)}` });

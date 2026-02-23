@@ -159,6 +159,29 @@ export async function transfer(
           },
         });
 
+        // Write the two segregated ledger entries (debit + credit).
+        // `updatedFrom.balance` and `updatedTo.balance` were already re-read
+        // above for the double-entry invariant check, so no extra DB round-trip
+        // is needed here.
+        await tx.ledgerEntry.createMany({
+          data: [
+            {
+              transactionId: transaction.id,
+              accountId: fromAccountId,
+              entryType: 'DEBIT',
+              amount,
+              balanceAfter: updatedFrom.balance,
+            },
+            {
+              transactionId: transaction.id,
+              accountId: toAccountId,
+              entryType: 'CREDIT',
+              amount,
+              balanceAfter: updatedTo.balance,
+            },
+          ],
+        });
+
         await tx.auditLog.create({
           data: {
             userId: actorUserId ?? fromAccount.userId,
@@ -212,6 +235,8 @@ export async function createTransaction(
     try {
       return await prisma.$transaction(async (tx) => {
         let currency = 'USD';
+        let fromBalanceAfter: Decimal | null = null;
+        let toBalanceAfter: Decimal | null = null;
 
         if (fromAccountId) {
           const fromAccount = await tx.account.findUnique({ where: { id: fromAccountId } });
@@ -227,6 +252,12 @@ export async function createTransaction(
           if (result.count === 0) throw new OccConflictError('Optimistic concurrency conflict on debit account');
 
           currency = fromAccount.currency;
+          // Compute balance after debit for the ledger entry.
+          // `fromAccount.balance` is the pre-decrement value read at the start of
+          // this transaction.  The OCC check (`version` match) guarantees no other
+          // writer has modified this row since we read it, so
+          // `fromAccount.balance - amount` is the exact value now in the DB.
+          fromBalanceAfter = fromAccount.balance.minus(new Decimal(amount));
         }
 
         if (toAccountId) {
@@ -240,6 +271,12 @@ export async function createTransaction(
             data: { balance: { increment: amount }, version: { increment: 1 } },
           });
           if (result.count === 0) throw new OccConflictError('Optimistic concurrency conflict on credit account');
+
+          // Compute balance after credit for the ledger entry.
+          // Same reasoning as the debit case: OCC guarantees the row was not
+          // modified between the read and the update, so
+          // `toAccount.balance + amount` is the exact value now in the DB.
+          toBalanceAfter = toAccount.balance.plus(new Decimal(amount));
         }
 
         const transaction = await tx.transaction.create({
@@ -260,6 +297,36 @@ export async function createTransaction(
             metadata: metadata as object | undefined,
           },
         });
+
+        // Write segregated ledger entry(ies): DEBIT for outflows, CREDIT for inflows.
+        const ledgerData: Array<{
+          transactionId: string;
+          accountId: string;
+          entryType: 'DEBIT' | 'CREDIT';
+          amount: number;
+          balanceAfter: Decimal;
+        }> = [];
+        if (fromAccountId && fromBalanceAfter !== null) {
+          ledgerData.push({
+            transactionId: transaction.id,
+            accountId: fromAccountId,
+            entryType: 'DEBIT',
+            amount,
+            balanceAfter: fromBalanceAfter,
+          });
+        }
+        if (toAccountId && toBalanceAfter !== null) {
+          ledgerData.push({
+            transactionId: transaction.id,
+            accountId: toAccountId,
+            entryType: 'CREDIT',
+            amount,
+            balanceAfter: toBalanceAfter,
+          });
+        }
+        if (ledgerData.length > 0) {
+          await tx.ledgerEntry.createMany({ data: ledgerData });
+        }
 
         return transaction;
       });
