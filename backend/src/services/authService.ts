@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import { createHash } from 'crypto';
 import { JwtPayload } from '../types';
 
 const BCRYPT_ROUNDS = 12;
@@ -24,6 +25,16 @@ export function verifyRefreshToken(token: string): { userId: string } | null {
   } catch {
     return null;
   }
+}
+
+/** SHA-256 hash a refresh token for safe storage. */
+export function hashToken(token: string): string {
+  return createHash('sha256').update(token).digest('hex');
+}
+
+/** Expiry timestamp 7 days from now. */
+export function refreshTokenExpiry(): Date {
+  return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 }
 
 export function generateAccountNumber(): string {

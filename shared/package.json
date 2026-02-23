@@ -1,0 +1,8 @@
+{
+  "name": "@springbank/shared",
+  "version": "1.0.0",
+  "description": "Shared TypeScript types for Spring Bank (frontend + backend)",
+  "private": true,
+  "main": "./dist/types.js",
+  "types": "./dist/types.d.ts"
+}

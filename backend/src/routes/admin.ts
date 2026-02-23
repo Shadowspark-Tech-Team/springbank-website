@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { z } from 'zod';
 import { authenticate, requireRole } from '../middleware/auth';
 import { validate } from '../middleware/validate';
+import { Decimal } from '@prisma/client/runtime/library';
 import { UserRole } from '../types';
 import prisma from '../db';
 
@@ -135,13 +136,29 @@ router.get('/audit-logs', async (req: Request, res: Response) => {
   });
 });
 
+// Audit logs are IMMUTABLE: no route may delete or mutate them.
+// Any attempt to do so is an explicit 405 Method Not Allowed.
+router.delete('/audit-logs', (_req: Request, res: Response) => {
+  res.status(405).json({ error: 'Audit logs are immutable and cannot be deleted' });
+});
+router.delete('/audit-logs/:id', (_req: Request, res: Response) => {
+  res.status(405).json({ error: 'Audit logs are immutable and cannot be deleted' });
+});
+router.patch('/audit-logs/:id', (_req: Request, res: Response) => {
+  res.status(405).json({ error: 'Audit logs are immutable and cannot be modified' });
+});
+router.put('/audit-logs/:id', (_req: Request, res: Response) => {
+  res.status(405).json({ error: 'Audit logs are immutable and cannot be modified' });
+});
+
 const adjustSchema = z.object({
-  amount: z.number(),
+  /** Amount in minor currency units (cents). Positive = credit, negative = debit. */
+  amountCents: z.number().int(),
   description: z.string().min(1).max(500),
 });
 
 router.patch('/accounts/:id/adjust', validate(adjustSchema), async (req: Request, res: Response) => {
-  const { amount, description } = req.body as z.infer<typeof adjustSchema>;
+  const { amountCents, description } = req.body as z.infer<typeof adjustSchema>;
 
   const account = await prisma.account.findUnique({ where: { id: req.params.id } });
   if (!account) {
@@ -149,8 +166,12 @@ router.patch('/accounts/:id/adjust', validate(adjustSchema), async (req: Request
     return;
   }
 
-  const newBalance = Number(account.balance) + amount;
-  if (newBalance < 0) {
+  // Convert integer cents to major currency units using Decimal arithmetic to
+  // avoid floating-point precision loss (e.g. 0.1 + 0.2 !== 0.3 in IEEE 754).
+  const adjustment = new Decimal(amountCents).div(100);
+  const newBalance = account.balance.plus(adjustment);
+
+  if (newBalance.isNegative()) {
     res.status(400).json({ error: 'Adjustment would result in negative balance' });
     return;
   }
@@ -168,7 +189,12 @@ router.patch('/accounts/:id/adjust', validate(adjustSchema), async (req: Request
       resourceId: req.params.id,
       ipAddress: req.ip,
       userAgent: req.headers['user-agent'],
-      details: { previousBalance: account.balance, adjustment: amount, newBalance, description },
+      details: {
+        previousBalance: account.balance.toFixed(2),
+        adjustmentCents: amountCents,
+        newBalance: newBalance.toFixed(2),
+        description,
+      },
     },
   });
 

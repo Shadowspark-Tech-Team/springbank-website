@@ -39,6 +39,20 @@ export async function transfer(
       data: { balance: { increment: amount } },
     });
 
+    // Double-entry invariant: verify conservation of funds.
+    // The total of (fromAccount + toAccount) must be identical before and after.
+    const [updatedFrom, updatedTo] = await Promise.all([
+      tx.account.findUniqueOrThrow({ where: { id: fromAccountId }, select: { balance: true } }),
+      tx.account.findUniqueOrThrow({ where: { id: toAccountId }, select: { balance: true } }),
+    ]);
+    const sumBefore = fromAccount.balance.plus(toAccount.balance);
+    const sumAfter = updatedFrom.balance.plus(updatedTo.balance);
+    if (!sumBefore.equals(sumAfter)) {
+      throw new Error(
+        `Double-entry invariant violated: sum before ${sumBefore.toFixed(2)} ≠ sum after ${sumAfter.toFixed(2)}`,
+      );
+    }
+
     const transaction = await tx.transaction.create({
       data: {
         fromAccountId,

@@ -11,6 +11,8 @@ import {
   generateAccountNumber,
   hashPassword,
   verifyPassword,
+  hashToken,
+  refreshTokenExpiry,
 } from '../services/authService';
 import { UserRole } from '../types';
 
@@ -84,6 +86,14 @@ router.post('/register', authLimiter, validate(registerSchema), async (req: Requ
 
   const token = generateJwt({ userId: user.id, email: user.email, role: user.role as UserRole });
   const refreshToken = generateRefreshToken(user.id);
+
+  await prisma.refreshToken.create({
+    data: {
+      userId: user.id,
+      tokenHash: hashToken(refreshToken),
+      expiresAt: refreshTokenExpiry(),
+    },
+  });
 
   res.status(201).json({
     token,
@@ -164,6 +174,14 @@ router.post('/login', authLimiter, validate(loginSchema), async (req: Request, r
   const token = generateJwt({ userId: user.id, email: user.email, role: user.role as UserRole }, '15m');
   const refreshToken = generateRefreshToken(user.id);
 
+  await prisma.refreshToken.create({
+    data: {
+      userId: user.id,
+      tokenHash: hashToken(refreshToken),
+      expiresAt: refreshTokenExpiry(),
+    },
+  });
+
   res.json({
     token,
     refreshToken,
@@ -180,9 +198,25 @@ router.post('/login', authLimiter, validate(loginSchema), async (req: Request, r
 router.post('/refresh', authLimiter, validate(refreshSchema), async (req: Request, res: Response) => {
   const { refreshToken } = req.body as z.infer<typeof refreshSchema>;
 
+  // 1. Verify JWT signature and expiry.
   const payload = verifyRefreshToken(refreshToken);
   if (!payload) {
     res.status(401).json({ error: 'Invalid or expired refresh token' });
+    return;
+  }
+
+  // 2. Validate token exists in DB and has not been revoked (rotation check).
+  const incomingHash = hashToken(refreshToken);
+  const stored = await prisma.refreshToken.findUnique({
+    where: { tokenHash: incomingHash },
+  });
+  if (!stored || stored.revokedAt !== null || stored.expiresAt < new Date()) {
+    // Possible token reuse — revoke ALL tokens for this user as a security measure.
+    await prisma.refreshToken.updateMany({
+      where: { userId: payload.userId, revokedAt: null },
+      data: { revokedAt: new Date() },
+    });
+    res.status(401).json({ error: 'Refresh token has been revoked or reused' });
     return;
   }
 
@@ -192,13 +226,33 @@ router.post('/refresh', authLimiter, validate(refreshSchema), async (req: Reques
     return;
   }
 
-  const token = generateJwt({ userId: user.id, email: user.email, role: user.role as UserRole }, '15m');
+  // 3. Revoke the old token and issue a new one (rotation).
   const newRefreshToken = generateRefreshToken(user.id);
+  await prisma.$transaction([
+    prisma.refreshToken.update({
+      where: { tokenHash: incomingHash },
+      data: { revokedAt: new Date() },
+    }),
+    prisma.refreshToken.create({
+      data: {
+        userId: user.id,
+        tokenHash: hashToken(newRefreshToken),
+        expiresAt: refreshTokenExpiry(),
+      },
+    }),
+  ]);
 
+  const token = generateJwt({ userId: user.id, email: user.email, role: user.role as UserRole }, '15m');
   res.json({ token, refreshToken: newRefreshToken });
 });
 
 router.post('/logout', authenticate, async (req: Request, res: Response) => {
+  // Revoke all active refresh tokens for this user.
+  await prisma.refreshToken.updateMany({
+    where: { userId: req.user!.userId, revokedAt: null },
+    data: { revokedAt: new Date() },
+  });
+
   await prisma.auditLog.create({
     data: {
       userId: req.user!.userId,

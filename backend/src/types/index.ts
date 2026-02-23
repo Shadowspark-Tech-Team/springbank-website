@@ -1,33 +1,10 @@
 /**
- * Enums below mirror those in `shared/types.ts` (the frontend/shared source of truth).
- * Keep these in sync when modifying either file.
+ * Re-exports shared enums from @springbank/shared so that backend code can
+ * import a single canonical set of values that is also used by the frontend.
+ * This eliminates enum drift between layers.
  */
-export enum UserRole {
-  ADMIN = 'ADMIN',
-  STAFF = 'STAFF',
-  CUSTOMER = 'CUSTOMER',
-}
-
-export enum AccountType {
-  CHECKING = 'CHECKING',
-  SAVINGS = 'SAVINGS',
-  BUSINESS = 'BUSINESS',
-}
-
-export enum TransactionType {
-  INTERNAL_TRANSFER = 'INTERNAL_TRANSFER',
-  EXTERNAL_TRANSFER = 'EXTERNAL_TRANSFER',
-  BILL_PAYMENT = 'BILL_PAYMENT',
-  DEPOSIT = 'DEPOSIT',
-  WITHDRAWAL = 'WITHDRAWAL',
-}
-
-export enum TransactionStatus {
-  PENDING = 'PENDING',
-  COMPLETED = 'COMPLETED',
-  FAILED = 'FAILED',
-  REVERSED = 'REVERSED',
-}
+import { UserRole, AccountType, TransactionType, TransactionStatus } from '@springbank/shared';
+export { UserRole, AccountType, TransactionType, TransactionStatus };
 
 export interface JwtPayload {
   userId: string;
@@ -37,6 +14,7 @@ export interface JwtPayload {
   exp?: number;
 }
 
+// Augment Express Request with the decoded JWT payload.
 declare global {
   namespace Express {
     interface Request {
