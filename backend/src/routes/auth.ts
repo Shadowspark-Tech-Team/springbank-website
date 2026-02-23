@@ -92,6 +92,8 @@ router.post('/register', authLimiter, validate(registerSchema), async (req: Requ
       userId: user.id,
       tokenHash: hashToken(refreshToken),
       expiresAt: refreshTokenExpiry(),
+      ipAddress: req.ip,
+      userAgent: req.headers['user-agent'] ?? null,
     },
   });
 
@@ -179,6 +181,8 @@ router.post('/login', authLimiter, validate(loginSchema), async (req: Request, r
       userId: user.id,
       tokenHash: hashToken(refreshToken),
       expiresAt: refreshTokenExpiry(),
+      ipAddress: req.ip,
+      userAgent: req.headers['user-agent'] ?? null,
     },
   });
 
@@ -238,6 +242,8 @@ router.post('/refresh', authLimiter, validate(refreshSchema), async (req: Reques
         userId: user.id,
         tokenHash: hashToken(newRefreshToken),
         expiresAt: refreshTokenExpiry(),
+        ipAddress: req.ip,
+        userAgent: req.headers['user-agent'] ?? null,
       },
     }),
   ]);

@@ -3,11 +3,11 @@ import { z } from 'zod';
 import { authenticate, requireRole } from '../middleware/auth';
 import { validate } from '../middleware/validate';
 import { transfer, createTransaction } from '../services/ledgerService';
+import { checkAccountTransferLimit, remainingAttempts } from '../middleware/accountLimiter';
 import { UserRole } from '../types';
 import prisma from '../db';
 
 const router = Router();
-
 
 router.use(authenticate);
 
@@ -52,6 +52,14 @@ const withdrawalSchema = z.object({
   description: z.string().min(1).max(500),
 });
 
+/** Extract idempotency key from the Idempotency-Key header (trimmed, max 128 chars). */
+function getIdempotencyKey(req: Request): string | undefined {
+  const raw = req.headers['idempotency-key'];
+  if (!raw) return undefined;
+  const key = (Array.isArray(raw) ? raw[0] : raw).trim().slice(0, 128);
+  return key || undefined;
+}
+
 router.post('/transfer', validate(transferSchema), async (req: Request, res: Response) => {
   const { fromAccountId, toAccountId, amount, description } = req.body as z.infer<typeof transferSchema>;
 
@@ -63,6 +71,15 @@ router.post('/transfer', validate(transferSchema), async (req: Request, res: Res
     return;
   }
 
+  // Per-account rate limit: 10 transfers per 60 seconds.
+  if (!checkAccountTransferLimit(fromAccountId)) {
+    res.status(429).json({
+      error: 'Transfer rate limit exceeded for this account. Please try again shortly.',
+      remaining: remainingAttempts(fromAccountId),
+    });
+    return;
+  }
+
   const toAccount = await prisma.account.findFirst({
     where: { id: toAccountId },
   });
@@ -71,7 +88,15 @@ router.post('/transfer', validate(transferSchema), async (req: Request, res: Res
     return;
   }
 
-  const tx = await transfer(fromAccountId, toAccountId, amount / 100, description, prisma, req.user!.userId);
+  const tx = await transfer(
+    fromAccountId,
+    toAccountId,
+    amount / 100,
+    description,
+    prisma,
+    req.user!.userId,
+    getIdempotencyKey(req),
+  );
   res.status(201).json({ transaction: tx });
 });
 
@@ -87,6 +112,14 @@ router.post('/external-transfer', validate(externalTransferSchema), async (req: 
     return;
   }
 
+  if (!checkAccountTransferLimit(fromAccountId)) {
+    res.status(429).json({
+      error: 'Transfer rate limit exceeded for this account. Please try again shortly.',
+      remaining: remainingAttempts(fromAccountId),
+    });
+    return;
+  }
+
   const tx = await createTransaction(
     {
       fromAccountId,
@@ -94,6 +127,7 @@ router.post('/external-transfer', validate(externalTransferSchema), async (req: 
       amount: amount / 100,
       description,
       metadata: { recipientName, recipientBank, recipientAccount },
+      idempotencyKey: getIdempotencyKey(req),
     },
     prisma,
   );
@@ -112,6 +146,14 @@ router.post('/bill-payment', validate(billPaymentSchema), async (req: Request, r
     return;
   }
 
+  if (!checkAccountTransferLimit(fromAccountId)) {
+    res.status(429).json({
+      error: 'Transfer rate limit exceeded for this account. Please try again shortly.',
+      remaining: remainingAttempts(fromAccountId),
+    });
+    return;
+  }
+
   const tx = await createTransaction(
     {
       fromAccountId,
@@ -119,6 +161,7 @@ router.post('/bill-payment', validate(billPaymentSchema), async (req: Request, r
       amount: amount / 100,
       description,
       metadata: { billerName, billerReference },
+      idempotencyKey: getIdempotencyKey(req),
     },
     prisma,
   );
@@ -133,7 +176,13 @@ router.post(
     const { toAccountId, amount, description } = req.body as z.infer<typeof depositSchema>;
 
     const tx = await createTransaction(
-      { toAccountId, type: 'DEPOSIT', amount: amount / 100, description },
+      {
+        toAccountId,
+        type: 'DEPOSIT',
+        amount: amount / 100,
+        description,
+        idempotencyKey: getIdempotencyKey(req),
+      },
       prisma,
     );
     res.status(201).json({ transaction: tx });
@@ -151,11 +200,26 @@ router.post('/withdrawal', validate(withdrawalSchema), async (req: Request, res:
     return;
   }
 
+  if (!checkAccountTransferLimit(fromAccountId)) {
+    res.status(429).json({
+      error: 'Transfer rate limit exceeded for this account. Please try again shortly.',
+      remaining: remainingAttempts(fromAccountId),
+    });
+    return;
+  }
+
   const tx = await createTransaction(
-    { fromAccountId, type: 'WITHDRAWAL', amount: amount / 100, description },
+    {
+      fromAccountId,
+      type: 'WITHDRAWAL',
+      amount: amount / 100,
+      description,
+      idempotencyKey: getIdempotencyKey(req),
+    },
     prisma,
   );
   res.status(201).json({ transaction: tx });
 });
 
 export default router;
+
