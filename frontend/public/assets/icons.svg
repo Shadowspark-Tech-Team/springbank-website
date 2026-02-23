@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:none">
+  <!--
+    SpringBank UI Icon Sprite
+    All icons: 24×24 viewBox, stroke style, currentColor
+    Usage: <svg><use href="/assets/icons.svg#icon-NAME"></use></svg>
+  -->
+
+  <!-- icon-account: circle with person silhouette -->
+  <symbol id="icon-account" viewBox="0 0 24 24">
+    <circle cx="12" cy="8" r="4"
+            stroke="currentColor" fill="none" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
+          stroke="currentColor" fill="none" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <!-- icon-transfer: two arrows forming a cycle inside a circle -->
+  <symbol id="icon-transfer" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9"
+            stroke="currentColor" fill="none" stroke-width="2"/>
+    <!-- right-pointing arrow (top arc) -->
+    <path d="M9 10h6"
+          stroke="currentColor" fill="none" stroke-width="2"
+          stroke-linecap="round"/>
+    <polyline points="13 8 15 10 13 12"
+              stroke="currentColor" fill="none" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- left-pointing arrow (bottom arc) -->
+    <path d="M15 14H9"
+          stroke="currentColor" fill="none" stroke-width="2"
+          stroke-linecap="round"/>
+    <polyline points="11 16 9 14 11 12"
+              stroke="currentColor" fill="none" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <!-- icon-deposit: downward arrow landing in an open box -->
+  <symbol id="icon-deposit" viewBox="0 0 24 24">
+    <!-- Box / tray -->
+    <path d="M4 14v5a1 1 0 001 1h14a1 1 0 001-1v-5"
+          stroke="currentColor" fill="none" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Down arrow -->
+    <line x1="12" y1="4" x2="12" y2="14"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <polyline points="8 10 12 14 16 10"
+              stroke="currentColor" fill="none" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <!-- icon-withdrawal: upward arrow rising out of an open box -->
+  <symbol id="icon-withdrawal" viewBox="0 0 24 24">
+    <!-- Box / tray -->
+    <path d="M4 14v5a1 1 0 001 1h14a1 1 0 001-1v-5"
+          stroke="currentColor" fill="none" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Up arrow -->
+    <line x1="12" y1="14" x2="12" y2="4"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <polyline points="8 8 12 4 16 8"
+              stroke="currentColor" fill="none" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <!-- icon-security: shield shape -->
+  <symbol id="icon-security" viewBox="0 0 24 24">
+    <path d="M12 2L4 6v6c0 5.25 3.5 10.15 8 11.35C16.5 22.15 20 17.25 20 12V6L12 2z"
+          stroke="currentColor" fill="none" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Check mark inside shield -->
+    <polyline points="9 12 11 14 15 10"
+              stroke="currentColor" fill="none" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <!-- icon-settings: gear / cog -->
+  <symbol id="icon-settings" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="3"
+            stroke="currentColor" fill="none" stroke-width="2"/>
+    <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83
+             2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33
+             1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4
+             a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06
+             A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09
+             A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06
+             a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51
+             V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33
+             l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9
+             a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09
+             a1.65 1.65 0 00-1.51 1z"
+          stroke="currentColor" fill="none" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <!-- icon-admin: star / badge shape -->
+  <symbol id="icon-admin" viewBox="0 0 24 24">
+    <!-- Badge outline -->
+    <path d="M12 2l2.4 4.8 5.3.77-3.85 3.75.91 5.3L12 14.1l-4.76 2.52.91-5.3L4.3 7.57l5.3-.77L12 2z"
+          stroke="currentColor" fill="none" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Admin shield clip at bottom -->
+    <path d="M8 22h8"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <line x1="12" y1="17" x2="12" y2="22"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+
+  <!-- icon-logout: door with exit arrow -->
+  <symbol id="icon-logout" viewBox="0 0 24 24">
+    <!-- Door frame -->
+    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"
+          stroke="currentColor" fill="none" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Arrow pointing right (exit) -->
+    <polyline points="16 17 21 12 16 7"
+              stroke="currentColor" fill="none" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="21" y1="12" x2="9" y2="12"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+
+</svg>

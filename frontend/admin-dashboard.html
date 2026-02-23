@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard – SpringBank</title>
+  <style>
+    /* ── Design tokens ──────────────────────────────────────── */
+    :root {
+      --teal:        #00b4b4;
+      --teal-dark:   #007a7a;
+      --teal-light:  #e6f7f7;
+      --blue:        #0066cc;
+      --blue-light:  #e8f2ff;
+      --dark:        #1a2332;
+      --mid:         #3d5166;
+      --muted:       #6b7c93;
+      --border:      #dde3ec;
+      --surface:     #ffffff;
+      --surface-alt: #f8fafc;
+      --success:     #16a34a;
+      --success-bg:  #dcfce7;
+      --danger:      #dc2626;
+      --danger-bg:   #fee2e2;
+      --warning:     #d97706;
+      --warning-bg:  #fef3c7;
+      --purple:      #7c3aed;
+      --purple-bg:   #ede9fe;
+      --radius:      10px;
+      --shadow-sm:   0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
+      --shadow-md:   0 4px 16px rgba(0,0,0,.08);
+      --shadow-lg:   0 8px 32px rgba(0,0,0,.1);
+      --transition:  .18s ease;
+    }
+
+    /* ── Reset / base ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--surface-alt)
+        url('public/assets/dashboard-bg.svg') center/cover fixed;
+      color: var(--dark);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    a  { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    button { cursor: pointer; font-family: inherit; }
+    input, select, textarea { font-family: inherit; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    /* ── Header ─────────────────────────────────────────────── */
+    .site-header {
+      background: var(--dark);
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-md);
+    }
+    .header-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .logo-area { display: flex; align-items: center; gap: .75rem; flex-shrink: 0; }
+    .logo-area img { height: 32px; filter: brightness(0) invert(1); }
+    .admin-badge {
+      background: var(--purple);
+      color: #fff;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      padding: .18rem .55rem;
+      border-radius: 4px;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-left: auto;
+    }
+    .admin-name { font-size: .88rem; color: rgba(255,255,255,.8); }
+    .admin-name strong { color: #fff; }
+    .btn-logout {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.18);
+      color: #fff;
+      padding: .38rem .85rem;
+      border-radius: 6px;
+      font-size: .85rem;
+      font-weight: 500;
+      transition: background var(--transition);
+    }
+    .btn-logout:hover { background: rgba(255,255,255,.18); }
+    .btn-logout svg { width: 16px; height: 16px; }
+
+    /* ── Page layout ─────────────────────────────────────────── */
+    .page {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* ── Stat cards ──────────────────────────────────────────── */
+    .stat-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.1rem;
+    }
+    .stat-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.3rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .stat-card.c-blue::before   { background: var(--blue); }
+    .stat-card.c-teal::before   { background: var(--teal); }
+    .stat-card.c-purple::before { background: var(--purple); }
+    .stat-card.c-green::before  { background: var(--success); }
+    .stat-label {
+      font-size: .75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--muted);
+      margin-bottom: .5rem;
+    }
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1;
+    }
+    .stat-sub {
+      font-size: .78rem;
+      color: var(--muted);
+      margin-top: .4rem;
+    }
+    .status-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-right: .35rem;
+    }
+    .status-dot.green { background: var(--success); }
+
+    /* ── Tab navigation ──────────────────────────────────────── */
+    .tabs-wrap { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow-sm); overflow: hidden; }
+    .tab-bar {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-alt);
+    }
+    .tab-btn {
+      padding: .85rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color var(--transition), border-color var(--transition);
+      margin-bottom: -1px;
+    }
+    .tab-btn:hover { color: var(--teal); }
+    .tab-btn.active {
+      color: var(--teal);
+      border-bottom-color: var(--teal);
+      background: var(--surface);
+    }
+    .tab-panel { display: none; padding: 1.5rem; }
+    .tab-panel.active { display: block; }
+
+    /* ── Search / toolbar ────────────────────────────────────── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: 1.1rem;
+      flex-wrap: wrap;
+    }
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+      max-width: 340px;
+    }
+    .search-wrap svg {
+      position: absolute;
+      left: .7rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px; height: 16px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+    .search-input {
+      width: 100%;
+      padding: .55rem .85rem .55rem 2.1rem;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: var(--surface);
+      font-size: .88rem;
+      color: var(--dark);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(0,180,180,.12);
+    }
+    .filter-select {
+      padding: .55rem .8rem;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: var(--surface);
+      font-size: .88rem;
+      color: var(--dark);
+    }
+    .filter-select:focus { outline: 2px solid var(--teal); outline-offset: 1px; }
+
+    /* ── Tables ──────────────────────────────────────────────── */
+    .table-wrap { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .875rem;
+    }
+    th {
+      background: var(--surface-alt);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: .76rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      padding: .7rem 1rem;
+      text-align: left;
+      white-space: nowrap;
+    }
+    td {
+      padding: .78rem 1rem;
+      border-top: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    tr:hover td { background: #fafbfc; }
+
+    .badge {
+      display: inline-block;
+      padding: .18rem .6rem;
+      border-radius: 20px;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .badge-active    { background: var(--success-bg); color: var(--success); }
+    .badge-frozen    { background: var(--blue-light);  color: var(--blue); }
+    .badge-locked    { background: var(--danger-bg);   color: var(--danger); }
+    .badge-admin     { background: var(--purple-bg);   color: var(--purple); }
+    .badge-customer  { background: var(--teal-light);  color: var(--teal-dark); }
+    .badge-pending   { background: var(--warning-bg);  color: var(--warning); }
+    .badge-closed    { background: #f1f5f9; color: var(--muted); }
+
+    /* ── Action buttons ──────────────────────────────────────── */
+    .action-btn {
+      padding: .3rem .7rem;
+      border-radius: 5px;
+      font-size: .78rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+      transition: background var(--transition), border-color var(--transition);
+      margin-right: .25rem;
+    }
+    .action-btn:last-child { margin-right: 0; }
+    .action-btn.view   { background: var(--blue-light); color: var(--blue); border-color: #c3d9f5; }
+    .action-btn.view:hover { background: #d4e8ff; }
+    .action-btn.freeze { background: var(--warning-bg); color: var(--warning); border-color: #fde68a; }
+    .action-btn.freeze:hover { background: #fde68a; }
+    .action-btn.lock   { background: var(--danger-bg); color: var(--danger); border-color: #fca5a5; }
+    .action-btn.lock:hover { background: #fca5a5; }
+    .action-btn.adjust { background: var(--success-bg); color: var(--success); border-color: #86efac; }
+    .action-btn.adjust:hover { background: #86efac; }
+    .action-btn.unfreeze { background: var(--teal-light); color: var(--teal-dark); border-color: #99e6e6; }
+    .action-btn.unfreeze:hover { background: #99e6e6; }
+
+    /* ── Modal ────────────────────────────────────────────────── */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26,35,50,.65);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--surface);
+      border-radius: 14px;
+      padding: 2rem 2.25rem;
+      max-width: 440px;
+      width: 90%;
+      box-shadow: var(--shadow-lg);
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+    .modal-header h2 { font-size: 1.1rem; font-weight: 700; }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      color: var(--muted);
+      line-height: 1;
+      transition: color var(--transition);
+    }
+    .modal-close:hover { color: var(--dark); }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+      margin-bottom: 1rem;
+    }
+    .form-group label { font-size: .83rem; font-weight: 600; color: var(--mid); }
+    .form-group input, .form-group select {
+      padding: .6rem .85rem;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-size: .9rem;
+      color: var(--dark);
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(0,180,180,.12);
+    }
+    .modal-actions { display: flex; gap: .75rem; justify-content: flex-end; margin-top: 1.25rem; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--teal), var(--blue));
+      color: #fff;
+      border: none;
+      padding: .6rem 1.5rem;
+      border-radius: 7px;
+      font-size: .9rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,102,204,.2);
+      transition: opacity var(--transition);
+    }
+    .btn-primary:hover { opacity: .88; }
+    .btn-secondary {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      color: var(--mid);
+      padding: .6rem 1.25rem;
+      border-radius: 7px;
+      font-size: .9rem;
+      font-weight: 600;
+      transition: background var(--transition);
+    }
+    .btn-secondary:hover { background: var(--border); }
+
+    /* ── Audit log date filter ────────────────────────────────── */
+    .date-filter-wrap {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+    .date-filter-wrap label { font-size: .83rem; font-weight: 600; color: var(--mid); }
+    .date-filter-wrap input[type="date"] {
+      padding: .45rem .7rem;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-size: .85rem;
+      color: var(--dark);
+    }
+
+    /* ── Toast notification ───────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--dark);
+      color: #fff;
+      padding: .75rem 1.25rem;
+      border-radius: 8px;
+      font-size: .875rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(120%);
+      transition: transform .3s ease;
+      z-index: 1000;
+      max-width: 320px;
+    }
+    #toast.show { transform: translateY(0); }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .tab-btn { padding: .7rem .9rem; font-size: .83rem; }
+      .stat-cards { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .stat-cards { grid-template-columns: 1fr 1fr; }
+      .admin-name  { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Balance adjustment modal -->
+<div class="modal-backdrop" id="adjust-modal" role="dialog" aria-modal="true"
+     aria-labelledby="adjust-modal-title">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="adjust-modal-title">Adjust Account Balance</h2>
+      <button class="modal-close" id="adjust-modal-close" aria-label="Close">&times;</button>
+    </div>
+    <div class="form-group">
+      <label for="adj-account">Account</label>
+      <input type="text" id="adj-account" readonly/>
+    </div>
+    <div class="form-group">
+      <label for="adj-type">Adjustment Type</label>
+      <select id="adj-type">
+        <option value="credit">Credit (add funds)</option>
+        <option value="debit">Debit (remove funds)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="adj-amount">Amount (USD)</label>
+      <input type="number" id="adj-amount" min="0.01" step="0.01" placeholder="0.00"/>
+    </div>
+    <div class="form-group">
+      <label for="adj-reason">Reason / Note</label>
+      <input type="text" id="adj-reason" maxlength="120" placeholder="Administrative adjustment…"/>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="adj-cancel">Cancel</button>
+      <button class="btn-primary"   id="adj-confirm">Apply Adjustment</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- ── Header ───────────────────────────────────────────────── -->
+<header class="site-header" role="banner">
+  <div class="header-inner">
+    <div class="logo-area">
+      <img src="public/assets/logo.svg" alt="SpringBank" width="130" height="32"/>
+      <span class="admin-badge">Admin</span>
+    </div>
+    <div class="header-right">
+      <span class="admin-name">Logged in as <strong id="admin-name-display">Admin</strong></span>
+      <button class="btn-logout" id="btn-logout" aria-label="Log out">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" aria-hidden="true">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Log Out
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ── Main ─────────────────────────────────────────────────── -->
+<main class="page">
+
+  <div>
+    <h1 style="font-size:1.5rem;font-weight:700;color:var(--dark)">
+      Admin <span style="color:var(--teal)">Dashboard</span>
+    </h1>
+  </div>
+
+  <!-- Stat cards -->
+  <section aria-labelledby="stats-heading">
+    <h2 id="stats-heading" class="sr-only">System Statistics</h2>
+    <div class="stat-cards">
+      <div class="stat-card c-blue">
+        <div class="stat-label">Total Users</div>
+        <div class="stat-value">1,247</div>
+        <div class="stat-sub">+12 this week</div>
+      </div>
+      <div class="stat-card c-teal">
+        <div class="stat-label">Active Accounts</div>
+        <div class="stat-value">3,891</div>
+        <div class="stat-sub">98.4% healthy</div>
+      </div>
+      <div class="stat-card c-purple">
+        <div class="stat-label">Transactions Today</div>
+        <div class="stat-value">523</div>
+        <div class="stat-sub">$1.24M total volume</div>
+      </div>
+      <div class="stat-card c-green">
+        <div class="stat-label">System Status</div>
+        <div class="stat-value" style="font-size:1.1rem;padding-top:.3rem">
+          <span class="status-dot green"></span>Operational
+        </div>
+        <div class="stat-sub">All services normal</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tab panel -->
+  <div class="tabs-wrap">
+    <div class="tab-bar" role="tablist" aria-label="Admin sections">
+      <button class="tab-btn active" role="tab" aria-selected="true"
+              aria-controls="panel-users" id="tab-users">Users</button>
+      <button class="tab-btn" role="tab" aria-selected="false"
+              aria-controls="panel-accounts" id="tab-accounts">Accounts</button>
+      <button class="tab-btn" role="tab" aria-selected="false"
+              aria-controls="panel-audit" id="tab-audit">Audit Logs</button>
+    </div>
+
+    <!-- ── Users tab ──────────────────────────────────────── -->
+    <div class="tab-panel active" id="panel-users" role="tabpanel" aria-labelledby="tab-users">
+      <div class="toolbar">
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="search" id="user-search" class="search-input"
+                 placeholder="Search users…" aria-label="Search users"/>
+        </div>
+        <select id="user-role-filter" class="filter-select" aria-label="Filter by role">
+          <option value="all">All Roles</option>
+          <option value="ADMIN">Admin</option>
+          <option value="CUSTOMER">Customer</option>
+        </select>
+        <select id="user-status-filter" class="filter-select" aria-label="Filter by status">
+          <option value="all">All Statuses</option>
+          <option value="Active">Active</option>
+          <option value="Frozen">Frozen</option>
+          <option value="Locked">Locked</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table aria-label="User management">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Accounts</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody"><!-- filled by JS --></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Accounts tab ───────────────────────────────────── -->
+    <div class="tab-panel" id="panel-accounts" role="tabpanel" aria-labelledby="tab-accounts">
+      <div class="toolbar">
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="search" id="account-search" class="search-input"
+                 placeholder="Search accounts…" aria-label="Search accounts"/>
+        </div>
+        <select id="account-status-filter" class="filter-select" aria-label="Filter by status">
+          <option value="all">All Statuses</option>
+          <option value="Active">Active</option>
+          <option value="Frozen">Frozen</option>
+          <option value="Closed">Closed</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table aria-label="Account management">
+          <thead>
+            <tr>
+              <th>Account #</th>
+              <th>Owner</th>
+              <th>Type</th>
+              <th>Balance</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="accounts-tbody"><!-- filled by JS --></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Audit Logs tab ─────────────────────────────────── -->
+    <div class="tab-panel" id="panel-audit" role="tabpanel" aria-labelledby="tab-audit">
+      <div class="toolbar">
+        <div class="date-filter-wrap">
+          <label for="audit-from">From:</label>
+          <input type="date" id="audit-from" aria-label="Audit log start date"/>
+          <label for="audit-to">To:</label>
+          <input type="date" id="audit-to"   aria-label="Audit log end date"/>
+          <button class="btn-secondary" id="btn-audit-filter"
+                  style="padding:.45rem 1rem;font-size:.85rem">Apply</button>
+          <button class="btn-secondary" id="btn-audit-reset"
+                  style="padding:.45rem 1rem;font-size:.85rem">Reset</button>
+        </div>
+        <div class="search-wrap" style="margin-left:auto">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="search" id="audit-search" class="search-input"
+                 placeholder="Search logs…" aria-label="Search audit logs"/>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table aria-label="Audit log">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>User</th>
+              <th>Action</th>
+              <th>Resource</th>
+              <th>IP Address</th>
+            </tr>
+          </thead>
+          <tbody id="audit-tbody"><!-- filled by JS --></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+/* =========================================================
+   SpringBank Admin Dashboard
+   ========================================================= */
+(function () {
+  'use strict';
+
+  /* ── Admin auth guard ──────────────────────────────────── */
+  const token = localStorage.getItem('token');
+  const isDemo = localStorage.getItem('demo') === 'true';
+
+  function parseJwt(t) {
+    try { return JSON.parse(atob(t.split('.')[1])); } catch(_) { return null; }
+  }
+
+  if (!isDemo) {
+    if (!token) { window.location.replace('/signin.html'); return; }
+    const payload = parseJwt(token);
+    if (!payload || (payload.role !== 'ADMIN' && payload.roles && !payload.roles.includes('ADMIN'))) {
+      // Not an admin — redirect to customer dashboard
+      window.location.replace('/frontend/dashboard.html');
+      return;
+    }
+    const name = payload.name || payload.sub || 'Admin';
+    document.getElementById('admin-name-display').textContent = name;
+  } else {
+    document.getElementById('admin-name-display').textContent = 'Demo Admin';
+  }
+
+  /* ── Logout ────────────────────────────────────────────── */
+  function doLogout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('demo');
+    window.location.replace('/signin.html');
+  }
+  document.getElementById('btn-logout').addEventListener('click', doLogout);
+
+  /* ── Helpers ───────────────────────────────────────────── */
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function fmt(n) {
+    return new Intl.NumberFormat('en-US', { style:'currency', currency:'USD' }).format(n);
+  }
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3000);
+  }
+
+  /* ── Mock data ─────────────────────────────────────────── */
+  const USERS = [
+    { id:1, name:'Alice Johnson',  email:'alice@example.com',  role:'ADMIN',    status:'Active', accounts:2 },
+    { id:2, name:'Bob Martinez',   email:'bob@example.com',    role:'CUSTOMER', status:'Active', accounts:3 },
+    { id:3, name:'Carol White',    email:'carol@example.com',  role:'CUSTOMER', status:'Active', accounts:1 },
+    { id:4, name:'David Kim',      email:'david@example.com',  role:'CUSTOMER', status:'Frozen', accounts:2 },
+    { id:5, name:'Eve Nakamura',   email:'eve@example.com',    role:'CUSTOMER', status:'Locked', accounts:1 }
+  ];
+
+  const ACCOUNTS = [
+    { acctNo:'SB-0001-1234', owner:'Bob Martinez',  type:'Checking', balance:12450.00, status:'Active' },
+    { acctNo:'SB-0001-5678', owner:'Bob Martinez',  type:'Savings',  balance:35200.50, status:'Active' },
+    { acctNo:'SB-0002-2345', owner:'Carol White',   type:'Checking', balance:4300.75,  status:'Active' },
+    { acctNo:'SB-0003-3456', owner:'David Kim',     type:'Checking', balance:8900.00,  status:'Frozen' },
+    { acctNo:'SB-0003-7890', owner:'David Kim',     type:'Savings',  balance:22100.00, status:'Frozen' },
+    { acctNo:'SB-0004-4567', owner:'Eve Nakamura',  type:'Checking', balance:1250.30,  status:'Active' },
+    { acctNo:'SB-0005-9012', owner:'Alice Johnson', type:'Savings',  balance:98000.00, status:'Active' },
+    { acctNo:'SB-0006-0123', owner:'Alice Johnson', type:'Checking', balance:5400.20,  status:'Active' }
+  ];
+
+  const AUDIT_LOGS = [
+    { ts:'2025-06-20 14:32:01', user:'alice@example.com',  action:'LOGIN',           resource:'Auth',          ip:'10.0.1.4' },
+    { ts:'2025-06-20 14:35:18', user:'alice@example.com',  action:'FREEZE_ACCOUNT',  resource:'SB-0003-3456',  ip:'10.0.1.4' },
+    { ts:'2025-06-20 13:10:44', user:'bob@example.com',    action:'TRANSFER',        resource:'SB-0001-1234',  ip:'192.168.0.55' },
+    { ts:'2025-06-20 12:55:09', user:'admin@springbank',   action:'ADJUST_BALANCE',  resource:'SB-0004-4567',  ip:'10.0.1.1' },
+    { ts:'2025-06-20 11:40:22', user:'carol@example.com',  action:'LOGIN',           resource:'Auth',          ip:'172.16.0.8' },
+    { ts:'2025-06-20 10:22:58', user:'admin@springbank',   action:'LOCK_USER',       resource:'User:5',        ip:'10.0.1.1' },
+    { ts:'2025-06-19 16:08:33', user:'bob@example.com',    action:'DEPOSIT',         resource:'SB-0001-5678',  ip:'192.168.0.55' },
+    { ts:'2025-06-19 15:44:17', user:'alice@example.com',  action:'VIEW_AUDIT',      resource:'AuditLog',      ip:'10.0.1.4' },
+    { ts:'2025-06-19 14:30:05', user:'david@example.com',  action:'LOGIN_FAILED',    resource:'Auth',          ip:'203.0.113.42' },
+    { ts:'2025-06-19 09:15:51', user:'carol@example.com',  action:'WITHDRAWAL',      resource:'SB-0002-2345',  ip:'172.16.0.8' }
+  ];
+
+  /* ── Tab navigation ─────────────────────────────────────── */
+  const tabs = document.querySelectorAll('.tab-btn');
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabs.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      document.getElementById(btn.getAttribute('aria-controls')).classList.add('active');
+    });
+  });
+
+  /* ── Users tab ──────────────────────────────────────────── */
+  let usersData = JSON.parse(JSON.stringify(USERS));
+
+  function roleClass(r)   { return r === 'ADMIN' ? 'badge-admin' : 'badge-customer'; }
+  function statusClass(s) {
+    return { Active:'badge-active', Frozen:'badge-frozen', Locked:'badge-locked' }[s] || '';
+  }
+
+  function renderUsers(list) {
+    document.getElementById('users-tbody').innerHTML = list.map(u => `
+      <tr data-uid="${u.id}">
+        <td>${escHtml(u.name)}</td>
+        <td>${escHtml(u.email)}</td>
+        <td><span class="badge ${roleClass(u.role)}">${escHtml(u.role)}</span></td>
+        <td><span class="badge ${statusClass(u.status)}" id="user-status-${u.id}">${escHtml(u.status)}</span></td>
+        <td>${u.accounts}</td>
+        <td>
+          <button class="action-btn view"   onclick="adminViewUser(${u.id})">View</button>
+          <button class="action-btn freeze" onclick="adminFreezeUser(${u.id})">Freeze Accounts</button>
+          <button class="action-btn lock"   onclick="adminLockUser(${u.id})">Lock User</button>
+        </td>
+      </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">No users found.</td></tr>';
+  }
+
+  function filterUsers() {
+    const q      = document.getElementById('user-search').value.toLowerCase();
+    const role   = document.getElementById('user-role-filter').value;
+    const status = document.getElementById('user-status-filter').value;
+    renderUsers(usersData.filter(u =>
+      (q === '' || u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)) &&
+      (role === 'all' || u.role === role) &&
+      (status === 'all' || u.status === status)
+    ));
+  }
+
+  document.getElementById('user-search').addEventListener('input', filterUsers);
+  document.getElementById('user-role-filter').addEventListener('change', filterUsers);
+  document.getElementById('user-status-filter').addEventListener('change', filterUsers);
+
+  /* expose to inline onclick */
+  window.adminViewUser = function(id) {
+    const u = usersData.find(x => x.id === id);
+    if (u) toast(`Viewing profile: ${u.name} (${u.email})`);
+  };
+  window.adminFreezeUser = function(id) {
+    const u = usersData.find(x => x.id === id);
+    if (!u) return;
+    const action = u.status === 'Frozen' ? 'unfreeze' : 'freeze';
+    if (!confirm(`${action === 'freeze' ? 'Freeze' : 'Unfreeze'} all accounts for ${u.name}?`)) return;
+    u.status = action === 'freeze' ? 'Frozen' : 'Active';
+    filterUsers();
+    toast(`Accounts ${action}d for ${u.name}.`);
+  };
+  window.adminLockUser = function(id) {
+    const u = usersData.find(x => x.id === id);
+    if (!u) return;
+    if (!confirm(`Lock account for ${u.name}? They will be unable to log in.`)) return;
+    u.status = 'Locked';
+    filterUsers();
+    toast(`User ${u.name} has been locked.`);
+  };
+
+  renderUsers(usersData);
+
+  /* ── Accounts tab ───────────────────────────────────────── */
+  let accountsData = JSON.parse(JSON.stringify(ACCOUNTS));
+
+  function acctStatusClass(s) {
+    return { Active:'badge-active', Frozen:'badge-frozen', Closed:'badge-closed' }[s] || '';
+  }
+
+  function renderAccounts(list) {
+    document.getElementById('accounts-tbody').innerHTML = list.map((a, i) => `
+      <tr>
+        <td style="font-family:'Courier New',monospace">${escHtml(a.acctNo)}</td>
+        <td>${escHtml(a.owner)}</td>
+        <td style="text-transform:capitalize">${escHtml(a.type)}</td>
+        <td style="font-weight:600">${fmt(a.balance)}</td>
+        <td><span class="badge ${acctStatusClass(a.status)}" id="acct-status-${i}">${escHtml(a.status)}</span></td>
+        <td>
+          <button class="action-btn view"   onclick="adminViewTx('${escHtml(a.acctNo)}')">View Tx</button>
+          <button class="action-btn freeze" onclick="adminToggleFreeze(${i})">${a.status === 'Frozen' ? 'Unfreeze' : 'Freeze'}</button>
+          <button class="action-btn adjust" onclick="adminAdjustBalance(${i})">Adjust</button>
+        </td>
+      </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">No accounts found.</td></tr>';
+  }
+
+  function filterAccounts() {
+    const q      = document.getElementById('account-search').value.toLowerCase();
+    const status = document.getElementById('account-status-filter').value;
+    renderAccounts(accountsData.filter(a =>
+      (q === '' || a.acctNo.toLowerCase().includes(q) || a.owner.toLowerCase().includes(q)) &&
+      (status === 'all' || a.status === status)
+    ));
+  }
+
+  document.getElementById('account-search').addEventListener('input', filterAccounts);
+  document.getElementById('account-status-filter').addEventListener('change', filterAccounts);
+
+  window.adminViewTx = function(acct) {
+    toast(`Loading transactions for ${acct}…`);
+  };
+  window.adminToggleFreeze = function(idx) {
+    const a = accountsData[idx];
+    if (!a) return;
+    const action = a.status === 'Frozen' ? 'Unfreeze' : 'Freeze';
+    if (!confirm(`${action} account ${a.acctNo}?`)) return;
+    a.status = a.status === 'Frozen' ? 'Active' : 'Frozen';
+    filterAccounts();
+    toast(`Account ${a.acctNo} ${action.toLowerCase()}d.`);
+  };
+  window.adminAdjustBalance = function(idx) {
+    const a = accountsData[idx];
+    if (!a) return;
+    document.getElementById('adj-account').value = `${a.acctNo} – ${a.owner}`;
+    document.getElementById('adj-amount').value  = '';
+    document.getElementById('adj-reason').value  = '';
+    document.getElementById('adjust-modal').classList.add('open');
+    document.getElementById('adj-confirm').onclick = function() {
+      const type   = document.getElementById('adj-type').value;
+      const amount = parseFloat(document.getElementById('adj-amount').value);
+      if (!amount || amount <= 0) { toast('Enter a valid amount.'); return; }
+      if (type === 'credit') a.balance += amount;
+      else {
+        if (amount > a.balance) { toast('Debit exceeds current balance.'); return; }
+        a.balance -= amount;
+      }
+      document.getElementById('adjust-modal').classList.remove('open');
+      filterAccounts();
+      toast(`Balance adjusted for ${a.acctNo}. New balance: ${fmt(a.balance)}`);
+    };
+  };
+
+  // Modal close handlers
+  document.getElementById('adjust-modal-close').addEventListener('click', () =>
+    document.getElementById('adjust-modal').classList.remove('open'));
+  document.getElementById('adj-cancel').addEventListener('click', () =>
+    document.getElementById('adjust-modal').classList.remove('open'));
+  document.getElementById('adjust-modal').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+
+  renderAccounts(accountsData);
+
+  /* ── Audit log tab ─────────────────────────────────────── */
+  let auditData = JSON.parse(JSON.stringify(AUDIT_LOGS));
+
+  function actionBadgeStyle(action) {
+    const map = {
+      LOGIN: 'background:var(--success-bg);color:var(--success)',
+      LOGIN_FAILED: 'background:var(--danger-bg);color:var(--danger)',
+      FREEZE_ACCOUNT: 'background:var(--blue-light);color:var(--blue)',
+      LOCK_USER: 'background:var(--danger-bg);color:var(--danger)',
+      ADJUST_BALANCE: 'background:var(--warning-bg);color:var(--warning)',
+      TRANSFER: 'background:var(--teal-light);color:var(--teal-dark)',
+      DEPOSIT: 'background:var(--success-bg);color:var(--success)',
+      WITHDRAWAL: 'background:var(--warning-bg);color:var(--warning)',
+      VIEW_AUDIT: 'background:#f1f5f9;color:var(--muted)'
+    };
+    return map[action] || 'background:#f1f5f9;color:var(--muted)';
+  }
+
+  function renderAuditLogs(list) {
+    document.getElementById('audit-tbody').innerHTML = list.map(l => `
+      <tr>
+        <td style="font-family:'Courier New',monospace;font-size:.82rem">${escHtml(l.ts)}</td>
+        <td>${escHtml(l.user)}</td>
+        <td><span class="badge" style="${actionBadgeStyle(l.action)}">${escHtml(l.action)}</span></td>
+        <td style="font-family:'Courier New',monospace;font-size:.82rem">${escHtml(l.resource)}</td>
+        <td style="font-family:'Courier New',monospace;font-size:.82rem;color:var(--muted)">${escHtml(l.ip)}</td>
+      </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">No logs found.</td></tr>';
+  }
+
+  function filterAuditLogs() {
+    const q    = document.getElementById('audit-search').value.toLowerCase();
+    const from = document.getElementById('audit-from').value; // 'YYYY-MM-DD'
+    const to   = document.getElementById('audit-to').value;
+    renderAuditLogs(auditData.filter(l => {
+      const logDate = l.ts.slice(0, 10);
+      const matchQ    = q === '' || l.user.toLowerCase().includes(q) ||
+                        l.action.toLowerCase().includes(q) ||
+                        l.resource.toLowerCase().includes(q) ||
+                        l.ip.includes(q);
+      const matchFrom = !from || logDate >= from;
+      const matchTo   = !to   || logDate <= to;
+      return matchQ && matchFrom && matchTo;
+    }));
+  }
+
+  document.getElementById('audit-search').addEventListener('input', filterAuditLogs);
+  document.getElementById('btn-audit-filter').addEventListener('click', filterAuditLogs);
+  document.getElementById('btn-audit-reset').addEventListener('click', () => {
+    document.getElementById('audit-from').value = '';
+    document.getElementById('audit-to').value   = '';
+    document.getElementById('audit-search').value = '';
+    renderAuditLogs(auditData);
+  });
+
+  // Set sensible default date range (last 7 days)
+  const today = new Date();
+  const lastWeek = new Date(today);
+  lastWeek.setDate(today.getDate() - 7);
+  document.getElementById('audit-from').value = lastWeek.toISOString().slice(0,10);
+  document.getElementById('audit-to').value   = today.toISOString().slice(0,10);
+
+  renderAuditLogs(auditData);
+
+})();
+</script>
+</body>
+</html>
