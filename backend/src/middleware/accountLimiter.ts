@@ -21,11 +21,23 @@ const MAX_PER_WINDOW = 10;
 const VELOCITY_ALERT_WINDOW_MS = 5 * 60 * 1000; // 5 minutes
 const VELOCITY_ALERT_THRESHOLD = 6;
 
+/**
+ * Amount-based velocity alert: if the total amount transferred from an account
+ * within the alert window exceeds this value (in major currency units), a
+ * separate high-amount warning is emitted alongside the count-based alert.
+ *
+ * Default: $10,000 in 5 minutes — a typical AML soft-trigger threshold.
+ */
+const VELOCITY_AMOUNT_THRESHOLD = 10_000;
+
 /** Tracks the most recent alert emission timestamp per account to prevent log flooding. */
 const lastAlertTime = new Map<string, number>();
 
 /** accountId → timestamps of recent transfer attempts */
 const transferWindows = new Map<string, number[]>();
+
+/** accountId → amounts (in major currency units) of recent transfer attempts */
+const transferAmounts = new Map<string, { ts: number; amount: number }[]>();
 
 /**
  * Record a transfer attempt for `accountId` and check if the account has
@@ -55,6 +67,28 @@ export function checkAccountTransferLimit(accountId: string): boolean {
   return true;
 }
 
+/**
+ * Record the amount of a committed transfer for velocity-amount tracking.
+ *
+ * **Ordering**: this must be called *before* `checkVelocityAmountAlert` so
+ * that the current transfer's amount is included in the window total when the
+ * alert threshold is evaluated.  The typical call sequence is:
+ *   1. `checkAccountTransferLimit(id)` — decides whether to allow the request
+ *   2. execute the transaction
+ *   3. `recordTransferAmount(id, amount)` — record the committed amount
+ *   4. `checkVelocityAlert(id)`       — count-based alert check
+ *   5. `checkVelocityAmountAlert(id)` — amount-based alert check
+ *
+ * @param amount - Amount in major currency units (e.g. 50.00 for $50).
+ */
+export function recordTransferAmount(accountId: string, amount: number): void {
+  const now = Date.now();
+  const alertWindowStart = now - VELOCITY_ALERT_WINDOW_MS;
+  const entries = (transferAmounts.get(accountId) ?? []).filter((e) => e.ts > alertWindowStart);
+  entries.push({ ts: now, amount });
+  transferAmounts.set(accountId, entries);
+}
+
 /** How many attempts remain in the current window for `accountId`. */
 export function remainingAttempts(accountId: string): number {
   const now = Date.now();
@@ -62,8 +96,16 @@ export function remainingAttempts(accountId: string): number {
   return Math.max(0, MAX_PER_WINDOW - timestamps.length);
 }
 
+/** Returns the total amount transferred from `accountId` in the current alert window. */
+export function windowTransferTotal(accountId: string): number {
+  const now = Date.now();
+  return (transferAmounts.get(accountId) ?? [])
+    .filter((e) => e.ts > now - VELOCITY_ALERT_WINDOW_MS)
+    .reduce((sum, e) => sum + e.amount, 0);
+}
+
 /**
- * Check whether an account's recent transfer volume exceeds the velocity
+ * Check whether an account's recent transfer **count** exceeds the velocity
  * alert threshold (6 transfers in 5 minutes).
  *
  * Call this **after** `checkAccountTransferLimit` has already recorded the
@@ -73,8 +115,7 @@ export function remainingAttempts(accountId: string): number {
  * given window, then suppresses further alerts until the window resets.
  * This prevents log flooding and duplicate audit entries.
  *
- * @returns `true` when a new alert should be emitted (caller should emit a
- *          warning log and an audit-log entry).  Does not block the request.
+ * @returns `true` when a new count-based alert should be emitted.
  */
 export function checkVelocityAlert(accountId: string): boolean {
   const now = Date.now();
@@ -91,8 +132,32 @@ export function checkVelocityAlert(accountId: string): boolean {
   return true;
 }
 
+/**
+ * Check whether the total **amount** transferred from an account in the
+ * current 5-minute window exceeds the high-amount alert threshold ($10,000).
+ *
+ * Uses a separate `lastAlertTime` key (`amount:accountId`) so count-based
+ * and amount-based alerts can fire independently without suppressing each other.
+ *
+ * @returns `true` when a new amount-based alert should be emitted.
+ */
+export function checkVelocityAmountAlert(accountId: string): boolean {
+  const total = windowTransferTotal(accountId);
+  if (total < VELOCITY_AMOUNT_THRESHOLD) return false;
+
+  // Suppress repeated amount alerts within the same window.
+  const amountAlertKey = `amount:${accountId}`;
+  const now = Date.now();
+  const lastAlert = lastAlertTime.get(amountAlertKey) ?? 0;
+  if (now - lastAlert < VELOCITY_ALERT_WINDOW_MS) return false;
+
+  lastAlertTime.set(amountAlertKey, now);
+  return true;
+}
+
 /** Exposed for testing: clear all rate-limit and alert state. */
 export function resetAccountLimits(): void {
   transferWindows.clear();
+  transferAmounts.clear();
   lastAlertTime.clear();
 }

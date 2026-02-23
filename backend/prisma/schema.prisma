@@ -81,6 +81,7 @@ model Transaction {
   reference             String            @unique
   idempotencyKey        String?           @unique
   idempotencyPayloadHash String?
+  idempotencyExpiresAt  DateTime?
   status                TransactionStatus @default(PENDING)
   metadata              Json?
   createdAt             DateTime          @default(now())

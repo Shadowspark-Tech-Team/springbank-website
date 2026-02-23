@@ -1,6 +1,7 @@
-import { PrismaClient, Transaction, TransactionType } from '@prisma/client';
+import { Transaction, TransactionType } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
 import { createHash, randomUUID } from 'crypto';
+import type { ExtendedPrismaClient } from '../db';
 
 function generateReference(): string {
   return `TXN-${Date.now()}-${randomUUID().slice(0, 8).toUpperCase()}`;
@@ -33,29 +34,63 @@ function computePayloadHash(
 /** How many times to retry an optimistic-lock conflict before giving up. */
 const MAX_OCC_RETRIES = 3;
 
+/**
+ * Idempotency keys are honoured for this duration after the original request.
+ * After expiry, the key is treated as unused — a new transaction may be created.
+ * 24 hours matches Stripe's idempotency window and balances storage cost with
+ * practical retry windows (network timeouts, client retries, etc.).
+ */
+const IDEMPOTENCY_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+/** Returns the expiry Date for a freshly-created idempotency record. */
+function idempotencyExpiry(): Date {
+  return new Date(Date.now() + IDEMPOTENCY_TTL_MS);
+}
+
+/**
+ * Look up an idempotency key.
+ * Returns the existing Transaction if found AND not yet expired.
+ * Returns null if not found, or if the record has expired (allowing a new request through).
+ * Throws IdempotencyPayloadMismatchError if found, non-expired, but payload differs.
+ */
+async function checkIdempotency(
+  prisma: ExtendedPrismaClient,
+  idempotencyKey: string,
+  payloadHash: string,
+): Promise<Transaction | null> {
+  const existing = await prisma.transaction.findUnique({ where: { idempotencyKey } });
+  if (!existing) return null;
+
+  // Expired record: treat as if the key was never used.
+  if (existing.idempotencyExpiresAt && existing.idempotencyExpiresAt < new Date()) {
+    return null;
+  }
+
+  if (existing.idempotencyPayloadHash !== payloadHash) {
+    throw new IdempotencyPayloadMismatchError(
+      'Idempotency key has already been used with a different payload',
+    );
+  }
+
+  return existing;
+}
+
 export async function transfer(
   fromAccountId: string,
   toAccountId: string,
   amount: number,
   description: string,
-  prisma: PrismaClient,
+  prisma: ExtendedPrismaClient,
   actorUserId?: string,
   idempotencyKey?: string,
 ): Promise<Transaction> {
-  // Idempotency guard: if a completed transaction exists for this key, return it.
+  // Idempotency guard: if a non-expired transaction exists for this key, return it.
   // The payload hash binds the key to the specific request body — prevents replaying
   // the same key with a different amount or account (Stripe-style payload binding).
   if (idempotencyKey) {
     const payloadHash = computePayloadHash('INTERNAL_TRANSFER', fromAccountId, toAccountId, amount);
-    const existing = await prisma.transaction.findUnique({ where: { idempotencyKey } });
-    if (existing) {
-      if (existing.idempotencyPayloadHash !== payloadHash) {
-        throw new IdempotencyPayloadMismatchError(
-          'Idempotency key has already been used with a different payload',
-        );
-      }
-      return existing;
-    }
+    const existing = await checkIdempotency(prisma, idempotencyKey, payloadHash);
+    if (existing) return existing;
   }
 
   for (let attempt = 0; attempt < MAX_OCC_RETRIES; attempt++) {
@@ -119,6 +154,7 @@ export async function transfer(
             idempotencyPayloadHash: idempotencyKey
               ? computePayloadHash('INTERNAL_TRANSFER', fromAccountId, toAccountId, amount)
               : null,
+            idempotencyExpiresAt: idempotencyKey ? idempotencyExpiry() : null,
             status: 'COMPLETED',
           },
         });
@@ -160,7 +196,7 @@ interface CreateTransactionParams {
 
 export async function createTransaction(
   params: CreateTransactionParams,
-  prisma: PrismaClient,
+  prisma: ExtendedPrismaClient,
 ): Promise<Transaction> {
   const { fromAccountId, toAccountId, type, amount, description, metadata, idempotencyKey } = params;
 
@@ -168,15 +204,8 @@ export async function createTransaction(
   // with a different payload (e.g. same key but different amount).
   if (idempotencyKey) {
     const payloadHash = computePayloadHash(type, fromAccountId, toAccountId, amount);
-    const existing = await prisma.transaction.findUnique({ where: { idempotencyKey } });
-    if (existing) {
-      if (existing.idempotencyPayloadHash !== payloadHash) {
-        throw new IdempotencyPayloadMismatchError(
-          'Idempotency key has already been used with a different payload',
-        );
-      }
-      return existing;
-    }
+    const existing = await checkIdempotency(prisma, idempotencyKey, payloadHash);
+    if (existing) return existing;
   }
 
   for (let attempt = 0; attempt < MAX_OCC_RETRIES; attempt++) {
@@ -226,6 +255,7 @@ export async function createTransaction(
             idempotencyPayloadHash: idempotencyKey
               ? computePayloadHash(type, fromAccountId, toAccountId, amount)
               : null,
+            idempotencyExpiresAt: idempotencyKey ? idempotencyExpiry() : null,
             status: 'COMPLETED',
             metadata: metadata as object | undefined,
           },

@@ -8,10 +8,11 @@
  *
  * Usage:
  *   cd backend
- *   npx ts-node ../scripts/reconcile.ts
+ *   npx ts-node ../scripts/reconcile.ts          # detect only
+ *   npx ts-node ../scripts/reconcile.ts --repair  # detect + repair
  *
  * Exit codes:
- *   0 – all accounts balanced
+ *   0 – all accounts balanced (or all repaired successfully in --repair mode)
  *   1 – one or more discrepancies found (or script error)
  *
  * Environment:
@@ -22,6 +23,10 @@ import { PrismaClient } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
 
 const prisma = new PrismaClient();
+
+// ─── CLI flags ────────────────────────────────────────────────────────────────
+
+const REPAIR_MODE = process.argv.includes('--repair');
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -89,7 +94,8 @@ async function reconcileAccounts(): Promise<ReconciliationResult[]> {
         discrepancy,
         detectedAt: new Date(), // captured now, before any DB write
       });
-    }  }
+    }
+  }
 
   return discrepancies;
 }
@@ -116,13 +122,86 @@ async function writeAuditEntries(discrepancies: ReconciliationResult[]): Promise
   }
 }
 
+// ─── Repair mode ─────────────────────────────────────────────────────────────
+
+/**
+ * Idempotently repairs each discrepant account by setting its stored balance
+ * to the value derived from the ledger.  Each repair runs inside its own
+ * Prisma transaction with an optimistic-lock check (version field) so
+ * concurrent writes don't silently corrupt the repair.
+ *
+ * A `reconciliation_repair` AuditLog entry is written for every repaired
+ * account so the correction is fully traceable.
+ */
+async function repairDiscrepancies(discrepancies: ReconciliationResult[]): Promise<number> {
+  let repaired = 0;
+
+  for (const d of discrepancies) {
+    try {
+      await prisma.$transaction(async (tx) => {
+        // Re-read the account inside the transaction to get the current version.
+        const account = await tx.account.findUniqueOrThrow({ where: { id: d.accountId } });
+
+        // If the balance has already been corrected (e.g. by a concurrent repair
+        // run), skip this account to keep the operation idempotent.
+        if (account.balance.equals(d.computedBalance)) {
+          console.log(`  ⏭  ${d.accountNumber} already balanced – skipping`);
+          return;
+        }
+
+        // Optimistic lock: only update if version hasn't changed since we read it.
+        const result = await tx.account.updateMany({
+          where: { id: d.accountId, version: account.version },
+          data: {
+            balance: d.computedBalance,
+            version: { increment: 1 },
+          },
+        });
+
+        if (result.count === 0) {
+          throw new Error(
+            `Optimistic lock conflict on ${d.accountNumber} – re-run reconcile to verify`,
+          );
+        }
+
+        // Immutable audit trail for the repair.
+        await tx.auditLog.create({
+          data: {
+            userId: null,
+            action: 'reconciliation_repair',
+            resource: 'account',
+            resourceId: d.accountId,
+            details: {
+              accountNumber: d.accountNumber,
+              previousBalance: d.storedBalance.toFixed(2),
+              correctedBalance: d.computedBalance.toFixed(2),
+              discrepancy: d.discrepancy.toFixed(2),
+              repairedAt: new Date().toISOString(),
+            },
+          },
+        });
+      });
+
+      console.log(
+        `  ✔ Repaired ${d.accountNumber}: ${fmt(d.storedBalance)} → ${fmt(d.computedBalance)}`,
+      );
+      repaired++;
+    } catch (err) {
+      console.error(`  ✖ Failed to repair ${d.accountNumber}: ${String(err)}`);
+    }
+  }
+
+  return repaired;
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main(): Promise<void> {
   console.log('\n╔══════════════════════════════════════════╗');
-  console.log('║   Spring Bank – Ledger Reconciliation    ║');
+  console.log(`║   Spring Bank – Ledger Reconciliation    ║`);
   console.log('╚══════════════════════════════════════════╝');
-  console.log(`  Started at: ${new Date().toISOString()}`);
+  console.log(`  Mode    : ${REPAIR_MODE ? '⚠  REPAIR (will modify balances)' : 'detect only'}`);
+  console.log(`  Started : ${new Date().toISOString()}`);
 
   try {
     section('Scanning accounts');
@@ -145,13 +224,23 @@ async function main(): Promise<void> {
       console.error('');
     }
 
-    // Persist discrepancies to the audit log for compliance visibility.
-    section('Writing audit log entries');
-    await writeAuditEntries(discrepancies);
-    console.log(`  ✔ Wrote ${discrepancies.length} audit log entry(ies).`);
+    if (REPAIR_MODE) {
+      section('Repairing discrepancies');
+      const repaired = await repairDiscrepancies(discrepancies);
+      console.log(`\n  ✅ Repaired ${repaired} / ${discrepancies.length} account(s).\n`);
+      if (repaired < discrepancies.length) {
+        console.error('  ❌ Some accounts could not be repaired – re-run to verify.\n');
+        process.exitCode = 1;
+      }
+    } else {
+      // Persist discrepancies to the audit log for compliance visibility.
+      section('Writing audit log entries');
+      await writeAuditEntries(discrepancies);
+      console.log(`  ✔ Wrote ${discrepancies.length} audit log entry(ies).`);
 
-    console.error('\n  ❌ Reconciliation FAILED – see discrepancies above.\n');
-    process.exitCode = 1;
+      console.error('\n  ❌ Reconciliation FAILED – run with --repair to correct.\n');
+      process.exitCode = 1;
+    }
   } finally {
     await prisma.$disconnect();
   }

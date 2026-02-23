@@ -11,7 +11,8 @@
     "db:migrate": "prisma migrate dev",
     "db:generate": "prisma generate",
     "db:seed": "ts-node prisma/seed.ts",
-    "db:reconcile": "ts-node ../scripts/reconcile.ts"
+    "db:reconcile": "ts-node ../scripts/reconcile.ts",
+    "db:reconcile:repair": "ts-node ../scripts/reconcile.ts --repair"
   },
   "dependencies": {
     "@prisma/client": "^5.10.0",

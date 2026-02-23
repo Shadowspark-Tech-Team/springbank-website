@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { authenticate, requireRole } from '../middleware/auth';
 import { validate } from '../middleware/validate';
 import { transfer, createTransaction, IdempotencyPayloadMismatchError } from '../services/ledgerService';
-import { checkAccountTransferLimit, checkVelocityAlert, remainingAttempts } from '../middleware/accountLimiter';
+import { checkAccountTransferLimit, checkVelocityAlert, checkVelocityAmountAlert, recordTransferAmount, remainingAttempts, windowTransferTotal } from '../middleware/accountLimiter';
 import { log } from '../middleware/logger';
 import { UserRole } from '../types';
 import prisma from '../db';
@@ -62,36 +62,66 @@ function getIdempotencyKey(req: Request): string | undefined {
 }
 
 /**
- * Emit a structured warning log and write a fire-and-forget audit log entry
- * when an account's transfer velocity crosses the alert threshold.
- * Called after `checkAccountTransferLimit` has already recorded the attempt.
+ * Record a committed transfer amount and emit structured alerts when count-based
+ * or amount-based velocity thresholds are crossed.
+ *
+ * @param amount - Transfer amount in major currency units (e.g. 50.00 for $50).
  */
-function handleVelocityAlert(accountId: string, userId: string, req: Request): void {
-  if (!checkVelocityAlert(accountId)) return;
+function handleVelocityAlert(accountId: string, userId: string, amount: number, req: Request): void {
+  recordTransferAmount(accountId, amount);
 
   const requestId = req.requestId ?? 'unknown';
-  log({
-    level: 'warn',
-    requestId,
-    message: 'High transfer velocity detected',
-    accountId,
-    userId,
-  });
 
-  prisma.auditLog.create({
-    data: {
+  // Count-based velocity alert (6 transfers in 5 minutes).
+  if (checkVelocityAlert(accountId)) {
+    log({
+      level: 'warn',
+      requestId,
+      message: 'High transfer velocity detected',
+      accountId,
       userId,
-      action: 'high_transfer_velocity',
-      resource: 'account',
-      resourceId: accountId,
-      ipAddress: req.ip,
-      userAgent: req.headers['user-agent'],
-      details: { requestId },
-    },
-  }).catch((err: unknown) => {
-    // Fire-and-forget: never throw from alert path, but do log failures.
-    log({ level: 'error', requestId, message: `Failed to write velocity-alert audit log: ${String(err)}` });
-  });
+    });
+
+    prisma.auditLog.create({
+      data: {
+        userId,
+        action: 'high_transfer_velocity',
+        resource: 'account',
+        resourceId: accountId,
+        ipAddress: req.ip,
+        userAgent: req.headers['user-agent'],
+        details: { requestId },
+      },
+    }).catch((err: unknown) => {
+      log({ level: 'error', requestId, message: `Failed to write velocity-alert audit log: ${String(err)}` });
+    });
+  }
+
+  // Amount-based velocity alert ($10,000+ in 5 minutes).
+  if (checkVelocityAmountAlert(accountId)) {
+    log({
+      level: 'warn',
+      requestId,
+      message: 'High transfer amount velocity detected',
+      accountId,
+      userId,
+      windowTotalUsd: windowTransferTotal(accountId),
+    });
+
+    prisma.auditLog.create({
+      data: {
+        userId,
+        action: 'high_transfer_amount',
+        resource: 'account',
+        resourceId: accountId,
+        ipAddress: req.ip,
+        userAgent: req.headers['user-agent'],
+        details: { requestId },
+      },
+    }).catch((err: unknown) => {
+      log({ level: 'error', requestId, message: `Failed to write amount-alert audit log: ${String(err)}` });
+    });
+  }
 }
 
 router.post('/transfer', validate(transferSchema), async (req: Request, res: Response) => {
@@ -132,7 +162,7 @@ router.post('/transfer', validate(transferSchema), async (req: Request, res: Res
       req.user!.userId,
       getIdempotencyKey(req),
     );
-    handleVelocityAlert(fromAccountId, req.user!.userId, req);
+    handleVelocityAlert(fromAccountId, req.user!.userId, amount / 100, req);
     res.status(201).json({ transaction: tx });
   } catch (err) {
     if (err instanceof IdempotencyPayloadMismatchError) {
@@ -175,7 +205,7 @@ router.post('/external-transfer', validate(externalTransferSchema), async (req: 
       },
       prisma,
     );
-    handleVelocityAlert(fromAccountId, req.user!.userId, req);
+    handleVelocityAlert(fromAccountId, req.user!.userId, amount / 100, req);
     res.status(201).json({ transaction: tx });
   } catch (err) {
     if (err instanceof IdempotencyPayloadMismatchError) {
@@ -218,7 +248,7 @@ router.post('/bill-payment', validate(billPaymentSchema), async (req: Request, r
       },
       prisma,
     );
-    handleVelocityAlert(fromAccountId, req.user!.userId, req);
+    handleVelocityAlert(fromAccountId, req.user!.userId, amount / 100, req);
     res.status(201).json({ transaction: tx });
   } catch (err) {
     if (err instanceof IdempotencyPayloadMismatchError) {
@@ -280,7 +310,7 @@ router.post('/withdrawal', validate(withdrawalSchema), async (req: Request, res:
       },
       prisma,
     );
-    handleVelocityAlert(fromAccountId, req.user!.userId, req);
+    handleVelocityAlert(fromAccountId, req.user!.userId, amount / 100, req);
     res.status(201).json({ transaction: tx });
   } catch (err) {
     if (err instanceof IdempotencyPayloadMismatchError) {
