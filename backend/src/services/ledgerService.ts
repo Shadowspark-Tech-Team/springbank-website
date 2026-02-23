@@ -1,4 +1,5 @@
 import { PrismaClient, Transaction, TransactionType } from '@prisma/client';
+import { Decimal } from '@prisma/client/runtime/library';
 import { randomUUID } from 'crypto';
 
 function generateReference(): string {
@@ -24,7 +25,7 @@ export async function transfer(
     if (!toAccount.isActive) throw new Error('Destination account is inactive');
     if (toAccount.isFrozen) throw new Error('Destination account is frozen');
 
-    if (Number(fromAccount.balance) < amount) {
+    if (fromAccount.balance.lessThan(new Decimal(amount))) {
       throw new Error('Insufficient balance');
     }
 
@@ -88,7 +89,7 @@ export async function createTransaction(
       if (!fromAccount) throw new Error('Source account not found');
       if (!fromAccount.isActive) throw new Error('Source account is inactive');
       if (fromAccount.isFrozen) throw new Error('Source account is frozen');
-      if (Number(fromAccount.balance) < amount) throw new Error('Insufficient balance');
+      if (fromAccount.balance.lessThan(new Decimal(amount))) throw new Error('Insufficient balance');
 
       await tx.account.update({
         where: { id: fromAccountId },

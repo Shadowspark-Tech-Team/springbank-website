@@ -1,3 +1,7 @@
+/**
+ * Enums below mirror those in `shared/types.ts` (the frontend/shared source of truth).
+ * Keep these in sync when modifying either file.
+ */
 export enum UserRole {
   ADMIN = 'ADMIN',
   STAFF = 'STAFF',

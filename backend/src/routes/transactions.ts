@@ -14,13 +14,15 @@ router.use(authenticate);
 const transferSchema = z.object({
   fromAccountId: z.string().uuid(),
   toAccountId: z.string().uuid(),
-  amount: z.number().positive(),
+  /** Amount in minor currency units (cents), e.g. 5000 = $50.00 */
+  amount: z.number().int().positive(),
   description: z.string().min(1).max(500),
 });
 
 const externalTransferSchema = z.object({
   fromAccountId: z.string().uuid(),
-  amount: z.number().positive(),
+  /** Amount in minor currency units (cents), e.g. 5000 = $50.00 */
+  amount: z.number().int().positive(),
   description: z.string().min(1).max(500),
   recipientName: z.string().min(1).max(200),
   recipientBank: z.string().min(1).max(200),
@@ -29,7 +31,8 @@ const externalTransferSchema = z.object({
 
 const billPaymentSchema = z.object({
   fromAccountId: z.string().uuid(),
-  amount: z.number().positive(),
+  /** Amount in minor currency units (cents), e.g. 5000 = $50.00 */
+  amount: z.number().int().positive(),
   description: z.string().min(1).max(500),
   billerName: z.string().min(1).max(200),
   billerReference: z.string().min(1).max(100),
@@ -37,13 +40,15 @@ const billPaymentSchema = z.object({
 
 const depositSchema = z.object({
   toAccountId: z.string().uuid(),
-  amount: z.number().positive(),
+  /** Amount in minor currency units (cents), e.g. 5000 = $50.00 */
+  amount: z.number().int().positive(),
   description: z.string().min(1).max(500),
 });
 
 const withdrawalSchema = z.object({
   fromAccountId: z.string().uuid(),
-  amount: z.number().positive(),
+  /** Amount in minor currency units (cents), e.g. 5000 = $50.00 */
+  amount: z.number().int().positive(),
   description: z.string().min(1).max(500),
 });
 
@@ -66,7 +71,7 @@ router.post('/transfer', validate(transferSchema), async (req: Request, res: Res
     return;
   }
 
-  const tx = await transfer(fromAccountId, toAccountId, amount, description, prisma, req.user!.userId);
+  const tx = await transfer(fromAccountId, toAccountId, amount / 100, description, prisma, req.user!.userId);
   res.status(201).json({ transaction: tx });
 });
 
@@ -86,7 +91,7 @@ router.post('/external-transfer', validate(externalTransferSchema), async (req: 
     {
       fromAccountId,
       type: 'EXTERNAL_TRANSFER',
-      amount,
+      amount: amount / 100,
       description,
       metadata: { recipientName, recipientBank, recipientAccount },
     },
@@ -111,7 +116,7 @@ router.post('/bill-payment', validate(billPaymentSchema), async (req: Request, r
     {
       fromAccountId,
       type: 'BILL_PAYMENT',
-      amount,
+      amount: amount / 100,
       description,
       metadata: { billerName, billerReference },
     },
@@ -128,7 +133,7 @@ router.post(
     const { toAccountId, amount, description } = req.body as z.infer<typeof depositSchema>;
 
     const tx = await createTransaction(
-      { toAccountId, type: 'DEPOSIT', amount, description },
+      { toAccountId, type: 'DEPOSIT', amount: amount / 100, description },
       prisma,
     );
     res.status(201).json({ transaction: tx });
@@ -147,7 +152,7 @@ router.post('/withdrawal', validate(withdrawalSchema), async (req: Request, res:
   }
 
   const tx = await createTransaction(
-    { fromAccountId, type: 'WITHDRAWAL', amount, description },
+    { fromAccountId, type: 'WITHDRAWAL', amount: amount / 100, description },
     prisma,
   );
   res.status(201).json({ transaction: tx });
