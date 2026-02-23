@@ -2,8 +2,9 @@ import { Router, Request, Response } from 'express';
 import { z } from 'zod';
 import { authenticate, requireRole } from '../middleware/auth';
 import { validate } from '../middleware/validate';
-import { transfer, createTransaction } from '../services/ledgerService';
-import { checkAccountTransferLimit, remainingAttempts } from '../middleware/accountLimiter';
+import { transfer, createTransaction, IdempotencyPayloadMismatchError } from '../services/ledgerService';
+import { checkAccountTransferLimit, checkVelocityAlert, remainingAttempts } from '../middleware/accountLimiter';
+import { log } from '../middleware/logger';
 import { UserRole } from '../types';
 import prisma from '../db';
 
@@ -60,6 +61,39 @@ function getIdempotencyKey(req: Request): string | undefined {
   return key || undefined;
 }
 
+/**
+ * Emit a structured warning log and write a fire-and-forget audit log entry
+ * when an account's transfer velocity crosses the alert threshold.
+ * Called after `checkAccountTransferLimit` has already recorded the attempt.
+ */
+function handleVelocityAlert(accountId: string, userId: string, req: Request): void {
+  if (!checkVelocityAlert(accountId)) return;
+
+  const requestId = req.requestId ?? 'unknown';
+  log({
+    level: 'warn',
+    requestId,
+    message: 'High transfer velocity detected',
+    accountId,
+    userId,
+  });
+
+  prisma.auditLog.create({
+    data: {
+      userId,
+      action: 'high_transfer_velocity',
+      resource: 'account',
+      resourceId: accountId,
+      ipAddress: req.ip,
+      userAgent: req.headers['user-agent'],
+      details: { requestId },
+    },
+  }).catch((err: unknown) => {
+    // Fire-and-forget: never throw from alert path, but do log failures.
+    log({ level: 'error', requestId, message: `Failed to write velocity-alert audit log: ${String(err)}` });
+  });
+}
+
 router.post('/transfer', validate(transferSchema), async (req: Request, res: Response) => {
   const { fromAccountId, toAccountId, amount, description } = req.body as z.infer<typeof transferSchema>;
 
@@ -88,16 +122,25 @@ router.post('/transfer', validate(transferSchema), async (req: Request, res: Res
     return;
   }
 
-  const tx = await transfer(
-    fromAccountId,
-    toAccountId,
-    amount / 100,
-    description,
-    prisma,
-    req.user!.userId,
-    getIdempotencyKey(req),
-  );
-  res.status(201).json({ transaction: tx });
+  try {
+    const tx = await transfer(
+      fromAccountId,
+      toAccountId,
+      amount / 100,
+      description,
+      prisma,
+      req.user!.userId,
+      getIdempotencyKey(req),
+    );
+    handleVelocityAlert(fromAccountId, req.user!.userId, req);
+    res.status(201).json({ transaction: tx });
+  } catch (err) {
+    if (err instanceof IdempotencyPayloadMismatchError) {
+      res.status(409).json({ error: err.message });
+      return;
+    }
+    throw err;
+  }
 });
 
 router.post('/external-transfer', validate(externalTransferSchema), async (req: Request, res: Response) => {
@@ -120,18 +163,27 @@ router.post('/external-transfer', validate(externalTransferSchema), async (req: 
     return;
   }
 
-  const tx = await createTransaction(
-    {
-      fromAccountId,
-      type: 'EXTERNAL_TRANSFER',
-      amount: amount / 100,
-      description,
-      metadata: { recipientName, recipientBank, recipientAccount },
-      idempotencyKey: getIdempotencyKey(req),
-    },
-    prisma,
-  );
-  res.status(201).json({ transaction: tx });
+  try {
+    const tx = await createTransaction(
+      {
+        fromAccountId,
+        type: 'EXTERNAL_TRANSFER',
+        amount: amount / 100,
+        description,
+        metadata: { recipientName, recipientBank, recipientAccount },
+        idempotencyKey: getIdempotencyKey(req),
+      },
+      prisma,
+    );
+    handleVelocityAlert(fromAccountId, req.user!.userId, req);
+    res.status(201).json({ transaction: tx });
+  } catch (err) {
+    if (err instanceof IdempotencyPayloadMismatchError) {
+      res.status(409).json({ error: err.message });
+      return;
+    }
+    throw err;
+  }
 });
 
 router.post('/bill-payment', validate(billPaymentSchema), async (req: Request, res: Response) => {
@@ -154,18 +206,27 @@ router.post('/bill-payment', validate(billPaymentSchema), async (req: Request, r
     return;
   }
 
-  const tx = await createTransaction(
-    {
-      fromAccountId,
-      type: 'BILL_PAYMENT',
-      amount: amount / 100,
-      description,
-      metadata: { billerName, billerReference },
-      idempotencyKey: getIdempotencyKey(req),
-    },
-    prisma,
-  );
-  res.status(201).json({ transaction: tx });
+  try {
+    const tx = await createTransaction(
+      {
+        fromAccountId,
+        type: 'BILL_PAYMENT',
+        amount: amount / 100,
+        description,
+        metadata: { billerName, billerReference },
+        idempotencyKey: getIdempotencyKey(req),
+      },
+      prisma,
+    );
+    handleVelocityAlert(fromAccountId, req.user!.userId, req);
+    res.status(201).json({ transaction: tx });
+  } catch (err) {
+    if (err instanceof IdempotencyPayloadMismatchError) {
+      res.status(409).json({ error: err.message });
+      return;
+    }
+    throw err;
+  }
 });
 
 router.post(
@@ -208,17 +269,26 @@ router.post('/withdrawal', validate(withdrawalSchema), async (req: Request, res:
     return;
   }
 
-  const tx = await createTransaction(
-    {
-      fromAccountId,
-      type: 'WITHDRAWAL',
-      amount: amount / 100,
-      description,
-      idempotencyKey: getIdempotencyKey(req),
-    },
-    prisma,
-  );
-  res.status(201).json({ transaction: tx });
+  try {
+    const tx = await createTransaction(
+      {
+        fromAccountId,
+        type: 'WITHDRAWAL',
+        amount: amount / 100,
+        description,
+        idempotencyKey: getIdempotencyKey(req),
+      },
+      prisma,
+    );
+    handleVelocityAlert(fromAccountId, req.user!.userId, req);
+    res.status(201).json({ transaction: tx });
+  } catch (err) {
+    if (err instanceof IdempotencyPayloadMismatchError) {
+      res.status(409).json({ error: err.message });
+      return;
+    }
+    throw err;
+  }
 });
 
 export default router;

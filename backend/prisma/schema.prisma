@@ -71,20 +71,21 @@ model Account {
 }
 
 model Transaction {
-  id               String            @id @default(uuid())
-  fromAccountId    String?
-  toAccountId      String?
-  type             TransactionType
-  amount           Decimal           @db.Decimal(18, 2)
-  currency         String            @default("USD")
-  description      String
-  reference        String            @unique
-  idempotencyKey   String?           @unique
-  status           TransactionStatus @default(PENDING)
-  metadata         Json?
-  createdAt        DateTime          @default(now())
-  fromAccount      Account?          @relation("FromAccount", fields: [fromAccountId], references: [id])
-  toAccount        Account?          @relation("ToAccount", fields: [toAccountId], references: [id])
+  id                    String            @id @default(uuid())
+  fromAccountId         String?
+  toAccountId           String?
+  type                  TransactionType
+  amount                Decimal           @db.Decimal(18, 2)
+  currency              String            @default("USD")
+  description           String
+  reference             String            @unique
+  idempotencyKey        String?           @unique
+  idempotencyPayloadHash String?
+  status                TransactionStatus @default(PENDING)
+  metadata              Json?
+  createdAt             DateTime          @default(now())
+  fromAccount           Account?          @relation("FromAccount", fields: [fromAccountId], references: [id])
+  toAccount             Account?          @relation("ToAccount", fields: [toAccountId], references: [id])
 }
 
 model AuditLog {
