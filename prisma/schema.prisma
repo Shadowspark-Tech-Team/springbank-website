@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum AccountType {
+  CHECKING
+  SAVINGS
+}
+
+enum AccountStatus {
+  ACTIVE
+  FROZEN
+  CLOSED
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  TRANSFER
+}
+
+enum TransactionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  POSTED
+  FAILED
+}
+
+enum AuditAction {
+  LOGIN_SUCCESS
+  LOGIN_FAILED
+  USER_CREATED
+  ACCOUNT_CREATED
+  TRANSACTION_CREATED
+  TRANSACTION_APPROVED
+  TRANSACTION_REJECTED
+  ACCOUNT_FROZEN
+  ACCOUNT_UNFROZEN
+}
+
+model User {
+  id            String        @id @default(cuid())
+  email         String        @unique
+  passwordHash  String
+  fullName      String
+  role          Role          @default(CUSTOMER)
+  isActive      Boolean       @default(true)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  accounts      Account[]
+  initiatedTxns Transaction[] @relation("InitiatedTransactions")
+  approvedTxns  Transaction[] @relation("ApprovedTransactions")
+  auditLogs     AuditLog[]
+}
+
+model Account {
+  id            String        @id @default(cuid())
+  userId        String
+  accountNumber String        @unique
+  type          AccountType
+  status        AccountStatus @default(ACTIVE)
+  currency      String        @default("USD")
+  balance       Decimal       @db.Decimal(14, 2)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  outgoingTxns  Transaction[] @relation("FromAccount")
+  incomingTxns  Transaction[] @relation("ToAccount")
+}
+
+model Transaction {
+  id            String            @id @default(cuid())
+  reference     String            @unique
+  initiatedById String
+  fromAccountId String?
+  toAccountId   String?
+  type          TransactionType
+  status        TransactionStatus @default(PENDING)
+  amount        Decimal           @db.Decimal(14, 2)
+  currency      String            @default("USD")
+  description   String?
+  approvalNote  String?
+  approvedById  String?
+  approvedAt    DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  initiatedBy User     @relation("InitiatedTransactions", fields: [initiatedById], references: [id], onDelete: Restrict)
+  approvedBy  User?    @relation("ApprovedTransactions", fields: [approvedById], references: [id], onDelete: SetNull)
+  fromAccount Account? @relation("FromAccount", fields: [fromAccountId], references: [id], onDelete: SetNull)
+  toAccount   Account? @relation("ToAccount", fields: [toAccountId], references: [id], onDelete: SetNull)
+}
+
+model AuditLog {
+  id         String      @id @default(cuid())
+  userId     String?
+  action     AuditAction
+  entityType String
+  entityId   String?
+  metadata   String?
+  createdAt  DateTime    @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
