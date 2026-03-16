@@ -27,3 +27,4 @@ package-lock.json
 deepseek_*
 .vercel
 .env*.local
+.next
