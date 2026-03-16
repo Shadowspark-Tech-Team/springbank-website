@@ -11,6 +11,7 @@ const PAGE_MAP: Record<string, string> = {
   security: "security.html",
   terms: "terms.html",
   demo2: "demo2.html",
+  es: "es/index.html"
   es: "es/index.html",
 };
 
@@ -29,6 +30,7 @@ export default async function LegacyPage({
   params: Promise<{ slug: string[] }>;
 }) {
   const { slug } = await params;
+  const key = slug.join("/");
   const joinedSlug = slug.join("/");
   const pagePath = PAGE_MAP[joinedSlug];
 
