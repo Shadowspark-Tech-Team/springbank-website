@@ -11,7 +11,7 @@ const PAGE_MAP: Record<string, string> = {
   security: "security.html",
   terms: "terms.html",
   demo2: "demo2.html",
-  es: "es/index.html"
+  es: "es/index.html",
 };
 
 function normalizeLinks(html: string) {
@@ -23,7 +23,28 @@ function normalizeLinks(html: string) {
     .replace(/href="\/es\/index.html"/gi, 'href="/es"');
 }
 
-export default async function LegacyPage({ params }: { params: { slug: string[] } }) {
+export default async function LegacyPage({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>;
+}) {
+  const { slug } = await params;
+  const joinedSlug = slug.join("/");
+  const pagePath = PAGE_MAP[joinedSlug];
+
+  if (!pagePath) {
+    notFound();
+  }
+
+  const html = await loadLegacyPage(pagePath);
+  const normalizedHtml = normalizeLinks(html);
+
+  return (
+    <main
+      dangerouslySetInnerHTML={{ __html: normalizedHtml }}
+    />
+  );
+}({ params }: { params: { slug: string[] } }) {
   const key = params.slug.join("/");
   const fileName = PAGE_MAP[key];
   if (!fileName) notFound();
