@@ -3,6 +3,17 @@ import { getSession } from "@/lib/auth/session";
 
 export default async function SignInPage({ searchParams }: { searchParams?: Promise<{ error?: string }> }) {
   const resolvedSearchParams = searchParams ? await searchParams : undefined;
+export default async function SignInPage({
+  searchParams
+}: {
+  searchParams?: Promise<{ error?: string }>
+}) {
+  const session = await getSession();
+  const resolvedSearchParams = await searchParams;
+  if (session) redirect(session.role === "ADMIN" ? "/admin" : "/dashboard");
+
+  const hasError = Boolean(resolvedSearchParams?.error);
+export default async function SignInPage({ searchParams }: { searchParams?: { error?: string } }) {
   const session = await getSession();
   if (session) redirect(session.role === "ADMIN" ? "/admin" : "/dashboard");
 
