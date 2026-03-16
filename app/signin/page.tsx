@@ -11,6 +11,11 @@ export default async function SignInPage({
   if (session) redirect(session.role === "ADMIN" ? "/admin" : "/dashboard");
 
   const hasError = Boolean(resolvedSearchParams?.error);
+export default async function SignInPage({ searchParams }: { searchParams?: { error?: string } }) {
+  const session = await getSession();
+  if (session) redirect(session.role === "ADMIN" ? "/admin" : "/dashboard");
+
+  const hasError = Boolean(searchParams?.error);
 
   return (
     <main className="portal-shell">

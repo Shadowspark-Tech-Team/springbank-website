@@ -6,6 +6,7 @@ export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+export async function POST(request: Request, { params }: { params: { id: string } }) {
   const session = await getSession();
   if (!session) return NextResponse.redirect(new URL("/signin", request.url));
   if (session.role !== "ADMIN") return NextResponse.redirect(new URL("/dashboard", request.url));
@@ -23,6 +24,7 @@ export async function POST(
 
   const result = await reviewPendingTransfer({
     transactionId: id,
+    transactionId: params.id,
     adminUserId: session.userId,
     decision: decisionValue,
     note

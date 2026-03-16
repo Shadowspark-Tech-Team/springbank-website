@@ -17,6 +17,9 @@ export default async function DashboardPage({
   const session = await requireSession();
   const data = await getDashboardData(session.userId);
   const resolvedSearchParams = await searchParams;
+export default async function DashboardPage({ searchParams }: { searchParams?: { success?: string; error?: string } }) {
+  const session = await requireSession();
+  const data = await getDashboardData(session.userId);
 
   if (!data) {
     return <main className="portal-shell"><section className="portal-panel"><h1>Dashboard unavailable</h1></section></main>;
@@ -43,6 +46,8 @@ export default async function DashboardPage({
 
       {resolvedSearchParams?.success && <div className="portal-alert portal-alert--success">{resolvedSearchParams.success}</div>}
       {resolvedSearchParams?.error && <div className="portal-alert portal-alert--error">{resolvedSearchParams.error}</div>}
+      {searchParams?.success && <div className="portal-alert portal-alert--success">{searchParams.success}</div>}
+      {searchParams?.error && <div className="portal-alert portal-alert--error">{searchParams.error}</div>}
 
       <section className="portal-grid-two">
         <article className="portal-panel">
