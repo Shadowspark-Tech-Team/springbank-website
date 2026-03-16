@@ -1,18 +1,25 @@
 #!/bin/bash
 
+echo "Cleaning cache..."
+rm -rf .next
+
 echo "Generating Prisma client..."
 npx prisma generate
 
-echo "Building project..."
+echo "Running database migrations..."
+npx prisma migrate deploy
+
+echo "Building Next.js..."
 npm run build
 
 echo "Committing changes..."
 git add .
-git commit -m "deploy" || true
+git commit -m "deploy update" || true
 
 echo "Pushing to GitHub..."
 git push
 
 echo "Deploying to Vercel..."
-vercel --prodnpm run build && git add . && git commit -m "deploy" && git push && vercel --prod
+vercel --prod
 
+echo "Deployment complete."
