@@ -1,6 +1,13 @@
 import { notFound } from "next/navigation";
 import { loadLegacyPage } from "@/lib/legacy/loadLegacyPage";
 
+type PageProps = {
+  params: Promise<{
+    slug?: string[];
+  }>;
+};
+
+
 const PAGE_MAP: Record<string, string> = {
   about: "about.html",
   business: "business.html",
@@ -23,8 +30,9 @@ function normalizeLinks(html: string) {
     .replace(/href="\/es\/index.html"/gi, 'href="/es"');
 }
 
-export default async function LegacyPage({ params }: { params: { slug: string[] } }) {
-  const key = params.slug.join("/");
+export default async function LegacyPage({ params }: PageProps) {
+  const { slug = [] } = await params;
+  const key = slug.join("/");
   const fileName = PAGE_MAP[key];
   if (!fileName) notFound();
 
