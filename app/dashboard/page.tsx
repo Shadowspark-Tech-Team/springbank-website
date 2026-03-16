@@ -9,6 +9,14 @@ const statusTone: Record<string, string> = {
   FAILED: "portal-pill portal-pill--danger"
 };
 
+export default async function DashboardPage({
+  searchParams
+}: {
+  searchParams?: Promise<{ success?: string; error?: string }>
+}) {
+  const session = await requireSession();
+  const data = await getDashboardData(session.userId);
+  const resolvedSearchParams = await searchParams;
 export default async function DashboardPage({ searchParams }: { searchParams?: { success?: string; error?: string } }) {
   const session = await requireSession();
   const data = await getDashboardData(session.userId);
@@ -36,6 +44,8 @@ export default async function DashboardPage({ searchParams }: { searchParams?: {
         </div>
       </header>
 
+      {resolvedSearchParams?.success && <div className="portal-alert portal-alert--success">{resolvedSearchParams.success}</div>}
+      {resolvedSearchParams?.error && <div className="portal-alert portal-alert--error">{resolvedSearchParams.error}</div>}
       {searchParams?.success && <div className="portal-alert portal-alert--success">{searchParams.success}</div>}
       {searchParams?.error && <div className="portal-alert portal-alert--error">{searchParams.error}</div>}
 
