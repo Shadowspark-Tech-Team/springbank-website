@@ -2,16 +2,12 @@ import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { reviewPendingTransfer } from "@/lib/banking/service";
 
-export async function POST(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const session = await getSession();
   if (!session) return NextResponse.redirect(new URL("/signin", request.url));
   if (session.role !== "ADMIN") return NextResponse.redirect(new URL("/dashboard", request.url));
 
-  const { id } = await params;
   const formData = await request.formData();
   const decisionValue = String(formData.get("decision") ?? "");
   const note = String(formData.get("note") ?? "");
@@ -24,7 +20,6 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
   const result = await reviewPendingTransfer({
     transactionId: id,
-    transactionId: params.id,
     adminUserId: session.userId,
     decision: decisionValue,
     note

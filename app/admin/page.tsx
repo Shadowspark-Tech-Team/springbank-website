@@ -1,15 +1,15 @@
 import { requireSession } from "@/lib/auth/session";
 import { formatCurrency, getAdminApprovalData, maskAccountNumber } from "@/lib/banking/service";
 
-export default async function AdminPage({
-  searchParams
-}: {
-  searchParams?: Promise<{ success?: string; error?: string }>
-}) {
-  const session = await requireSession({ role: "ADMIN" });
-  const data = await getAdminApprovalData();
-  const resolvedSearchParams = await searchParams;
-export default async function AdminPage({ searchParams }: { searchParams?: { success?: string; error?: string } }) {
+type AdminPageProps = {
+  searchParams?: Promise<{
+    success?: string;
+    error?: string;
+  }>;
+};
+
+export default async function AdminPage({ searchParams }: { searchParams?: Promise<{ success?: string; error?: string }> }) {
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
   const session = await requireSession({ role: "ADMIN" });
   const data = await getAdminApprovalData();
 
@@ -31,8 +31,6 @@ export default async function AdminPage({ searchParams }: { searchParams?: { suc
 
       {resolvedSearchParams?.success && <div className="portal-alert portal-alert--success">{resolvedSearchParams.success}</div>}
       {resolvedSearchParams?.error && <div className="portal-alert portal-alert--error">{resolvedSearchParams.error}</div>}
-      {searchParams?.success && <div className="portal-alert portal-alert--success">{searchParams.success}</div>}
-      {searchParams?.error && <div className="portal-alert portal-alert--error">{searchParams.error}</div>}
 
       <section className="portal-panel">
         <h2>Pending approvals ({data.pending.length})</h2>
