@@ -18,7 +18,7 @@ const PAGE_MAP: Record<string, string> = {
   security: "security.html",
   terms: "terms.html",
   demo2: "demo2.html",
-  es: "es/index.html"
+  
 };
 
 function normalizeLinks(html: string) {
