@@ -1,0 +1,13 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/admin/transactions/[id]/decision/route": "app/api/admin/transactions/[id]/decision/route.js",
+  "/api/auth/signin/route": "app/api/auth/signin/route.js",
+  "/api/auth/signout/route": "app/api/auth/signout/route.js",
+  "/api/transfers/route": "app/api/transfers/route.js",
+  "/signout/route": "app/signout/route.js",
+  "/[...slug]/page": "app/[...slug]/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/page": "app/page.js",
+  "/signin/page": "app/signin/page.js"
+}

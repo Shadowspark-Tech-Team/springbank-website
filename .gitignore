@@ -26,3 +26,4 @@ package-lock.json
 # Source files (DeepSeek drafts – not for production)
 deepseek_*
 .vercel
+.env*.local
