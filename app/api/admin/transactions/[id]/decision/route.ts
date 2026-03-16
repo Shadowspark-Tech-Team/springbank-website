@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { reviewPendingTransfer } from "@/lib/banking/service";
 
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }

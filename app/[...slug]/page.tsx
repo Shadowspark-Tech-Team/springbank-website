@@ -46,11 +46,4 @@ export default async function LegacyPage({
       dangerouslySetInnerHTML={{ __html: normalizedHtml }}
     />
   );
-}({ params }: { params: { slug: string[] } }) {
-  const key = params.slug.join("/");
-  const fileName = PAGE_MAP[key];
-  if (!fileName) notFound();
-
-  const body = normalizeLinks(await loadLegacyPage(fileName));
-  return <main className="legacy-page" dangerouslySetInnerHTML={{ __html: body }} />;
 }

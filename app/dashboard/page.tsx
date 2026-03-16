@@ -9,6 +9,8 @@ const statusTone: Record<string, string> = {
   FAILED: "portal-pill portal-pill--danger"
 };
 
+export default async function DashboardPage({ searchParams }: { searchParams?: Promise<{ success?: string; error?: string }> }) {
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
 export default async function DashboardPage({
   searchParams
 }: {

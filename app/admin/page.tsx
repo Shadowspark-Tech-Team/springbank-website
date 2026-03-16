@@ -1,6 +1,8 @@
 import { requireSession } from "@/lib/auth/session";
 import { formatCurrency, getAdminApprovalData, maskAccountNumber } from "@/lib/banking/service";
 
+export default async function AdminPage({ searchParams }: { searchParams?: Promise<{ success?: string; error?: string }> }) {
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
 export default async function AdminPage({
   searchParams
 }: {

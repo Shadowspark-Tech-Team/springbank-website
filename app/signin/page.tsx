@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth/session";
 
+export default async function SignInPage({ searchParams }: { searchParams?: Promise<{ error?: string }> }) {
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
 export default async function SignInPage({
   searchParams
 }: {
@@ -15,7 +17,7 @@ export default async function SignInPage({ searchParams }: { searchParams?: { er
   const session = await getSession();
   if (session) redirect(session.role === "ADMIN" ? "/admin" : "/dashboard");
 
-  const hasError = Boolean(searchParams?.error);
+  const hasError = Boolean(resolvedSearchParams?.error);
 
   return (
     <main className="portal-shell">
