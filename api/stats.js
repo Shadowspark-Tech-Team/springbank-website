@@ -25,7 +25,17 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const sql = neon(process.env.DATABASE_URL);
+    const connectionString =
+      process.env.DATABASE_URL ||
+      process.env.NEON_POSTGRES_PRISMA_URL ||
+      process.env.NEON_POSTGRES_URL ||
+      process.env.NEON_DATABASE_URL;
+
+    if (!connectionString) {
+      throw new Error('No database connection string was provided to neon()');
+    }
+
+    const sql = neon(connectionString);
     const rows = await sql`
       SELECT key, label, value, icon, sort_order
       FROM stats WHERE active = true ORDER BY sort_order LIMIT 8
