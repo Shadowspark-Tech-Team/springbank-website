@@ -36,6 +36,15 @@ module.exports = async function handler(req, res) {
     }
 
     const sql = neon(connectionString);
+
+    const tableCheck = await sql`
+      SELECT to_regclass('public.stats') AS table_name
+    `;
+    const hasStatsTable = Array.isArray(tableCheck) && tableCheck[0]?.table_name;
+    if (!hasStatsTable) {
+      return res.status(200).json({ stats: FALLBACK_STATS, source: 'fallback' });
+    }
+
     const rows = await sql`
       SELECT key, label, value, icon, sort_order
       FROM stats WHERE active = true ORDER BY sort_order LIMIT 8
