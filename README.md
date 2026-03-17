@@ -55,13 +55,15 @@ From your local machine (or CI) against the hosted DB:
 
 ```bash
 npm install
-npm run prisma:generate
-npm run prisma:migrate:deploy
+npm run deploy:prepare
 npm run prisma:seed
 ```
 
 ### 4) Deploy app to Vercel
 Deploy normally via Git integration or CLI.
+
+`npm run build` now performs application build only (`prisma generate && next build`).
+Database migrations are intentionally separated into `npm run deploy:prepare`.
 
 ## Demo credentials
 
@@ -83,4 +85,4 @@ Examples:
 ## Optional follow-up (not blocker)
 
 - Add a dedicated production seed command (or make seeding idempotent by environment guard) for CI/CD workflows.
-- Add a Vercel build hook/CI step that runs `prisma migrate deploy` automatically before app promotion.
+- Add a Vercel build hook/CI step that runs `npm run deploy:prepare` before app promotion.
