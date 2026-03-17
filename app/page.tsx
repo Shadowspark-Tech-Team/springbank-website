@@ -1,4 +1,5 @@
-import { loadLegacyPage } from "@/lib/legacy/loadLegacyPage";
+import { headers } from "next/headers";
+import { addNonceToScripts, loadLegacyPage } from "@/lib/legacy/loadLegacyPage";
 
 function normalizeLinks(html: string) {
   return html
@@ -9,6 +10,8 @@ function normalizeLinks(html: string) {
 }
 
 export default async function HomePage() {
+  const nonce = (await headers()).get("x-nonce");
   const body = normalizeLinks(await loadLegacyPage("index.html"));
-  return <main className="legacy-page" dangerouslySetInnerHTML={{ __html: body }} />;
+  const html = nonce ? addNonceToScripts(body, nonce) : body;
+  return <main className="legacy-page" dangerouslySetInnerHTML={{ __html: html }} />;
 }

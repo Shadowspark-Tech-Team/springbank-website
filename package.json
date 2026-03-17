@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
+    "csp:hashes": "node scripts/collect-csp-hashes.mjs",
     "deploy:prepare": "prisma generate && prisma migrate deploy",
     "start": "next start",
     "lint": "next lint",

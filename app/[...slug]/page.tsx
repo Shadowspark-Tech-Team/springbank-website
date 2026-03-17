@@ -1,5 +1,6 @@
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
-import { loadLegacyPage } from "@/lib/legacy/loadLegacyPage";
+import { addNonceToScripts, loadLegacyPage } from "@/lib/legacy/loadLegacyPage";
 
 type PageProps = {
   params: Promise<{
@@ -31,11 +32,13 @@ function normalizeLinks(html: string) {
 }
 
 export default async function LegacyPage({ params }: PageProps) {
+  const nonce = (await headers()).get("x-nonce");
   const { slug = [] } = await params;
   const key = slug.join("/");
   const fileName = PAGE_MAP[key];
   if (!fileName) notFound();
 
   const body = normalizeLinks(await loadLegacyPage(fileName));
-  return <main className="legacy-page" dangerouslySetInnerHTML={{ __html: body }} />;
+  const html = nonce ? addNonceToScripts(body, nonce) : body;
+  return <main className="legacy-page" dangerouslySetInnerHTML={{ __html: html }} />;
 }
