@@ -6,7 +6,13 @@ export default async function SignInPage({ searchParams }: { searchParams?: Prom
   const session = await getSession();
   if (session) redirect(session.role === "ADMIN" ? "/admin" : "/dashboard");
 
-  const hasError = Boolean(resolvedSearchParams?.error);
+  const errorCode = resolvedSearchParams?.error;
+  const errorMessage =
+    errorCode === "service"
+      ? "Sign-in is temporarily unavailable. Check the database connection and production environment variables."
+      : errorCode
+        ? "Unable to sign in with those credentials."
+        : null;
 
   return (
     <main className="portal-shell">
@@ -14,7 +20,7 @@ export default async function SignInPage({ searchParams }: { searchParams?: Prom
         <p className="portal-kicker">SpringBank Online Access</p>
         <h1>Sign in securely</h1>
         <p className="portal-muted">Access your SpringBank dashboard and transaction tools in this evaluation environment.</p>
-        {hasError && <div className="portal-alert portal-alert--error">Unable to sign in with those credentials.</div>}
+        {errorMessage && <div className="portal-alert portal-alert--error">{errorMessage}</div>}
         <form method="post" action="/api/auth/signin" className="portal-form-grid" aria-label="Sign in form">
           <label>
             Email

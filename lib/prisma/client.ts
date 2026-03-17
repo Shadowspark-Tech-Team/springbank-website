@@ -2,6 +2,27 @@ import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
+function resolveDatabaseUrl() {
+  return (
+    process.env.DATABASE_URL ||
+    process.env.NEON_POSTGRES_PRISMA_URL ||
+    process.env.NEON_POSTGRES_URL ||
+    process.env.NEON_DATABASE_URL
+  );
+}
+
+function resolveDirectUrl() {
+  return (
+    process.env.DIRECT_URL ||
+    process.env.NEON_DATABASE_URL_UNPOOLED ||
+    process.env.NEON_POSTGRES_URL_NON_POOLING ||
+    process.env.NEON_POSTGRES_URL
+  );
+}
+
+process.env.DATABASE_URL = resolveDatabaseUrl();
+process.env.DIRECT_URL = resolveDirectUrl();
+
 function assertPostgresUrl(name: "DATABASE_URL" | "DIRECT_URL") {
   const value = process.env[name];
   if (!value) return;
